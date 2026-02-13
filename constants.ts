@@ -74,7 +74,7 @@ const PROPERTY_IMAGES = [
 ];
 
 const generateMockData = () => {
-  const houses = [];
+  const houses: any[] = [];
 
   const pgNames = ["Stanza Living", "Zolo Stay", "Hello World PG", "Sunrise Hostels", "Olive Living", "Nestaway"];
   const aptNames = ["Prestige Heights", "Godrej Woods", "Sobha Dream", "Brigade Meadows", "Skyline Apartment", "Mantri Gardens"];
@@ -83,49 +83,55 @@ const generateMockData = () => {
 
   STATES_AND_DISTRICTS.forEach((sObj, sIdx) => {
     sObj.districts.forEach((d, dIdx) => {
-      const neighborhoods = NEIGHBORHOOD_MAP[d] || GENERIC_NEIGHBORHOODS;
-      const baseCoords = DISTRICT_COORDS[d] || DEFAULT_COORD;
+      const neighborhoods = (NEIGHBORHOOD_MAP as any)[d] || GENERIC_NEIGHBORHOODS;
+      const baseCoords = (DISTRICT_COORDS as any)[d] || DEFAULT_COORD;
       const priceModifier = d === 'The Nilgiris' || d === 'Dindigul' ? 1.4 : 1.0;
 
       const types = ['Pg', 'Apartment', 'Villa', 'Individual House', 'Studio'];
 
-      neighborhoods.forEach((neighborhood, nIdx) => {
+      neighborhoods.forEach((neighborhood: string, nIdx: number) => {
         for (let i = 0; i < 2; i++) {
           const typeIndex = (nIdx + i) % types.length;
           const type = types[typeIndex];
+
+          // Added significant jitter to ensure unique prices at first glance
+          const priceJitter = Math.floor(Math.random() * 3000) - 1500;
           let basePrice = 0;
           let title = "";
-          let amenities = [];
+          let amenities: string[] = [];
 
           const nameIndex = (nIdx + i + dIdx) % pgNames.length;
 
           switch (type) {
             case 'Pg':
-              basePrice = Math.round(4500 + (nIdx * 250) + (i * 1200));
+              basePrice = Math.round(4500 + (nIdx * 250) + (i * 1200)) + priceJitter;
               title = `${pgNames[nameIndex]} ${neighborhood}`;
               amenities = ['WiFi', 'Food', 'Cleaning', 'Laundry'];
               break;
             case 'Apartment':
-              basePrice = Math.round((9500 + (nIdx * 550) + (i * 2800)) * priceModifier);
+              basePrice = Math.round((9500 + (nIdx * 550) + (i * 2800)) * priceModifier) + priceJitter;
               title = `${aptNames[nameIndex]} @ ${neighborhood}`;
               amenities = ['Lift', 'Security', 'Parking', 'Gym'];
               break;
             case 'Villa':
-              basePrice = Math.round((38000 + (nIdx * 1200) + (i * 12000)) * priceModifier);
+              basePrice = Math.round((38000 + (nIdx * 1200) + (i * 12000)) * priceModifier) + priceJitter;
               title = `${villaNames[nameIndex]} - ${neighborhood}`;
               amenities = ['Private Garden', 'Swimming Pool', 'Luxury Interiors', 'Solar Power'];
               break;
             case 'Individual House':
-              basePrice = Math.round((14500 + (nIdx * 850) + (i * 3500)) * priceModifier);
+              basePrice = Math.round((14500 + (nIdx * 850) + (i * 3500)) * priceModifier) + priceJitter;
               title = `${neighborhood} ${indNames[nameIndex]}`;
               amenities = ['Backyard', 'Own Water Source', 'Quiet Area', 'Pet Friendly'];
               break;
             case 'Studio':
-              basePrice = Math.round(7500 + (nIdx * 350) + (i * 1800));
+              basePrice = Math.round(7500 + (nIdx * 350) + (i * 1800)) + priceJitter;
               title = `Cozy Studio ${neighborhood}`;
               amenities = ['AC', 'Compact Kitchen', 'Near Transit', 'Balcony'];
               break;
           }
+
+          // Ensure price doesn't go negative or too low
+          basePrice = Math.max(3000, basePrice);
 
           const latJitter = (Math.random() - 0.5) * 0.08;
           const lngJitter = (Math.random() - 0.5) * 0.08;

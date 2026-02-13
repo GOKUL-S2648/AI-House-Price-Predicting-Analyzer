@@ -1,16 +1,16 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { MOCK_HOUSES } from './constants.ts';
-import Auth from './components/Auth.tsx';
-import Navbar from './components/Navbar.tsx';
-import SearchFilters from './components/SearchFilters.tsx';
-import HouseCard from './components/HouseCard.tsx';
-import HouseDetails from './components/HouseDetails.tsx';
-import Dashboard from './components/Dashboard.tsx';
-import History from './components/History.tsx';
-import ChatAI from './components/ChatAI.tsx';
-import { getCategorizedSuggestions } from './geminiService.ts';
-import { rankProperties } from './mlService.ts';
-import { User, House, Booking, SearchCriteria } from './types.ts';
+import { MOCK_HOUSES } from './constants';
+import Auth from './components/Auth';
+import Navbar from './components/Navbar';
+import SearchFilters from './components/SearchFilters';
+import HouseCard from './components/HouseCard';
+import HouseDetails from './components/HouseDetails';
+import Dashboard from './components/Dashboard';
+import History from './components/History';
+import ChatAI from './components/ChatAI';
+import { getCategorizedSuggestions } from './geminiService';
+import { rankProperties } from './mlService';
+import { User, House, Booking, SearchCriteria } from './types';
 
 const App: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -26,7 +26,7 @@ const App: React.FC = () => {
     income: 0,
     maxPrice: 0,
     houseType: '',
-    district: '', 
+    district: '',
     state: ''
   });
 
@@ -56,7 +56,7 @@ const App: React.FC = () => {
     setCurrentUser(user);
     setView('search');
     setIsSearching(false);
-    
+
     const initialIncome = user.income || 50000;
     const ranked = rankProperties(MOCK_HOUSES.filter(h => h.price <= initialIncome * 0.5), user).slice(0, 15);
     setFilteredHouses(ranked);
@@ -70,7 +70,7 @@ const App: React.FC = () => {
         state: ''
       }, ranked);
       setAiTips(tips);
-    } catch (e) {}
+    } catch (e) { }
   };
 
   const handleViewDetails = (house: House) => {
@@ -81,11 +81,11 @@ const App: React.FC = () => {
   const handleSearch = useCallback((criteria: SearchCriteria) => {
     setSearchCriteria(criteria);
     setIsSearching(true);
-    
+
     const query = (criteria.district || '').toLowerCase().trim();
     const results = MOCK_HOUSES.filter(h => {
-      const priceLimit = criteria.maxPrice || 1000000; 
-      const priceMatch = h.price <= (priceLimit + 5000); 
+      const priceLimit = criteria.maxPrice || 1000000;
+      const priceMatch = h.price <= (priceLimit + 5000);
       const typeMatch = !criteria.houseType || criteria.houseType === 'Any' || h.type === criteria.houseType;
       const locationMatch = !query || h.location.toLowerCase().includes(query) || h.title.toLowerCase().includes(query);
       return priceMatch && typeMatch && locationMatch;
@@ -120,34 +120,34 @@ const App: React.FC = () => {
   }, [currentUser, isSearching, filteredHouses, view, selectedHouse]);
 
   const updateBookingStatus = (id: string, status: string) => {
-    setBookings(prev => prev.map(b => b.id === id ? {...b, status: status as any} : b));
+    setBookings(prev => prev.map(b => b.id === id ? { ...b, status: status as any } : b));
   };
 
   if (!currentUser) return <Auth onLogin={handleLogin} />;
 
   return (
     <div className={`min-h-screen flex transition-colors duration-300 ${isDarkMode ? 'bg-slate-900 text-slate-100' : 'bg-[#F8FAFC] text-[#1E1B4B]'}`}>
-      <Navbar 
-        user={currentUser} 
-        onNavigate={(v: any) => setView(v)} 
-        onLogout={() => setCurrentUser(null)} 
-        currentView={view} 
+      <Navbar
+        user={currentUser}
+        onNavigate={(v: any) => setView(v)}
+        onLogout={() => setCurrentUser(null)}
+        currentView={view}
       />
-      
+
       <main className="flex-1 overflow-y-auto px-6 py-12 md:px-16 md:py-20 scroll-smooth">
         <div className="flex justify-end mb-8">
-           <button 
-             onClick={() => setIsDarkMode(!isDarkMode)}
-             className={`p-3 rounded-xl transition-all ${isDarkMode ? 'bg-slate-800 text-yellow-400' : 'bg-white text-slate-400 shadow-sm'}`}
-           >
-             {isDarkMode ? '🌙' : '☀️'}
-           </button>
+          <button
+            onClick={() => setIsDarkMode(!isDarkMode)}
+            className={`p-3 rounded-xl transition-all ${isDarkMode ? 'bg-slate-800 text-yellow-400' : 'bg-white text-slate-400 shadow-sm'}`}
+          >
+            {isDarkMode ? '🌙' : '☀️'}
+          </button>
         </div>
 
         {view === 'search' && (
           <div className="max-w-7xl mx-auto space-y-20 animate-in fade-in duration-500">
             <SearchFilters onSearch={handleSearch} initialCriteria={searchCriteria} />
-            
+
             <section className="space-y-12">
               <div className="flex items-end justify-between px-2">
                 <div>
@@ -157,7 +157,7 @@ const App: React.FC = () => {
                   <p className="text-gray-400 font-bold text-lg mt-2">Ranked by our intelligence model for your profile.</p>
                 </div>
               </div>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
                 {currentDisplayHouses.map(house => (
                   <HouseCard key={house.id} house={house} onClick={() => handleViewDetails(house)} user={currentUser} />
@@ -169,28 +169,28 @@ const App: React.FC = () => {
 
         <div className="max-w-6xl mx-auto">
           {view === 'details' && selectedHouse && (
-            <HouseDetails 
-              house={selectedHouse} 
-              user={currentUser} 
-              onBack={() => setView('search')} 
-              onBook={() => handleBook(selectedHouse)} 
+            <HouseDetails
+              house={selectedHouse}
+              user={currentUser}
+              onBack={() => setView('search')}
+              onBook={() => handleBook(selectedHouse)}
             />
           )}
           {view === 'dashboard' && (
-            <Dashboard 
-              bookings={bookings} 
-              houses={MOCK_HOUSES} 
-              onViewHouse={handleViewDetails} 
-              onUpdateStatus={updateBookingStatus} 
-              onNavigate={(v: any) => setView(v)} 
+            <Dashboard
+              bookings={bookings}
+              houses={MOCK_HOUSES}
+              onViewHouse={handleViewDetails}
+              onUpdateStatus={updateBookingStatus}
+              onNavigate={(v: any) => setView(v)}
             />
           )}
           {view === 'history' && (
-            <History 
-              bookings={bookings} 
-              houses={MOCK_HOUSES} 
-              onViewHouse={handleViewDetails} 
-              onNavigate={(v: any) => setView(v)} 
+            <History
+              bookings={bookings}
+              houses={MOCK_HOUSES}
+              onViewHouse={handleViewDetails}
+              onNavigate={(v: any) => setView(v)}
             />
           )}
         </div>

@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { SearchCriteria } from '../types.ts';
+import { SearchCriteria } from '../types';
 
 interface SearchFiltersProps {
   onSearch: (criteria: SearchCriteria) => void;
@@ -42,13 +42,13 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({ onSearch, initialCriteria
         <h2 className="text-[44px] font-extrabold text-[#1E1B4B] leading-tight tracking-tighter">Your Next Chapter Begins Here.</h2>
         <p className="text-lg text-gray-400 font-medium mt-3">Refine your search to find spaces that speak to you.</p>
       </div>
-      
+
       <form onSubmit={handleSubmit} className="space-y-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           <div className="space-y-4">
             <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Type of Living</label>
             <div className="relative">
-              <select 
+              <select
                 value={houseType}
                 onChange={e => setHouseType(e.target.value)}
                 className="w-full bg-[#F8FAFC] border-transparent rounded-2xl px-6 py-5 text-base font-bold text-[#1E1B4B] appearance-none outline-none ring-2 ring-transparent focus:ring-indigo-500/10 focus:bg-white transition-all cursor-pointer border border-gray-100"
@@ -66,7 +66,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({ onSearch, initialCriteria
 
           <div className="space-y-4">
             <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Preferred State</label>
-            <input 
+            <input
               type="text"
               value={stateName}
               onChange={e => setStateName(e.target.value)}
@@ -77,7 +77,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({ onSearch, initialCriteria
 
           <div className="space-y-4">
             <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Location / Area</label>
-            <input 
+            <input
               type="text"
               value={district}
               onChange={e => setDistrict(e.target.value)}
@@ -88,7 +88,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({ onSearch, initialCriteria
 
           <div className="space-y-4">
             <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Budget Confidence</label>
-            <input 
+            <input
               type="text"
               value={income}
               onChange={e => setIncome(e.target.value.replace(/\D/g, ''))}
@@ -99,7 +99,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({ onSearch, initialCriteria
         </div>
 
         <div className="pt-6 flex justify-end">
-          <button 
+          <button
             type="submit"
             className="brand-gradient text-white px-12 py-5 rounded-2xl font-bold text-lg shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all"
           >

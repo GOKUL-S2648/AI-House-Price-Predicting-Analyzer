@@ -1,23 +1,39 @@
 
 import React, { useState, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { getAffordabilityInsight } from '../geminiService.ts';
-import { predictFuturePrice } from '../mlService.ts';
+import { getAffordabilityInsight } from '../geminiService';
+import { predictFuturePrice } from '../mlService';
+import { House, User } from '../types';
 
-const HouseDetails = ({ house, user, onBack, onBook }) => {
+const HouseDetails = ({ house, user, onBack, onBook }: { 
+  house: House; 
+  user: User; 
+  onBack: () => void; 
+  onBook: () => void; 
+}) => {
   const [insight, setInsight] = useState('');
-  const [mlData, setMlData] = useState(null);
+  const [mlData, setMlData] = useState<{
+    predictedPrice: number;
+    trend: string;
+    isRF: boolean;
+    lrPrice?: number;
+  } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const processData = async () => {
       setIsLoading(true);
-      const textInsight = await getAffordabilityInsight(house, user.income);
-      const forecast = predictFuturePrice(house.historicalPrices, 2025);
+      try {
+        const textInsight = await getAffordabilityInsight(house, user.income);
+        const forecast = await predictFuturePrice(house.historicalPrices, 2026, house.amenities.length);
 
-      setInsight(textInsight);
-      setMlData(forecast);
-      setIsLoading(false);
+        setInsight(textInsight);
+        setMlData(forecast);
+      } catch (e) {
+        console.error("Prediction error:", e);
+      } finally {
+        setIsLoading(false);
+      }
     };
     processData();
   }, [house.id, user.income]);
@@ -40,9 +56,29 @@ const HouseDetails = ({ house, user, onBack, onBook }) => {
             <p className="text-gray-400 font-bold">{house.location}</p>
           </div>
 
-          <div className="flex items-baseline gap-2">
-            <span className="text-5xl font-black text-[#1E1B4B]">₹{house.price.toLocaleString()}</span>
-            <span className="text-gray-400 font-bold text-lg">/month</span>
+          <div className="space-y-4">
+            <div className="flex items-baseline gap-2">
+              <span className="text-5xl font-black text-[#1E1B4B]">₹{house.price.toLocaleString()}</span>
+              <span className="text-gray-400 font-bold text-lg">/month</span>
+            </div>
+
+            {!isLoading && mlData && (
+              <div className="flex items-center gap-3 animate-in fade-in slide-in-from-left duration-1000">
+                <div className="px-4 py-2 bg-[#1E1B4B] text-white rounded-2xl flex items-center gap-3 shadow-xl shadow-indigo-100 border border-white/10">
+                  <div className="flex flex-col">
+                    <span className="text-[8px] font-black uppercase tracking-widest text-indigo-300">2026 AI Forecast</span>
+                    <span className="text-lg font-black leading-none">₹{mlData.predictedPrice.toLocaleString()}</span>
+                  </div>
+                  <div className={`p-1.5 rounded-lg ${mlData.trend === 'rising' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'}`}>
+                    {mlData.trend === 'rising' ? (
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+                    ) : (
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" /></svg>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           <p className="text-gray-600 font-medium leading-relaxed bg-gray-50 p-6 rounded-3xl border border-gray-100 italic">
@@ -58,14 +94,16 @@ const HouseDetails = ({ house, user, onBack, onBook }) => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
         <div className="bg-[#1E1B4B] rounded-[40px] p-10 text-white shadow-2xl relative overflow-hidden">
           <div className="relative z-10">
-            <h3 className="text-[10px] font-black text-indigo-300 uppercase tracking-widest mb-10">Linear Regression Projection</h3>
+            <h3 className="text-[10px] font-black text-indigo-300 uppercase tracking-widest mb-10">
+              {mlData?.isRF ? 'Random Forest Smart Projection' : 'Linear Regression Projection'}
+            </h3>
 
             {isLoading ? (
               <div className="h-20 w-full bg-white/5 animate-pulse rounded-2xl" />
             ) : (
               <div className="space-y-6">
                 <div>
-                  <p className="text-xs font-bold text-indigo-200/60 mb-1">Forecast for 2025</p>
+                  <p className="text-xs font-bold text-indigo-200/60 mb-1">Forecast for 2026</p>
                   <div className="flex items-baseline gap-4">
                     <span className="text-5xl font-black">₹{mlData?.predictedPrice.toLocaleString()}</span>
                     <span className={`text-[10px] font-black px-2 py-1 rounded-md ${mlData?.trend === 'rising' ? 'bg-rose-500/20 text-rose-400' : 'bg-emerald-500/20 text-emerald-400'}`}>
@@ -86,7 +124,7 @@ const HouseDetails = ({ house, user, onBack, onBook }) => {
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
             </svg>
-            AI Price Trend Analysis (Linear Regression)
+            AI Price Trend Analysis ({mlData?.isRF ? 'Random Forest' : 'Linear Regression'})
           </h3>
           <div className="h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">

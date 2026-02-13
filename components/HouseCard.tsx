@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
-import { getMatchScore } from '../mlService.ts';
-import { House, User } from '../types.ts';
+import { getMatchScore } from '../mlService';
+import { House, User } from '../types';
 
 // Fix: Defined HouseCardProps interface for strict typing
 interface HouseCardProps {
@@ -16,27 +16,27 @@ const HouseCard: React.FC<HouseCardProps> = ({ house, onClick, user }) => {
   const matchScore = user ? getMatchScore(house, user) : null;
 
   return (
-    <div 
+    <div
       className="bg-white rounded-[24px] overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-500 cursor-pointer group flex flex-col h-full"
       onClick={onClick}
     >
       <div className="relative aspect-[16/10] overflow-hidden bg-gray-50">
         {!isLoaded && <div className="absolute inset-0 bg-gray-100 animate-pulse" />}
-        <img 
-          src={house.image} 
-          alt={house.title} 
+        <img
+          src={house.image}
+          alt={house.title}
           onLoad={() => setIsLoaded(true)}
-          className={`w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ${isLoaded ? 'opacity-100' : 'opacity-0'}`} 
+          className={`w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
         />
-        
+
         <div className="absolute top-4 left-4 flex flex-col gap-2 z-10">
           <div className="bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest text-indigo-600 shadow-sm border border-white/20 flex items-center gap-1.5">
-            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/></svg>
+            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" /></svg>
             Verified Space
           </div>
           {matchScore !== null && (
             <div className={`px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest text-white shadow-lg border border-white/10 flex items-center gap-1.5 ${matchScore > 80 ? 'bg-emerald-600' : matchScore > 60 ? 'bg-amber-500' : 'bg-gray-500'}`}>
-              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
               {matchScore}% Match
             </div>
           )}
@@ -53,7 +53,7 @@ const HouseCard: React.FC<HouseCardProps> = ({ house, onClick, user }) => {
         </div>
 
         <div className="flex items-center gap-2 text-gray-400 mb-6">
-          <svg className="w-4 h-4 text-indigo-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+          <svg className="w-4 h-4 text-indigo-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /></svg>
           <span className="text-xs font-semibold">{house.location}</span>
         </div>
 
