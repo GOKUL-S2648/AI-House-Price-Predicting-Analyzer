@@ -5,7 +5,7 @@ This system combines Machine Learning, Large Language Models (LLMs), and modern 
 
 ## 🚀 Live Demo
 
-🔗 https://ai-house-predicting-analyser.onrender.com
+🔗 https://ai-house-price-predicting-analyzer.onrender.com
 
 > Click the link above to access the deployed application.
 
@@ -91,7 +91,7 @@ This design ensures efficient data management and tracking.
 ## ⚙️ Installation & Setup
 
 ### 1️⃣ Clone the repository
-https://github.com/GOKUL-S2648/AI-House-Predicting-Analyzer
+https://github.com/GOKUL-S2648/AI-House-Price-Predicting-Analyze
 cd-ypur-repo
 
 ### 2️⃣ Install dependencies
