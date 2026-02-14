@@ -1,7 +1,7 @@
 # 🏠 AI-Based Platform for Monitoring Affordable Housing Availability
 
-An intelligent full-stack web application that helps users discover affordable housing through real-time analytics, interactive dashboards, and AI-powered chatbot assistance.
-This system combines Machine Learning, Large Language Models (LLMs), and modern web technologies to provide a smart, scalable, and user-friendly housing monitoring platform.
+An intelligent AI-powered full-stack web application that helps users discover affordable housing through real-time analytics, interactive dashboards, smart search, and an AI chatbot.
+This system combines Machine Learning, LLMs, and modern web technologies to deliver a scalable and user-friendly housing monitoring platform.
 
 ## 🚀 Live Demo
 
@@ -40,7 +40,7 @@ User
 → React Frontend  
 → Python Backend  
 → AI Model (LLM API)  
-→ Database  
+→ Database 
 
 ### Benefits
 - Modular design  
@@ -77,7 +77,7 @@ This design ensures efficient data management and tracking.
 - Groq LLM API
 
 ### Database
-- SQLite / PostgreSQL
+- Supabase
 
 ### Deployment
 - Render
@@ -91,7 +91,7 @@ This design ensures efficient data management and tracking.
 ## ⚙️ Installation & Setup
 
 ### 1️⃣ Clone the repository
-https://github.com/GOKUL-S2648/AI-House-Price-Predicting-Analyze
+https://github.com/GOKUL-S2648/AI-House-Price-Predicting-Analyzer
 cd-ypur-repo
 
 ### 2️⃣ Install dependencies
