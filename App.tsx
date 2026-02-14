@@ -10,11 +10,14 @@ import History from './components/History';
 import ChatAI from './components/ChatAI';
 import { getCategorizedSuggestions } from './geminiService';
 import { rankProperties } from './mlService';
+import { supabase } from './supabaseClient';
+import ListProperty from './components/ListProperty';
+import AdminDashboard from './components/AdminDashboard';
 import { User, House, Booking, SearchCriteria } from './types';
 
 const App: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [view, setView] = useState<'search' | 'details' | 'dashboard' | 'history'>('search');
+  const [view, setView] = useState<'search' | 'details' | 'dashboard' | 'history' | 'list' | 'admin'>('search');
   const [selectedHouse, setSelectedHouse] = useState<House | null>(null);
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [filteredHouses, setFilteredHouses] = useState<House[]>([]);
@@ -29,6 +32,43 @@ const App: React.FC = () => {
     district: '',
     state: ''
   });
+  const [houses, setHouses] = useState<House[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchHouses = useCallback(async () => {
+    try {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('houses')
+        .select('*');
+
+      if (error) throw error;
+
+      if (data && data.length > 0) {
+        // Map snake_case from DB to camelCase interfaces
+        const mappedHouses: House[] = data.map(h => ({
+          ...h,
+          id: h.listing_id || h.id, // Prefer original listing ID for migration stability
+          historicalPrices: h.historical_prices,
+          isApproved: h.is_approved,
+          ownerId: h.owner_id
+        }));
+        setHouses(mappedHouses);
+      } else {
+        // Fallback to mock data if DB is empty
+        setHouses(MOCK_HOUSES);
+      }
+    } catch (err) {
+      console.error("Error fetching houses from Supabase:", err);
+      setHouses(MOCK_HOUSES);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchHouses();
+  }, [fetchHouses]);
 
   // Persist bookings
   useEffect(() => {
@@ -58,7 +98,8 @@ const App: React.FC = () => {
     setIsSearching(false);
 
     const initialIncome = user.income || 50000;
-    const ranked = rankProperties(MOCK_HOUSES.filter(h => h.price <= initialIncome * 0.5), user).slice(0, 15);
+    const approvedHouses = houses.filter(h => h.isApproved);
+    const ranked = rankProperties(approvedHouses.filter(h => h.price <= initialIncome * 0.5), user).slice(0, 15);
     setFilteredHouses(ranked);
 
     try {
@@ -83,7 +124,8 @@ const App: React.FC = () => {
     setIsSearching(true);
 
     const query = (criteria.district || '').toLowerCase().trim();
-    const results = MOCK_HOUSES.filter(h => {
+    const results = houses.filter(h => {
+      if (currentUser?.role !== 'admin' && !h.isApproved) return false;
       const priceLimit = criteria.maxPrice || 1000000;
       const priceMatch = h.price <= (priceLimit + 5000);
       const typeMatch = !criteria.houseType || criteria.houseType === 'Any' || h.type === criteria.houseType;
@@ -116,7 +158,8 @@ const App: React.FC = () => {
     if (!currentUser) return [];
     if (view === 'details' && selectedHouse) return [selectedHouse];
     if (isSearching) return filteredHouses;
-    return rankProperties(MOCK_HOUSES.filter(h => h.price <= (currentUser.income || 50000) * 0.45), currentUser).slice(0, 12);
+    const approvedHouses = houses.filter(h => h.isApproved);
+    return rankProperties(approvedHouses.filter(h => h.price <= (currentUser.income || 50000) * 0.45), currentUser).slice(0, 12);
   }, [currentUser, isSearching, filteredHouses, view, selectedHouse]);
 
   const updateBookingStatus = (id: string, status: string) => {
@@ -179,7 +222,7 @@ const App: React.FC = () => {
           {view === 'dashboard' && (
             <Dashboard
               bookings={bookings}
-              houses={MOCK_HOUSES}
+              houses={houses}
               onViewHouse={handleViewDetails}
               onUpdateStatus={updateBookingStatus}
               onNavigate={(v: any) => setView(v)}
@@ -188,9 +231,24 @@ const App: React.FC = () => {
           {view === 'history' && (
             <History
               bookings={bookings}
-              houses={MOCK_HOUSES}
+              houses={houses}
               onViewHouse={handleViewDetails}
               onNavigate={(v: any) => setView(v)}
+            />
+          )}
+
+          {view === 'list' && currentUser && (
+            <ListProperty
+              user={currentUser}
+              onSuccess={() => { fetchHouses(); setView('search'); }}
+              onBack={() => setView('search')}
+            />
+          )}
+
+          {view === 'admin' && currentUser?.role === 'admin' && (
+            <AdminDashboard
+              pendingHouses={houses.filter(h => !h.isApproved && !h.id.toString().startsWith('listing_'))}
+              onAction={() => fetchHouses()}
             />
           )}
         </div>

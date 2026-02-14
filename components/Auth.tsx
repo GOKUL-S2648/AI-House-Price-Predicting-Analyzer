@@ -7,7 +7,8 @@ const DEFAULT_USER = {
   name: 'Admin Demo',
   email: 'admin@affordhome.ai',
   password: 'password123',
-  income: 75000
+  income: 75000,
+  role: 'admin'
 };
 
 interface AuthProps {
@@ -17,11 +18,11 @@ interface AuthProps {
 const Auth: React.FC<AuthProps> = ({ onLogin }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [formData, setFormData] = useState({ name: '', email: '', password: ''});
+  const [formData, setFormData] = useState({ name: '', email: '', password: '' });
 
   useEffect(() => {
     setError(null);
-    setFormData({ name: '', email: '', password: ''});
+    setFormData({ name: '', email: '', password: '' });
   }, [isLogin]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,7 +40,7 @@ const Auth: React.FC<AuthProps> = ({ onLogin }) => {
         const parsed = JSON.parse(raw);
         if (Array.isArray(parsed)) storedUsers = [...storedUsers, ...parsed];
       }
-    } catch (err) {}
+    } catch (err) { }
 
     const emailInput = formData.email.trim().toLowerCase();
     const passwordInput = formData.password.trim();
@@ -54,7 +55,8 @@ const Auth: React.FC<AuthProps> = ({ onLogin }) => {
         id: 'user_' + Math.random().toString(36).substr(2, 9),
         name: formData.name.trim(),
         email: emailInput,
-        password: passwordInput
+        password: passwordInput,
+        role: 'user'
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify([...storedUsers.slice(1), newUser]));
       onLogin(newUser);
@@ -65,7 +67,7 @@ const Auth: React.FC<AuthProps> = ({ onLogin }) => {
     <div className="min-h-screen w-full flex items-center justify-center bg-[#F1F5F9] p-6 font-['Plus_Jakarta_Sans']">
       <div className="w-full max-w-[440px]">
         <div className="bg-white rounded-[54px] shadow-[0_32px_64px_-15px_rgba(0,0,0,0.08)] p-12 md:p-14 animate-in fade-in zoom-in-95 duration-500">
-          
+
           {/* Logo Header */}
           <div className="flex items-center gap-4 mb-12">
             <div className="w-12 h-12 bg-[#4338CA] rounded-2xl flex items-center justify-center text-white shadow-lg shadow-indigo-100">
@@ -82,54 +84,54 @@ const Auth: React.FC<AuthProps> = ({ onLogin }) => {
                 {error}
               </div>
             )}
-            
+
             {!isLogin && (
               <div className="space-y-1">
-                <input 
-                  name="name" 
-                  type="text" 
-                  value={formData.name} 
-                  onChange={handleChange} 
-                  placeholder="Full Name" 
-                  className="w-full bg-[#F8FAFC] border-none rounded-[20px] px-7 py-5 text-sm font-semibold text-[#1E1B4B] placeholder:text-gray-300 outline-none ring-2 ring-transparent focus:ring-indigo-500/10 transition-all" 
+                <input
+                  name="name"
+                  type="text"
+                  value={formData.name}
+                  onChange={handleChange}
+                  placeholder="Full Name"
+                  className="w-full bg-[#F8FAFC] border-none rounded-[20px] px-7 py-5 text-sm font-semibold text-[#1E1B4B] placeholder:text-gray-300 outline-none ring-2 ring-transparent focus:ring-indigo-500/10 transition-all"
                 />
               </div>
             )}
 
             <div className="space-y-1">
-              <input 
-                name="email" 
-                type="email" 
-                value={formData.email} 
-                onChange={handleChange} 
-                placeholder="Email" 
-                className="w-full bg-[#F8FAFC] border-none rounded-[20px] px-7 py-5 text-sm font-semibold text-[#1E1B4B] placeholder:text-gray-300 outline-none ring-2 ring-transparent focus:ring-indigo-500/10 transition-all" 
+              <input
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Email"
+                className="w-full bg-[#F8FAFC] border-none rounded-[20px] px-7 py-5 text-sm font-semibold text-[#1E1B4B] placeholder:text-gray-300 outline-none ring-2 ring-transparent focus:ring-indigo-500/10 transition-all"
               />
             </div>
 
             <div className="space-y-1">
-              <input 
-                name="password" 
-                type="password" 
-                value={formData.password} 
-                onChange={handleChange} 
-                placeholder="Password" 
-                className="w-full bg-[#F8FAFC] border-none rounded-[20px] px-7 py-5 text-sm font-semibold text-[#1E1B4B] placeholder:text-gray-300 outline-none ring-2 ring-transparent focus:ring-indigo-500/10 transition-all" 
+              <input
+                name="password"
+                type="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Password"
+                className="w-full bg-[#F8FAFC] border-none rounded-[20px] px-7 py-5 text-sm font-semibold text-[#1E1B4B] placeholder:text-gray-300 outline-none ring-2 ring-transparent focus:ring-indigo-500/10 transition-all"
               />
             </div>
 
-            
-            <button 
-              type="submit" 
+
+            <button
+              type="submit"
               className="w-full bg-[#3730A3] hover:bg-[#312E81] text-white font-extrabold py-5 rounded-[22px] mt-6 shadow-xl shadow-indigo-100 hover:scale-[1.01] active:scale-95 transition-all text-base tracking-tight"
             >
               {isLogin ? 'Sign In' : 'Sign Up'}
             </button>
 
             <div className="pt-4 flex justify-center">
-              <button 
-                type="button" 
-                onClick={() => setIsLogin(!isLogin)} 
+              <button
+                type="button"
+                onClick={() => setIsLogin(!isLogin)}
                 className="text-[11px] font-extrabold text-gray-400 uppercase tracking-[0.15em] hover:text-indigo-600 transition-colors"
               >
                 {isLogin ? "Need an account?" : "Have an account?"}

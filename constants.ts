@@ -153,6 +153,7 @@ const generateMockData = () => {
               { year: 2025, price: basePrice }
             ],
             description: `Beautifully maintained ${type} located in the heart of ${neighborhood}. Perfect for those seeking both comfort and accessibility in ${d}.`,
+            isApproved: true,
             lat: baseCoords[0] + latJitter,
             lng: baseCoords[1] + lngJitter
           });

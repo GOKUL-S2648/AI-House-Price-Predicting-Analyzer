@@ -5,6 +5,7 @@ export interface User {
   name: string;
   email: string;
   income: number;
+  role?: 'admin' | 'user';
 }
 
 // House interface representing a property listing
@@ -22,6 +23,8 @@ export interface House {
   description: string;
   lat: number;
   lng: number;
+  isApproved: boolean;
+  ownerId?: string;
 }
 
 // Booking interface representing a scheduled property visit
