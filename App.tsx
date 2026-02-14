@@ -24,6 +24,7 @@ const App: React.FC = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [aiTips, setAiTips] = useState<Record<string, string[]>>({});
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isNavbarOpen, setIsNavbarOpen] = useState(false);
 
   const [searchCriteria, setSearchCriteria] = useState<SearchCriteria>({
     income: 0,
@@ -175,10 +176,19 @@ const App: React.FC = () => {
         onNavigate={(v: any) => setView(v)}
         onLogout={() => setCurrentUser(null)}
         currentView={view}
+        isOpen={isNavbarOpen}
+        onClose={() => setIsNavbarOpen(false)}
       />
 
-      <main className="flex-1 overflow-y-auto px-6 py-12 md:px-16 md:py-20 scroll-smooth">
-        <div className="flex justify-end mb-8">
+      <main className="flex-1 min-w-0 overflow-y-auto px-6 py-12 md:px-16 md:py-20 scroll-smooth">
+        <div className="flex items-center justify-between md:justify-end mb-8">
+          <button
+            onClick={() => setIsNavbarOpen(true)}
+            className="md:hidden p-3 rounded-xl bg-white dark:bg-slate-800 shadow-sm text-slate-500"
+          >
+            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" /></svg>
+          </button>
+
           <button
             onClick={() => setIsDarkMode(!isDarkMode)}
             className={`p-3 rounded-xl transition-all ${isDarkMode ? 'bg-slate-800 text-yellow-400' : 'bg-white text-slate-400 shadow-sm'}`}

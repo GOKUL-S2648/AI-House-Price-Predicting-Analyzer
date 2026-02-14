@@ -37,10 +37,10 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({ onSearch, initialCriteria
   };
 
   return (
-    <div className="w-full bg-white rounded-[32px] p-8 md:p-14 border border-gray-100 shadow-xl animate-in fade-in slide-in-from-top-4 duration-700">
-      <div className="mb-14">
-        <h2 className="text-[44px] font-extrabold text-[#1E1B4B] leading-tight tracking-tighter">Your Next Chapter Begins Here.</h2>
-        <p className="text-lg text-gray-400 font-medium mt-3">Refine your search to find spaces that speak to you.</p>
+    <div className="w-full bg-white dark:bg-slate-800 rounded-[32px] p-6 md:p-14 border border-gray-100 dark:border-slate-700 shadow-xl animate-in fade-in slide-in-from-top-4 duration-700">
+      <div className="mb-10 md:mb-14">
+        <h2 className="text-3xl md:text-[44px] font-extrabold text-[#1E1B4B] dark:text-white leading-tight tracking-tighter">Your Next Chapter Begins Here.</h2>
+        <p className="text-base md:text-lg text-gray-400 font-medium mt-3">Refine your search to find spaces that speak to you.</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-12">
