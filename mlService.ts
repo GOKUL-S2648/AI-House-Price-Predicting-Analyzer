@@ -2,21 +2,30 @@ import { House, User } from './types';
 
 export const predictFuturePrice = async (historicalData: { year: number, price: number }[], targetYear: number, amenitiesCount: number = 0) => {
   try {
-    const response = await fetch('http://localhost:5000/predict', {
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    const response = await fetch(`${API_URL}/predict`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ historicalPrices: historicalData, targetYear, amenitiesCount })
     });
 
+
     if (!response.ok) throw new Error('Backend failed');
 
     const data = await response.json();
     return {
+      rfPrice: data.random_forest.predicted_price,
+      rfTrend: data.random_forest.trend,
+      lrPrice: data.linear_regression.predicted_price,
+      lrTrend: data.linear_regression.trend,
+      // Default price for standard components
       predictedPrice: data.random_forest.predicted_price,
       trend: data.random_forest.trend,
-      isRF: true,
-      lrPrice: data.linear_regression.predicted_price
+      isRF: true
     };
+
+
+
   } catch (error) {
     console.error("ML Backend error, falling back to local LR:", error);
     // Fallback to local Linear Regression if backend is down
@@ -37,9 +46,18 @@ export const predictFuturePrice = async (historicalData: { year: number, price: 
     const predictedPrice = Math.round(m * targetYear + b);
     const trend = m > 100 ? 'rising' : m < -100 ? 'declining' : 'stable';
 
-    return { predictedPrice, trend, isRF: false };
+    return {
+      rfPrice: predictedPrice,
+      rfTrend: trend,
+      lrPrice: predictedPrice,
+      lrTrend: trend,
+      predictedPrice,
+      trend,
+      isRF: false
+    };
   }
 };
+
 
 export const getMatchScore = (house: House, user: User) => {
   if (!user) return 0;
