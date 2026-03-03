@@ -58,6 +58,57 @@ export const predictFuturePrice = async (historicalData: { year: number, price: 
   }
 };
 
+export const getCheapDeals = async (houses: House[]) => {
+  try {
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    const response = await fetch(`${API_URL}/cheap-deals`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        houses: houses.map(h => ({
+          id: h.id,
+          title: h.title,
+          price: h.price,
+          historicalPrices: h.historicalPrices,
+          amenitiesCount: h.amenities.length
+        })),
+        targetYear: 2025
+      })
+    });
+
+    if (!response.ok) throw new Error('Backend failed');
+    const data = await response.json();
+    return data.deals;
+  } catch (error) {
+    console.error("Error fetching cheap deals:", error);
+    return [];
+  }
+};
+
+export const detectSuspiciousListings = async (houses: House[]) => {
+  try {
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    const response = await fetch(`${API_URL}/detect-suspicious`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        houses: houses.map(h => ({
+          ...h,
+          amenitiesCount: h.amenities ? h.amenities.length : 0
+        })),
+        targetYear: 2025
+      })
+    });
+
+    if (!response.ok) throw new Error('Backend failed');
+    const data = await response.json();
+    return data.listings || houses;
+  } catch (error) {
+    console.error("Error detecting suspicious listings:", error);
+    return Array.isArray(houses) ? houses : [];
+  }
+};
+
 
 export const getMatchScore = (house: House, user: User) => {
   if (!user) return 0;
@@ -79,6 +130,17 @@ export const getMatchScore = (house: House, user: User) => {
   else if (house.type === 'Pg') score += 5;
 
   return Math.round(score);
+};
+
+export const analyzeListingValue = (price: number, predictedPrice: number) => {
+  if (!predictedPrice) return { label: 'Unknown', color: 'gray' };
+
+  const ratio = price / predictedPrice;
+
+  if (ratio > 1.3) return { label: 'Overpriced', color: 'red' };
+  if (ratio < 0.6) return { label: 'Suspiciously Low', color: 'orange' };
+  if (ratio < 0.85) return { label: 'High Value', color: 'emerald' };
+  return { label: 'Fair Value', color: 'blue' };
 };
 
 export const rankProperties = (houses: House[], user: User) => {

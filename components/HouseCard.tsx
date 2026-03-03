@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { getMatchScore } from '../mlService';
+import { getMatchScore, predictFuturePrice, analyzeListingValue } from '../mlService';
 import { House, User } from '../types';
 
 // Fix: Defined HouseCardProps interface for strict typing
@@ -13,7 +13,17 @@ interface HouseCardProps {
 // Fix: Used React.FC<HouseCardProps> to correctly handle React props like 'key' in App.tsx
 const HouseCard: React.FC<HouseCardProps> = ({ house, onClick, user }) => {
   const [isLoaded, setIsLoaded] = useState(false);
+  const [valuation, setValuation] = useState<{ label: string, color: string } | null>(null);
   const matchScore = user ? getMatchScore(house, user) : null;
+
+  React.useEffect(() => {
+    const checkValuation = async () => {
+      const prediction = await predictFuturePrice(house.historicalPrices, 2025, house.amenities.length);
+      const analysis = analyzeListingValue(house.price, prediction.predictedPrice);
+      setValuation(analysis);
+    };
+    checkValuation();
+  }, [house]);
 
   return (
     <div
@@ -40,10 +50,44 @@ const HouseCard: React.FC<HouseCardProps> = ({ house, onClick, user }) => {
               {matchScore}% Match
             </div>
           )}
+          {valuation && (
+            <div className={`px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest text-white shadow-lg border border-white/10 flex items-center gap-1.5 ${valuation.color === 'emerald' ? 'bg-emerald-500' :
+              valuation.color === 'red' ? 'bg-rose-500' :
+                valuation.color === 'orange' ? 'bg-orange-500' :
+                  'bg-blue-500'
+              }`}>
+              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              {valuation.label}
+            </div>
+          )}
+          {house.is_suspicious && (
+            <div className="bg-rose-600 px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest text-white shadow-lg border border-white/10 flex items-center gap-1.5 animate-pulse">
+              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+              Suspicious
+            </div>
+          )}
+          {house.is_overpriced && !house.is_suspicious && (
+            <div className="bg-amber-600 px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest text-white shadow-lg border border-white/10 flex items-center gap-1.5">
+              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              Overpriced
+            </div>
+          )}
         </div>
       </div>
 
       <div className="p-6 flex flex-col flex-1">
+        {house.is_suspicious && (
+          <div className="mb-4 p-3 bg-rose-50 rounded-xl border border-rose-100">
+            <p className="text-[10px] font-black text-rose-600 uppercase tracking-widest mb-1">AI Risk Alert</p>
+            <p className="text-xs font-bold text-rose-700">{house.suspicious_reason}</p>
+          </div>
+        )}
+        {house.is_overpriced && !house.is_suspicious && (
+          <div className="mb-4 p-3 bg-amber-50 rounded-xl border border-amber-100">
+            <p className="text-[10px] font-black text-amber-600 uppercase tracking-widest mb-1">AI Price Analysis</p>
+            <p className="text-xs font-bold text-amber-700">{house.suspicious_reason || "Listed significantly above market value."}</p>
+          </div>
+        )}
         <div className="flex justify-between items-start gap-4 mb-4">
           <h3 className="text-base font-bold text-[#1E1B4B] group-hover:text-indigo-600 transition-colors line-clamp-2">{house.title}</h3>
           <div className="text-right shrink-0">

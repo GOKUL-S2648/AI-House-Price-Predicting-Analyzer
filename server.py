@@ -32,15 +32,14 @@ def calculate_property_match(house_price: float, user_income: float, amenities_c
         financial_score = max(0.0, 70.0 - penalty)
         
     # Amenity Score: 7.5 points per feature, max 30 points
-    amenity_score = min(30.0, amenities_count * 7.5)
+    amenity_score = min(30.0, float(amenities_count) * 7.5)
     
-    match_score = round(financial_score + amenity_score)
+    match_score = int(round(financial_score + amenity_score))
     return min(100, match_score)
 
 def forecast_rent_growth(historical_prices: List[Dict[str, Any]], target_year: int = 2025) -> Dict[str, Any]:
     """
     Simple Linear Regression implementation (y = mx + b) for rent forecasting.
-    historical_prices: list of dicts [{'year': 2022, 'price': 10000}, ...]
     """
     n = len(historical_prices)
     if n < 2:
@@ -55,8 +54,8 @@ def forecast_rent_growth(historical_prices: List[Dict[str, Any]], target_year: i
     if denominator == 0: 
         return {"predicted_price": sum_y / n, "trend": "stable"}
     
-    m: float = (n * sum_xy - sum_x * sum_y) / denominator
-    b: float = (sum_y - m * sum_x) / n
+    m = (n * sum_xy - sum_x * sum_y) / denominator
+    b = (sum_y - m * sum_x) / n
     
     prediction = round(m * target_year + b)
     trend = "rising" if m > 50 else "declining" if m < -50 else "stable"
@@ -70,34 +69,23 @@ def forecast_rent_growth(historical_prices: List[Dict[str, Any]], target_year: i
 def predict_rf(historical_prices: List[Dict[str, Any]], amenities_count: int, target_year: int = 2026) -> Dict[str, Any]:
     """
     Random Forest Regression predicting price growth (deltas) instead of absolute values.
-    This allows the model to 'grow' beyond historical maximums.
     """
     if len(historical_prices) < 2:
         return forecast_rent_growth(historical_prices, target_year)
 
     df = pd.DataFrame(historical_prices)
+    df['delta'] = df['price'].diff().fillna(0.0)
     
-    # Calculate year-over-year changes (deltas)
-    df['delta'] = df['price'].diff().fillna(0)
-    
-    # For training, we use years 1 to N-1 to predict deltas
-    # Since we have very few points, we'll augment the tiny dataset with synthetic variations
-    # to give the trees something to work with for a 'demo' feel.
-    train_X = df[['year']].values[1:] # Skip first year as delta is 0
+    train_X = df[['year']].values[1:] 
     train_y = df['delta'].values[1:]
     
-    # Initialize and train Random Forest to predict the CHANGE
     model = RandomForestRegressor(n_estimators=100, random_state=42)
     model.fit(train_X, train_y)
     
-    # Predict the delta for the target year
-    # We sum the predicted deltas for each year between last year and target year
     current_price = historical_prices[-1]['price']
     last_year = historical_prices[-1]['year']
     
     predicted_delta = model.predict([[target_year]])[0]
-    
-    # Simple extrapolation: apply predicted annual delta for the gap
     years_gap = target_year - last_year
     prediction = current_price + (predicted_delta * years_gap)
     
@@ -105,7 +93,7 @@ def predict_rf(historical_prices: List[Dict[str, Any]], amenities_count: int, ta
     trend = "rising" if m > 50 else "declining" if m < -50 else "stable"
 
     return {
-        "predicted_price": round(float(prediction)),
+        "predicted_price": int(round(float(prediction))),
         "trend": trend,
         "model": "Random Forest (Delta Engine)"
     }
@@ -117,7 +105,6 @@ def predict():
     amenities_count = data.get('amenitiesCount', 0)
     target_year = data.get('targetYear', 2025)
     
-    # Calculate both for comparison
     lr_result = forecast_rent_growth(historical_prices, target_year)
     rf_result = predict_rf(historical_prices, amenities_count, target_year)
     
@@ -135,6 +122,157 @@ def match():
     
     score = calculate_property_match(house_price, user_income, amenities_count)
     return jsonify({"match_score": score})
+
+@app.route('/cheap-deals', methods=['POST'])
+def cheap_deals():
+    data = request.json
+    houses = data.get('houses', [])
+    target_year = data.get('targetYear', 2025)
+    threshold = data.get('threshold', 0.85)
+    
+    deals = []
+    for house in houses:
+        historical_prices = house.get('historicalPrices', [])
+        amenities_count = house.get('amenitiesCount', 0)
+        current_price = house.get('price', 0)
+        
+        prediction = predict_rf(historical_prices, amenities_count, target_year)
+        market_value = prediction['predicted_price']
+        
+        if current_price > 0 and market_value > 0:
+            if current_price < (market_value * threshold):
+                house['market_predicted_price'] = market_value
+                house['discount_percentage'] = round((1.0 - (float(current_price) / float(market_value))) * 100.0)
+                deals.append(house)
+                
+    return jsonify({"deals": deals})
+
+@app.route('/district-analysis', methods=['POST'])
+def district_analysis():
+    """
+    Aggregate neighborhood data to identify risk factors and investment potential.
+    Risk Score (0-100): Lower is better. High risk indicates 'slum risk' or declining value.
+    """
+    data = request.json
+    houses_list = data.get('houses', [])
+    
+    # Initialize separate dictionaries for each metric to help linter inference
+    houses_by_district = {}
+    amenities_by_district = {}
+    growth_by_district = {}
+    
+    for house in houses_list:
+        d_name = str(house.get('district', 'Unknown'))
+        
+        if d_name not in houses_by_district:
+            houses_by_district[d_name] = []
+            amenities_by_district[d_name] = 0
+            growth_by_district[d_name] = []
+        
+        houses_by_district[d_name].append(house)
+        amenities_by_district[d_name] += len(house.get('amenities', []))
+        
+        historical = house.get('historicalPrices', [])
+        if len(historical) >= 2:
+            s_price = float(historical[0].get('price', 0))
+            e_price = float(historical[-1].get('price', 0))
+            if s_price > 0:
+                growth_rate = (e_price - s_price) / s_price
+                growth_by_district[d_name].append(growth_rate)
+            
+    final_analysis = []
+    # Iterate over the collected districts
+    all_districts = list(houses_by_district.keys())
+    
+    for d_name in all_districts:
+        current_houses = houses_by_district[d_name]
+        count = len(current_houses)
+        if count == 0: continue
+        
+        # Calculate averages safely
+        avg_amenities = float(amenities_by_district[d_name]) / count
+        growth_values = growth_by_district[d_name]
+        avg_growth = sum(growth_values) / len(growth_values) if growth_values else 0.0
+        
+        # Risk Logic (explicit float conversions to satisfy linter)
+        f_amenities = float(avg_amenities)
+        f_growth = float(avg_growth)
+        
+        amenity_risk = max(0.0, 40.0 - (f_amenities * 5.0))
+        growth_risk = max(0.0, 30.0 - (f_growth * 100.0))
+        
+        # Manual average price calculation
+        total_price = 0.0
+        for h in current_houses:
+            total_price += float(h.get('price', 0))
+        avg_price = total_price / count
+        
+        price_risk = 30.0 if avg_price < 5000.0 else 0.0
+        
+        calculated_risk = min(100.0, amenity_risk + growth_risk + price_risk)
+        risk_score_int = int(round(calculated_risk))
+        
+        status_text = "High Risk (Potential Slum Zone)" if risk_score_int > 70 else \
+                      "Emerging Area" if risk_score_int > 40 else "Prime/Stable Zone"
+                 
+        final_analysis.append({
+            "district": d_name,
+            "risk_score": risk_score_int,
+            "status": status_text,
+            "avg_growth": int(round(f_growth * 100.0)),
+            "house_count": count
+        })
+        
+    return jsonify({"analysis": final_analysis})
+
+@app.route('/detect-suspicious', methods=['POST'])
+def detect_suspicious():
+    """
+    AI-driven transparency engine to flag overpriced or potential scam listings.
+    """
+    data = request.json
+    houses = data.get('houses', [])
+    target_year = data.get('targetYear', 2025)
+    
+    results = []
+    for house in houses:
+        historical_prices = house.get('historicalPrices', [])
+        # Handle both list and direct count if sent from frontend
+        amenities = house.get('amenities', [])
+        amenities_count = len(amenities) if isinstance(amenities, list) else house.get('amenitiesCount', 0)
+        current_price = house.get('price', 0)
+        
+        # Predict market value using RF
+        prediction = predict_rf(historical_prices, amenities_count, target_year)
+        market_value = prediction['predicted_price']
+        
+        is_suspicious = False
+        suspicious_reason = ""
+        is_overpriced = False
+        
+        if current_price > 0 and market_value > 0:
+            # Overpriced: > 30% above market
+            if current_price > (market_value * 1.3):
+                is_overpriced = True
+                suspicious_reason = "Listed 30%+ above AI market valuation."
+            
+            # Underpriced/Scam: < 40% of market
+            elif current_price < (market_value * 0.4):
+                is_suspicious = True
+                suspicious_reason = "Price is suspiciously low compared to market value."
+                
+        # Scam Profile: low/no amenities + low price
+        if amenities_count == 0 and current_price < 5000:
+            is_suspicious = True
+            suspicious_reason = "Incomplete profile/zero amenities with unusually low price."
+
+        house['is_suspicious'] = is_suspicious
+        house['suspicious_reason'] = suspicious_reason
+        house['is_overpriced'] = is_overpriced
+        house['market_predicted_price'] = market_value
+        results.append(house)
+                
+    return jsonify({"listings": results})
 
 if __name__ == '__main__':
     print("AffordHome AI Backend running on http://localhost:5000")

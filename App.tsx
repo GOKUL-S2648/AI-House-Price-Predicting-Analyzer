@@ -9,7 +9,7 @@ import Dashboard from './components/Dashboard';
 import History from './components/History';
 import ChatAI from './components/ChatAI';
 import { getCategorizedSuggestions } from './geminiService';
-import { rankProperties } from './mlService';
+import { rankProperties, detectSuspiciousListings } from './mlService';
 import { supabase } from './supabaseClient';
 import ListProperty from './components/ListProperty';
 import AdminDashboard from './components/AdminDashboard';
@@ -49,19 +49,23 @@ const App: React.FC = () => {
         // Map snake_case from DB to camelCase interfaces
         const mappedHouses: House[] = data.map(h => ({
           ...h,
-          id: h.listing_id || h.id, // Prefer original listing ID for migration stability
+          id: h.listing_id || h.id,
           historicalPrices: h.historical_prices,
           isApproved: h.is_approved,
           ownerId: h.owner_id
         }));
-        setHouses(mappedHouses);
+
+        // Analyze for suspicious/overpriced listings
+        const analyzed = await detectSuspiciousListings(mappedHouses);
+        setHouses(analyzed);
       } else {
-        // Fallback to mock data if DB is empty
-        setHouses(MOCK_HOUSES);
+        const analyzed = await detectSuspiciousListings(MOCK_HOUSES);
+        setHouses(analyzed);
       }
     } catch (err) {
       console.error("Error fetching houses from Supabase:", err);
-      setHouses(MOCK_HOUSES);
+      const analyzed = await detectSuspiciousListings(MOCK_HOUSES);
+      setHouses(analyzed);
     } finally {
       setLoading(false);
     }
@@ -233,6 +237,7 @@ const App: React.FC = () => {
             <Dashboard
               bookings={bookings}
               houses={houses}
+              user={currentUser}
               onViewHouse={handleViewDetails}
               onUpdateStatus={updateBookingStatus}
               onNavigate={(v: any) => setView(v)}

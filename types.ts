@@ -25,6 +25,10 @@ export interface House {
   lng: number;
   isApproved: boolean;
   ownerId?: string;
+  is_suspicious?: boolean;
+  suspicious_reason?: string;
+  is_overpriced?: boolean;
+  market_predicted_price?: number;
 }
 
 // Booking interface representing a scheduled property visit
