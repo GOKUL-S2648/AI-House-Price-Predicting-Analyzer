@@ -64,80 +64,120 @@ const Auth: React.FC<AuthProps> = ({ onLogin }) => {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-[#F1F5F9] p-6 font-['Plus_Jakarta_Sans']">
-      <div className="w-full max-w-[440px]">
-        <div className="bg-white rounded-[54px] shadow-[0_32px_64px_-15px_rgba(0,0,0,0.08)] p-12 md:p-14 animate-in fade-in zoom-in-95 duration-500">
+    <div className="min-h-screen w-full relative flex items-center justify-center font-['Plus_Jakarta_Sans',_sans-serif] overflow-hidden">
+      {/* Cinematic Background */}
+      <div className="absolute inset-0 overflow-hidden">
+        <img 
+          src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" 
+          alt="Luxury living space"
+          className="w-full h-full object-cover scale-105"
+        />
+        <div className="absolute inset-0 bg-white/30"></div>
+      </div>
 
-          {/* Logo Header */}
-          <div className="flex items-center gap-4 mb-12">
-            <div className="w-12 h-12 bg-[#4338CA] rounded-2xl flex items-center justify-center text-white shadow-lg shadow-indigo-100">
-              <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-              </svg>
+      <div className="relative z-10 w-full max-w-[480px] px-6">
+        <div className="bg-white rounded-[40px] border border-black/5 p-10 md:p-14 shadow-2xl space-y-10">
+          
+          {/* Properly Branding */}
+          <div className="flex flex-col items-center text-center space-y-2">
+            <div className="flex items-center gap-2">
+              <span className="text-3xl font-black text-[#0F172A] tracking-[0.2em]">PR</span>
+              <div className="relative">
+                <span className="text-3xl font-black text-[#0F172A] tracking-[0.2em] opacity-0">O</span>
+                <svg className="absolute inset-0 w-full h-full text-[#00AEEF]" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zM7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 2.88-2.88 7.19-5 9.88C9.92 16.21 7 11.85 7 9z"/>
+                  <circle cx="12" cy="9" r="2.5"/>
+                </svg>
+              </div>
+              <span className="text-3xl font-black text-[#0F172A] tracking-[0.2em]">PERLY</span>
             </div>
-            <span className="text-2xl font-extrabold text-[#1E1B4B] tracking-tight">AffordHome</span>
+            <p className="text-[#00AEEF] text-[10px] font-black uppercase tracking-[0.4em]">modern. intelligent. real estate.</p>
           </div>
 
-          <form onSubmit={handleAuthAction} className="space-y-5">
+          <div className="space-y-4 text-center">
+            <h1 className="text-4xl font-black text-[#0F172A] tracking-tight">
+              {isLogin ? 'Welcome Back' : 'Join Property'}
+            </h1>
+            <p className="text-gray-400 text-sm font-medium">
+              Access premium investments and market analytics.
+            </p>
+          </div>
+
+          <form onSubmit={handleAuthAction} className="space-y-6">
             {error && (
-              <div className="bg-red-50 text-red-600 text-xs font-bold py-3 px-4 rounded-xl text-center animate-shake">
+              <div className="bg-rose-50 text-rose-500 text-[12px] font-bold py-3 px-5 rounded-2xl border border-rose-100 text-center">
                 {error}
               </div>
             )}
 
-            {!isLogin && (
-              <div className="space-y-1">
+            <div className="space-y-4">
+              {!isLogin && (
                 <input
                   name="name"
                   type="text"
                   value={formData.name}
                   onChange={handleChange}
                   placeholder="Full Name"
-                  className="w-full bg-[#F8FAFC] border-none rounded-[20px] px-7 py-5 text-sm font-semibold text-[#1E1B4B] placeholder:text-gray-300 outline-none ring-2 ring-transparent focus:ring-indigo-500/10 transition-all"
+                  className="w-full bg-[#F8FAFC] border border-black/5 rounded-2xl px-6 py-4 text-[#0F172A] focus:outline-none focus:border-[#00AEEF] focus:ring-4 focus:ring-[#00AEEF]/5 transition-all placeholder:text-gray-400 font-semibold"
                 />
-              </div>
-            )}
-
-            <div className="space-y-1">
+              )}
               <input
                 name="email"
                 type="email"
                 value={formData.email}
                 onChange={handleChange}
-                placeholder="Email"
-                className="w-full bg-[#F8FAFC] border-none rounded-[20px] px-7 py-5 text-sm font-semibold text-[#1E1B4B] placeholder:text-gray-300 outline-none ring-2 ring-transparent focus:ring-indigo-500/10 transition-all"
+                placeholder="Email Address"
+                className="w-full bg-[#F8FAFC] border border-black/5 rounded-2xl px-6 py-4 text-[#0F172A] focus:outline-none focus:border-[#00AEEF] focus:ring-4 focus:ring-[#00AEEF]/5 transition-all placeholder:text-gray-400 font-semibold"
               />
-            </div>
-
-            <div className="space-y-1">
               <input
                 name="password"
                 type="password"
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="Password"
-                className="w-full bg-[#F8FAFC] border-none rounded-[20px] px-7 py-5 text-sm font-semibold text-[#1E1B4B] placeholder:text-gray-300 outline-none ring-2 ring-transparent focus:ring-indigo-500/10 transition-all"
+                className="w-full bg-[#F8FAFC] border border-black/5 rounded-2xl px-6 py-4 text-[#0F172A] focus:outline-none focus:border-[#00AEEF] focus:ring-4 focus:ring-[#00AEEF]/5 transition-all placeholder:text-gray-400 font-semibold"
               />
             </div>
 
-
             <button
               type="submit"
-              className="w-full bg-[#3730A3] hover:bg-[#312E81] text-white font-extrabold py-5 rounded-[22px] mt-6 shadow-xl shadow-indigo-100 hover:scale-[1.01] active:scale-95 transition-all text-base tracking-tight"
+              className="w-full py-5 bg-gradient-to-r from-[#00AEEF] to-[#0077B6] text-white font-black rounded-2xl shadow-xl shadow-[#00AEEF]/10 hover:shadow-[#00AEEF]/30 hover:scale-[1.02] transition-all active:scale-95 uppercase tracking-widest text-sm"
             >
-              {isLogin ? 'Sign In' : 'Sign Up'}
+              {isLogin ? 'Sign In' : 'Create Account'}
             </button>
 
-            <div className="pt-4 flex justify-center">
-              <button
-                type="button"
-                onClick={() => setIsLogin(!isLogin)}
-                className="text-[11px] font-extrabold text-gray-400 uppercase tracking-[0.15em] hover:text-indigo-600 transition-colors"
-              >
-                {isLogin ? "Need an account?" : "Have an account?"}
-              </button>
+            <div className="pt-4 flex flex-col items-center gap-4">
+              <p className="text-gray-400 text-[13px] font-bold">
+                {isLogin ? "New to Properly?" : "Member of Properly?"}
+                <button
+                  type="button"
+                  onClick={() => setIsLogin(!isLogin)}
+                  className="text-[#00AEEF] font-black pl-2 hover:underline tracking-tight"
+                >
+                  {isLogin ? 'Sign up' : 'Sign in'}
+                </button>
+              </p>
+              
+              {isLogin && (
+                <button 
+                  type="button"
+                  className="text-gray-300 text-[11px] font-black uppercase tracking-widest hover:text-[#0F172A] transition-colors"
+                >
+                  Forgot your password?
+                </button>
+              )}
             </div>
           </form>
+        </div>
+      </div>
+
+      {/* Modern Edge Navigation Decor */}
+      <div className="fixed top-10 right-10 hidden lg:flex items-center gap-8 z-20">
+        {['Market', 'Intelligence', 'Analytics'].map(link => (
+          <a key={link} href="#" className="text-gray-400 font-black text-[10px] uppercase tracking-[0.3em] hover:text-[#00AEEF] transition-colors">{link}</a>
+        ))}
+        <div className="w-10 h-10 rounded-full border border-black/5 flex items-center justify-center text-gray-400">
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
         </div>
       </div>
     </div>

@@ -27,83 +27,52 @@ const HouseCard: React.FC<HouseCardProps> = ({ house, onClick, user }) => {
 
   return (
     <div
-      className="bg-white rounded-[24px] overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-500 cursor-pointer group flex flex-col h-full"
+      className="group relative bg-[#F8FAFC] rounded-[40px] overflow-hidden border border-black/5 shadow-xl hover:border-[#00AEEF]/30 transition-all duration-700 cursor-pointer flex flex-col h-full hover:shadow-[0_20px_60px_rgba(0,174,239,0.08)]"
       onClick={onClick}
     >
-      <div className="relative aspect-[16/10] overflow-hidden bg-gray-50">
-        {!isLoaded && <div className="absolute inset-0 bg-gray-100 animate-pulse" />}
+      <div className="relative aspect-[16/11] overflow-hidden">
+        {!isLoaded && <div className="absolute inset-0 bg-black/[0.02] animate-pulse" />}
         <img
           src={house.image}
           alt={house.title}
           onLoad={() => setIsLoaded(true)}
-          className={`w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+          className={`w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 grayscale-[20%] group-hover:grayscale-0 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
         />
 
-        <div className="absolute top-4 left-4 flex flex-col gap-2 z-10">
-          <div className="bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest text-indigo-600 shadow-sm border border-white/20 flex items-center gap-1.5">
+        <div className="absolute top-6 left-6 flex flex-col gap-3 z-10">
+          <div className="bg-[#00AEEF] px-4 py-2 rounded-xl text-[8px] font-black uppercase tracking-[0.2em] text-white shadow-xl flex items-center gap-2">
             <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" /></svg>
-            Verified Space
+            Verified Intelligence
           </div>
-          {matchScore !== null && (
-            <div className={`px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest text-white shadow-lg border border-white/10 flex items-center gap-1.5 ${matchScore > 80 ? 'bg-emerald-600' : matchScore > 60 ? 'bg-amber-500' : 'bg-gray-500'}`}>
-              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-              {matchScore}% Match
-            </div>
-          )}
-          {valuation && (
-            <div className={`px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest text-white shadow-lg border border-white/10 flex items-center gap-1.5 ${valuation.color === 'emerald' ? 'bg-emerald-500' :
-              valuation.color === 'red' ? 'bg-rose-500' :
-                valuation.color === 'orange' ? 'bg-orange-500' :
-                  'bg-blue-500'
-              }`}>
-              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-              {valuation.label}
-            </div>
-          )}
-          {house.is_suspicious && (
-            <div className="bg-rose-600 px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest text-white shadow-lg border border-white/10 flex items-center gap-1.5 animate-pulse">
-              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-              Suspicious
-            </div>
-          )}
-          {house.is_overpriced && !house.is_suspicious && (
-            <div className="bg-amber-600 px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest text-white shadow-lg border border-white/10 flex items-center gap-1.5">
-              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-              Overpriced
-            </div>
-          )}
         </div>
       </div>
 
-      <div className="p-6 flex flex-col flex-1">
+      <div className="p-8 flex flex-col flex-1">
         {house.is_suspicious && (
-          <div className="mb-4 p-3 bg-rose-50 rounded-xl border border-rose-100">
-            <p className="text-[10px] font-black text-rose-600 uppercase tracking-widest mb-1">AI Risk Alert</p>
-            <p className="text-xs font-bold text-rose-700">{house.suspicious_reason}</p>
+          <div className="mb-6 p-4 bg-rose-50 rounded-2xl border border-rose-100">
+            <p className="text-[9px] font-black text-rose-500 uppercase tracking-widest mb-1">Anomaly Log</p>
+            <p className="text-xs font-bold text-rose-600/70 leading-relaxed">{house.suspicious_reason}</p>
           </div>
         )}
-        {house.is_overpriced && !house.is_suspicious && (
-          <div className="mb-4 p-3 bg-amber-50 rounded-xl border border-amber-100">
-            <p className="text-[10px] font-black text-amber-600 uppercase tracking-widest mb-1">AI Price Analysis</p>
-            <p className="text-xs font-bold text-amber-700">{house.suspicious_reason || "Listed significantly above market value."}</p>
-          </div>
-        )}
-        <div className="flex justify-between items-start gap-4 mb-4">
-          <h3 className="text-base font-bold text-[#1E1B4B] group-hover:text-indigo-600 transition-colors line-clamp-2">{house.title}</h3>
+        
+        <div className="flex justify-between items-start gap-4 mb-6">
+          <h3 className="text-lg font-black text-[#0F172A] group-hover:text-[#00AEEF] transition-colors leading-tight uppercase tracking-tight">{house.title}</h3>
           <div className="text-right shrink-0">
-            <p className="text-lg font-black text-indigo-600">₹{house.price.toLocaleString()}</p>
-            <p className="text-[8px] font-bold text-gray-400 uppercase tracking-widest mt-0.5">Monthly Rent</p>
+            <p className="text-2xl font-black text-[#00AEEF] tracking-tighter">₹{house.price.toLocaleString()}</p>
+            <p className="text-[7px] font-black text-gray-400 uppercase tracking-[0.3em] mt-1 text-right">Liquidity Units</p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2 text-gray-400 mb-6">
-          <svg className="w-4 h-4 text-indigo-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /></svg>
-          <span className="text-xs font-semibold">{house.location}</span>
+        <div className="flex items-center gap-3 text-gray-400 mb-8">
+          <div className="w-8 h-8 rounded-full bg-white border border-black/5 flex items-center justify-center text-[#00AEEF]/60">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /></svg>
+          </div>
+          <span className="text-[10px] font-black uppercase tracking-[0.2em]">{house.location}</span>
         </div>
 
-        <div className="mt-auto flex flex-wrap gap-1.5">
+        <div className="mt-auto flex flex-wrap gap-2">
           {house.amenities.slice(0, 3).map(a => (
-            <span key={a} className="bg-gray-50 text-gray-500 text-[8px] font-black px-2.5 py-1 rounded-md uppercase tracking-tight border border-gray-100">
+            <span key={a} className="bg-white text-gray-400 text-[8px] font-black px-3 py-1.5 rounded-lg uppercase tracking-widest border border-black/5 group-hover:border-[#00AEEF]/10 group-hover:text-gray-500 transition-all">
               {a}
             </span>
           ))}

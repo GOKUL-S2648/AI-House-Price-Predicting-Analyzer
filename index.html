@@ -9,24 +9,38 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
       :root {
-        --brand: #4F46E5;
-        --brand-dark: #1E1B4B;
+        --brand-cyan: #00AEEF;
+        --brand-cyan-muted: rgba(0, 174, 239, 0.05);
+        --brand-cyan-glow: rgba(0, 174, 239, 0.1);
+        --bg-main: #FFFFFF;
+        --bg-secondary: #F8FAFC;
+        --text-main: #0F172A;
+        --text-muted: #64748B;
+        --border-main: rgba(0, 0, 0, 0.05);
       }
       body {
         font-family: 'Plus Jakarta Sans', sans-serif;
-        background-color: #F8FAFC;
-        color: #1E1B4B;
+        background-color: var(--bg-main);
+        color: var(--text-main);
         margin: 0;
       }
-      .dark body {
-        background-color: #0F172A;
-        color: #F1F5F9;
+      ::selection {
+        background-color: var(--brand-cyan);
+        color: white;
       }
-      .brand-gradient {
-        background: linear-gradient(135deg, #4F46E5 0%, #312E81 100%);
+      /* Custom Scrollbar for Premium Feel */
+      ::-webkit-scrollbar {
+        width: 8px;
+        background: var(--bg-secondary);
       }
-      ::-webkit-scrollbar { width: 6px; }
-      ::-webkit-scrollbar-thumb { background: #E2E8F0; border-radius: 10px; }
+      ::-webkit-scrollbar-thumb {
+        background: #E2E8F0;
+        border-radius: 10px;
+        border: 2px solid var(--bg-secondary);
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--brand-cyan);
+      }
       .glass {
         background: rgba(255, 255, 255, 0.8);
         backdrop-filter: blur(12px);

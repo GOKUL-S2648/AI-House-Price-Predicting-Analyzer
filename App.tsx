@@ -23,9 +23,7 @@ const App: React.FC = () => {
   const [filteredHouses, setFilteredHouses] = useState<House[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [aiTips, setAiTips] = useState<Record<string, string[]>>({});
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const [isNavbarOpen, setIsNavbarOpen] = useState(false);
-
   const [searchCriteria, setSearchCriteria] = useState<SearchCriteria>({
     income: 0,
     maxPrice: 0,
@@ -90,12 +88,6 @@ const App: React.FC = () => {
   useEffect(() => {
     localStorage.setItem('homesight_bookings', JSON.stringify(bookings));
   }, [bookings]);
-
-  // Dark mode toggle effect
-  useEffect(() => {
-    if (isDarkMode) document.documentElement.classList.add('dark');
-    else document.documentElement.classList.remove('dark');
-  }, [isDarkMode]);
 
   const handleLogin = async (user: User) => {
     setCurrentUser(user);
@@ -174,7 +166,7 @@ const App: React.FC = () => {
   if (!currentUser) return <Auth onLogin={handleLogin} />;
 
   return (
-    <div className={`min-h-screen flex transition-colors duration-300 ${isDarkMode ? 'bg-slate-900 text-slate-100' : 'bg-[#F8FAFC] text-[#1E1B4B]'}`}>
+    <div className="min-h-screen flex bg-white text-[#0F172A] selection:bg-[#00AEEF]/10">
       <Navbar
         user={currentUser}
         onNavigate={(v: any) => setView(v)}
@@ -184,20 +176,14 @@ const App: React.FC = () => {
         onClose={() => setIsNavbarOpen(false)}
       />
 
-      <main className="flex-1 min-w-0 overflow-y-auto px-6 py-12 md:px-16 md:py-20 scroll-smooth">
+      <main className="flex-1 min-w-0 overflow-y-auto px-6 py-12 md:px-16 md:py-16 scroll-smooth">
+        {/* Mobile Sidebar Toggle Overlay */}
         <div className="flex items-center justify-between md:justify-end mb-8">
           <button
             onClick={() => setIsNavbarOpen(true)}
-            className="md:hidden p-3 rounded-xl bg-white dark:bg-slate-800 shadow-sm text-slate-500"
+            className="md:hidden p-3 rounded-2xl bg-[#F8FAFC] border border-black/5 text-gray-400 hover:text-[#00AEEF] transition-all"
           >
-            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" /></svg>
-          </button>
-
-          <button
-            onClick={() => setIsDarkMode(!isDarkMode)}
-            className={`p-3 rounded-xl transition-all ${isDarkMode ? 'bg-slate-800 text-yellow-400' : 'bg-white text-slate-400 shadow-sm'}`}
-          >
-            {isDarkMode ? '🌙' : '☀️'}
+            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 6h16M4 12h16m-7 6h7" /></svg>
           </button>
         </div>
 
@@ -208,10 +194,10 @@ const App: React.FC = () => {
             <section className="space-y-12">
               <div className="flex items-end justify-between px-2">
                 <div>
-                  <h2 className={`text-4xl font-black tracking-tight ${isDarkMode ? 'text-white' : 'text-[#1E1B4B]'}`}>
-                    {isSearching ? 'Personalized Matches' : 'Market Recommendations'}
+                  <h2 className="text-4xl font-black tracking-tight text-[#0F172A] uppercase">
+                    {isSearching ? 'Strategic Matches' : 'Market Recommendations'}
                   </h2>
-                  <p className="text-gray-400 font-bold text-lg mt-2">Ranked by our intelligence model for your profile.</p>
+                  <p className="text-[#00AEEF] font-black text-xs mt-3 uppercase tracking-[0.3em]">Analyzed by our intelligence model for your portfolio.</p>
                 </div>
               </div>
 

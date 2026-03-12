@@ -16,41 +16,41 @@ const Dashboard: React.FC<DashboardProps> = ({ bookings, houses, user, onViewHou
   const activeBookings = bookings.filter(b => b.status === 'Confirmed' || b.status === 'Pending');
 
   return (
-    <div className="max-w-6xl mx-auto py-10 px-4 animate-in fade-in duration-700 space-y-12">
-      <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+    <div className="max-w-6xl mx-auto py-10 px-4 animate-in fade-in duration-700 space-y-12 text-[#0F172A]">
+      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b border-black/5">
         <div>
-          <h2 className="text-3xl font-black text-[#1A1F36] tracking-tight">User Dashboard</h2>
-          <p className="text-gray-400 font-bold text-sm mt-1">Manage your housing applications and digital bookings.</p>
+          <h2 className="text-4xl font-black text-[#0F172A] tracking-tight uppercase">User Terminal</h2>
+          <p className="text-gray-400 font-black text-[10px] mt-3 uppercase tracking-[0.4em]">Manage your premium holdings and digital reservations.</p>
         </div>
         <div className="flex gap-4">
-          <div className="bg-white px-6 py-3 rounded-2xl shadow-sm border border-gray-100 text-center">
-            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Bookings</p>
-            <p className="text-xl font-black text-[#3046D1]">{activeBookings.length}</p>
+          <div className="bg-[#F8FAFC] px-8 py-4 rounded-3xl shadow-sm border border-black/5 text-center backdrop-blur-md">
+            <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em] mb-2">Portfolio</p>
+            <p className="text-2xl font-black text-[#00AEEF] uppercase">{activeBookings.length} Active</p>
           </div>
-          <div className="bg-white px-6 py-3 rounded-2xl shadow-sm border border-gray-100 text-center">
-            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Status</p>
-            <p className="text-xl font-black text-green-600">Active</p>
+          <div className="bg-[#F8FAFC] px-8 py-4 rounded-3xl shadow-sm border border-black/5 text-center backdrop-blur-md">
+            <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em] mb-2">Network</p>
+            <p className="text-2xl font-black text-[#00AEEF] uppercase">Live</p>
           </div>
         </div>
       </header>
 
       <section>
-        <h3 className="text-xl font-black text-[#1A1F36] mb-8">Your Recent Bookings</h3>
+        <h3 className="text-[12px] font-black text-gray-400 mb-8 uppercase tracking-[0.4em]">Recent Manifestations</h3>
 
-        <div className="space-y-6">
+        <div className="space-y-8">
           {activeBookings.length === 0 ? (
-            <div className="bg-white rounded-[40px] border-2 border-dashed border-gray-100 p-20 text-center flex flex-col items-center">
-              <div className="w-20 h-20 bg-gray-50 rounded-3xl flex items-center justify-center mb-6 text-gray-200">
+            <div className="bg-[#F8FAFC] rounded-[48px] border-2 border-dashed border-black/5 p-24 text-center flex flex-col items-center">
+              <div className="w-24 h-24 bg-white rounded-[40px] flex items-center justify-center mb-8 text-gray-300 shadow-sm">
                 <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
               </div>
-              <p className="text-gray-400 font-bold text-xl mb-6">No bookings yet. Start your search to find your next home!</p>
+              <p className="text-gray-400 font-black text-xl mb-10 max-w-md uppercase tracking-tight">Your portfolio is currently blank. Initialize your orbit.</p>
               <button
                 onClick={() => onNavigate('search')}
-                className="bg-[#3046D1] text-white px-10 py-4 rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-blue-700 transition-all shadow-xl shadow-blue-50"
+                className="bg-gradient-to-r from-[#00AEEF] to-[#0077B6] text-white px-14 py-5 rounded-2xl font-black text-xs uppercase tracking-[0.3em] hover:scale-105 transition-all shadow-lg shadow-[#00AEEF]/20"
               >
-                Find Affordable Homes
+                Access Global Index
               </button>
             </div>
           ) : (
@@ -61,42 +61,42 @@ const Dashboard: React.FC<DashboardProps> = ({ bookings, houses, user, onViewHou
               return (
                 <div
                   key={booking.id}
-                  className="bg-white rounded-[32px] shadow-sm border border-gray-100 flex flex-col md:flex-row overflow-hidden hover:border-indigo-100 transition-colors"
+                  className="bg-[#F8FAFC] rounded-[40px] shadow-xl border border-black/5 flex flex-col md:flex-row overflow-hidden hover:border-[#00AEEF]/30 transition-all duration-500 group"
                 >
-                  <div className="md:w-64 h-48 md:h-auto shrink-0 bg-gray-50">
-                    <img src={house.image} alt={house.title} className="w-full h-full object-cover" />
+                  <div className="md:w-72 h-56 md:h-auto shrink-0 bg-gray-100 overflow-hidden">
+                    <img src={house.image} alt={house.title} className="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700" />
                   </div>
 
-                  <div className="p-8 flex-1 flex flex-col justify-between">
-                    <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
+                  <div className="p-10 flex-1 flex flex-col justify-between">
+                    <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
                       <div>
-                        <h4 className="text-2xl font-black text-[#1A1F36] mb-2">{house.title}</h4>
-                        <p className="text-gray-400 font-bold text-sm">₹ {house.price.toLocaleString()} • Applied on {booking.bookingDate}</p>
+                        <h4 className="text-2xl font-black text-[#0F172A] mb-2 uppercase tracking-tight">{house.title}</h4>
+                        <p className="text-[#00AEEF] font-black text-[10px] uppercase tracking-[0.2em]">₹ {house.price.toLocaleString()} • Logged {booking.bookingDate}</p>
                       </div>
-                      <div className="flex items-center gap-3">
-                        <div className="flex items-center gap-2 bg-green-50 text-green-600 px-4 py-2 rounded-full border border-green-100">
-                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
-                          <span className="text-xs font-black uppercase tracking-widest">{booking.status}</span>
+                      <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-2 bg-[#00AEEF]/5 text-[#00AEEF] px-5 py-2.5 rounded-full border border-[#00AEEF]/10">
+                          <div className="w-2 h-2 rounded-full bg-[#00AEEF] animate-pulse"></div>
+                          <span className="text-[9px] font-black uppercase tracking-[0.2em]">{booking.status}</span>
                         </div>
                         <button
                           onClick={() => onUpdateStatus(booking.id, 'Cancelled')}
-                          className="bg-red-600 text-white px-5 py-2 rounded-lg text-xs font-black uppercase tracking-widest shadow-md hover:bg-red-700 transition-all active:scale-95"
+                          className="bg-rose-50 text-rose-500 border border-rose-100 px-6 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-[0.2em] hover:bg-rose-500 hover:text-white transition-all active:scale-95"
                         >
-                          Cancel
+                          Terminate
                         </button>
                         <button
                           onClick={() => onViewHouse(house)}
-                          className="p-2 text-gray-300 hover:text-[#3046D1] transition-colors"
+                          className="p-3 bg-white rounded-xl text-gray-300 hover:text-[#00AEEF] shadow-sm border border-black/5 transition-all"
                         >
-                          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" /></svg>
+                          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" /></svg>
                         </button>
                       </div>
                     </div>
 
-                    <div className="mt-6 pt-6 border-t border-gray-50 flex justify-end">
+                    <div className="mt-8 pt-8 border-t border-black/5 flex justify-end">
                       <div className="text-right">
-                        <p className="text-[10px] text-gray-400 font-bold">Contact: <span className="text-gray-600">+91 98765 43210</span></p>
-                        <p className="text-[10px] text-gray-400 font-bold">Support: <span className="text-gray-600">support@affordhome.ai</span></p>
+                        <p className="text-[9px] text-gray-400 font-black uppercase tracking-widest">Protocol: <span className="text-[#00AEEF]">Properly Intelligence</span></p>
+                        <p className="text-[9px] text-gray-400 font-black uppercase tracking-widest">Encryption: <span className="text-emerald-500">Active</span></p>
                       </div>
                     </div>
                   </div>
@@ -107,31 +107,31 @@ const Dashboard: React.FC<DashboardProps> = ({ bookings, houses, user, onViewHou
         </div>
       </section>
 
-      <section className="pt-12 border-t border-gray-100">
-        <div className="mb-8">
-          <h3 className="text-xl font-black text-[#1A1F36]">Market Transparency</h3>
-          <p className="text-gray-400 font-bold text-sm mt-1">AI-flagged listings with price anomalies or suspicious profiles.</p>
+      <section>
+        <div className="mb-10">
+          <h3 className="text-[12px] font-black text-gray-400 uppercase tracking-[0.4em]">Intelligence Transparency</h3>
+          <p className="text-gray-400 font-black text-[10px] mt-2 uppercase tracking-[0.2em]">Neural detection of market anomalies and risk-weighted listings.</p>
         </div>
 
         {houses.some(h => h.is_suspicious || h.is_overpriced) ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {houses.filter(h => h.is_suspicious || h.is_overpriced).map(house => (
-              <div key={house.id} className="relative">
-                <div className={`absolute -top-3 -right-2 z-20 px-3 py-1.5 rounded-xl text-[9px] font-black shadow-lg ring-4 ring-white uppercase tracking-widest ${house.is_suspicious ? 'bg-rose-600 text-white' : 'bg-amber-600 text-white'}`}>
-                  {house.is_suspicious ? 'Suspect' : 'Overpriced'}
+              <div key={house.id} className="relative group">
+                <div className={`absolute -top-4 -right-2 z-20 px-4 py-2 rounded-xl text-[8px] font-black shadow-xl ring-4 ring-white uppercase tracking-[0.3em] ${house.is_suspicious ? 'bg-rose-600 text-white' : 'bg-[#00AEEF] text-white'}`}>
+                  {house.is_suspicious ? 'Suspect Flag' : 'Market Divergence'}
                 </div>
-                <div className="opacity-80 scale-95 grayscale-[20%] hover:opacity-100 hover:scale-100 hover:grayscale-0 transition-all duration-300">
+                <div className="opacity-90 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-500">
                   <div
                     onClick={() => onViewHouse(house)}
-                    className="bg-white rounded-[24px] overflow-hidden border border-gray-100 shadow-sm p-4 cursor-pointer"
+                    className="bg-[#F8FAFC] rounded-[40px] overflow-hidden border border-black/5 shadow-xl p-6 cursor-pointer group-hover:border-[#00AEEF]/30 transition-colors"
                   >
-                    <div className="aspect-video rounded-xl overflow-hidden mb-4">
-                      <img src={house.image} className="w-full h-full object-cover" alt="" />
+                    <div className="aspect-video rounded-[24px] overflow-hidden mb-6">
+                      <img src={house.image} className="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-700" alt="" />
                     </div>
-                    <h4 className="font-bold text-sm text-[#1A1F36] truncate">{house.title}</h4>
-                    <p className="text-xs text-gray-400 mt-1">₹{house.price.toLocaleString()}</p>
-                    <div className={`mt-3 p-2 rounded-lg text-[9px] font-bold ${house.is_suspicious ? 'bg-rose-50 text-rose-600' : 'bg-amber-50 text-amber-600'}`}>
-                      {house.suspicious_reason}
+                    <h4 className="font-black text-sm text-[#0F172A] truncate uppercase tracking-tight">{house.title}</h4>
+                    <p className="text-[#00AEEF] mt-2 font-black text-xs uppercase tracking-widest">VALUATION: ₹{house.price.toLocaleString()}</p>
+                    <div className={`mt-5 p-3 rounded-2xl text-[9px] font-black uppercase tracking-widest leading-relaxed ${house.is_suspicious ? 'bg-rose-50 text-rose-600' : 'bg-[#00AEEF]/5 text-[#00AEEF]'}`}>
+                      Anomaly: {house.suspicious_reason}
                     </div>
                   </div>
                 </div>
@@ -139,13 +139,13 @@ const Dashboard: React.FC<DashboardProps> = ({ bookings, houses, user, onViewHou
             ))}
           </div>
         ) : (
-          <div className="bg-emerald-50 rounded-3xl p-8 border border-emerald-100 flex items-center gap-6">
-            <div className="w-12 h-12 bg-white rounded-2xl shadow-sm flex items-center justify-center text-emerald-500 shrink-0">
-              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          <div className="bg-[#00AEEF]/5 rounded-[48px] p-12 border border-[#00AEEF]/10 flex items-center gap-10 backdrop-blur-md transition-all hover:bg-[#00AEEF]/10 group">
+            <div className="w-16 h-16 bg-white rounded-[32px] shadow-lg flex items-center justify-center text-[#00AEEF] shrink-0 border border-black/5 group-hover:scale-110 transition-transform">
+              <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
             </div>
             <div>
-              <p className="text-emerald-700 font-black text-sm uppercase tracking-widest">Market Integrity High</p>
-              <p className="text-emerald-600 text-xs font-semibold">No significant price anomalies detected in current active listings.</p>
+              <p className="text-[#00AEEF] font-black text-[12px] uppercase tracking-[0.4em]">Market Equilibrium Secured</p>
+              <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.2em] mt-2">Properly Neural Engine reports 0% high-risk price anomalies in current liquidity.</p>
             </div>
           </div>
         )}
