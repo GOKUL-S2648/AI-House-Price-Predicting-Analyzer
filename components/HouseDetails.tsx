@@ -103,6 +103,116 @@ const HouseDetails = ({ house, user, onBack, onBook }: {
         </div>
       </div>
 
+      {/* Feature Ratings Section */}
+      <div className="bg-white rounded-[48px] p-12 lg:p-16 mb-16 shadow-xl border border-black/5 animate-in fade-in slide-in-from-bottom duration-1000 delay-200">
+        <div className="flex items-center gap-2 mb-12">
+          <h3 className="text-xl font-black text-[#0F172A] tracking-tight uppercase">Ratings based on features</h3>
+          <div className="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 cursor-help group/info relative">
+            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" /></svg>
+            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-48 p-3 bg-[#0F172A] text-white text-[10px] rounded-xl opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all font-bold uppercase tracking-widest text-center shadow-2xl z-20">
+              Aggregated from user reviews and localized infra data targets.
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-12 lg:gap-20">
+          {[
+            { label: 'Connectivity', icon: 'M12 2c-4 0-8 .5-8 4v9.5c0 1.38 1.12 2.5 2.5 2.5l-.5 1v.5c0 .28.22.5.5.5h11c.28 0 .5-.22.5-.5v-.5l-.5-1c1.38 0 2.5-1.12 2.5-2.5V6c0-3.5-4-4-8-4zm0 2c3.71 0 6 .42 6 2v2H6V6c0-1.58 2.29-2 6-2zM6 15.5V10h12v5.5c0 .83-.67 1.5-1.5 1.5h-9c-.83 0-1.5-.67-1.5-1.5zM8 13c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm8 0c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1z', value: house.ratings?.connectivity || 4.2 },
+            { label: 'Neighbourhood', icon: 'M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z', value: house.ratings?.neighbourhood || 4.5 },
+            { label: 'Safety', icon: 'M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71L12 2z', value: house.ratings?.safety || 4.8 },
+            { label: 'Livability', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6', value: house.ratings?.livability || 4.6 }
+          ].map((rating, idx) => (
+            <div key={idx} className="flex flex-col items-center group/rating cursor-pointer">
+              <div className="relative w-24 h-24 mb-6">
+                {/* SVG Progress Circle */}
+                <svg className="w-full h-full transform -rotate-90">
+                  <circle
+                    cx="48"
+                    cy="48"
+                    r="42"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                    fill="transparent"
+                    className="text-gray-100"
+                  />
+                  <circle
+                    cx="48"
+                    cy="48"
+                    r="42"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                    fill="transparent"
+                    strokeDasharray={264}
+                    strokeDashoffset={264 - (264 * (rating.value / 5))}
+                    strokeLinecap="round"
+                    className="text-[#10B981] transition-all duration-1000 ease-out"
+                    style={{ filter: 'drop-shadow(0 0 8px rgba(16,185,129,0.3))' }}
+                  />
+                </svg>
+                {/* Icon in Center */}
+                <div className="absolute inset-0 flex items-center justify-center text-gray-400 group-hover/rating:text-[#10B981] transition-colors duration-500 bg-white rounded-full bg-clip-content m-2">
+                  <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={rating.icon} />
+                  </svg>
+                </div>
+              </div>
+              <div className="text-center">
+                <span className="text-lg font-black text-[#0F172A] tracking-tighter mb-1 block">
+                  {rating.value.toFixed(1)}<span className="text-gray-300 text-xs">/5</span>
+                </span>
+                <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest group-hover/rating:text-[#0F172A] transition-colors">
+                  {rating.label}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Furnishings Section */}
+      <div className="bg-white rounded-[48px] p-12 lg:p-16 mb-16 shadow-xl border border-black/5 animate-in fade-in slide-in-from-bottom duration-1000 delay-400">
+        <div className="flex items-center justify-between mb-12">
+          <h3 className="text-xl font-black text-[#0F172A] tracking-tight uppercase">Furnishings</h3>
+          <button className="text-[10px] font-black text-indigo-600 uppercase tracking-widest flex items-center gap-2 hover:gap-3 transition-all">
+            More furnishings 
+            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" /></svg>
+          </button>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          {(house.furnishings || [
+            { name: 'Sofa', count: 1 },
+            { name: 'Stove', count: 1 },
+            { name: 'Fan', count: 1 },
+            { name: 'Light', count: 1 },
+            { name: 'Wardrobe', count: 1 },
+            { name: 'TV', count: 1 },
+            { name: 'Bed', count: 1 }
+          ]).map((item, idx) => (
+            <div key={idx} className="bg-[#F8FAFC] border border-black/5 rounded-3xl p-6 flex flex-col gap-4 group hover:bg-white hover:border-indigo-600/20 hover:shadow-xl transition-all duration-500">
+              <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-gray-400 group-hover:text-indigo-600 group-hover:bg-indigo-50 transition-all duration-500 shadow-sm border border-black/5">
+                {item.name === 'Sofa' && <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 6v10a2 2 0 01-2 2H4a2 2 0 01-2-2V6z M7 18v2 M17 18v2 M3 10h18" /></svg>}
+                {item.name === 'Stove' && <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4h16v16H4V4zm4 4h2v2H8V8zm6 0h2v2h-2V8zm-6 6h2v2H8v-2zm6 0h2v2h-2v-2z" /></svg>}
+                {item.name === 'Fan' && <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 12m-3 0a3 3 0 106 0 3 3 0 10-6 0 M12 5v2 M12 17v2 M5 12h2 M17 12h2 M7.75 7.75l1.5 1.5 M14.75 14.75l1.5 1.5 M7.75 16.25l1.5-1.5 M14.75 9.25l1.5-1.5" /></svg>}
+                {item.name === 'Light' && <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.674a1 1 0 01.992.883l.11.9a1 1 0 01-.992 1.117H9.554a1 1 0 01-.992-1.117l.11-.9a1 1 0 01.992-.883zM12 3a7 7 0 00-7 7c0 1.58.523 3.039 1.405 4.215C7.456 15.343 8 16.5 8 18h8c0-1.5.544-2.657 1.595-3.785A6.974 6.974 0 0019 10a7 7 0 00-7-7z" /></svg>}
+                {item.name === 'Wardrobe' && <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 4h14v16H5z M12 4v16 M9 10h1 M14 10h1" /></svg>}
+                {item.name === 'TV' && <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 4h10a2 2 0 012 2v8a2 2 0 01-2 2H7a2 2 0 01-2-2V6a2 2 0 012-2z M10 16l-2 4 M14 16l2 4" /></svg>}
+                {item.name === 'Bed' && <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10V19 M21 10V19 M3 14h18 M6 10l.613-2.454a3 3 0 012.91-2.273h4.954a3 3 0 012.91 2.273L18 10" /></svg>}
+              </div>
+              <div className="flex flex-col">
+                <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{item.count && item.count > 0 ? `${item.count} ` : ''}{item.name}</span>
+              </div>
+            </div>
+          ))}
+          <div className="bg-indigo-50 border border-indigo-100 rounded-3xl p-6 flex flex-col items-center justify-center gap-2 group cursor-pointer hover:bg-indigo-600 hover:text-white transition-all duration-500 shadow-sm">
+            <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-indigo-600 text-xs font-black shadow-sm group-hover:scale-110 transition-transform">
+              +1
+            </div>
+            <span className="text-[9px] font-black uppercase tracking-widest text-indigo-600 group-hover:text-white">View Details</span>
+          </div>
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
         <div className="bg-[#F8FAFC] rounded-[56px] p-16 text-[#0F172A] shadow-xl border border-black/5 relative overflow-hidden group">
           <div className="absolute top-0 right-0 w-80 h-80 bg-[#00AEEF]/5 rounded-full -mr-40 -mt-40 blur-3xl group-hover:bg-[#00AEEF]/10 transition-colors duration-1000"></div>

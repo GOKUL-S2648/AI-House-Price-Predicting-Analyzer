@@ -8,6 +8,18 @@ export interface User {
   role?: 'admin' | 'user';
 }
 
+export interface HouseRatings {
+  connectivity: number;
+  neighbourhood: number;
+  safety: number;
+  livability: number;
+}
+
+export interface Furnishing {
+  name: string;
+  count?: number;
+}
+
 // House interface representing a property listing
 export interface House {
   id: string;
@@ -29,6 +41,8 @@ export interface House {
   suspicious_reason?: string;
   is_overpriced?: boolean;
   market_predicted_price?: number;
+  ratings?: HouseRatings;
+  furnishings?: Furnishing[];
 }
 
 // Booking interface representing a scheduled property visit

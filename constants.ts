@@ -155,7 +155,22 @@ const generateMockData = () => {
             description: `Beautifully maintained ${type} located in the heart of ${neighborhood}. Perfect for those seeking both comfort and accessibility in ${d}.`,
             isApproved: true,
             lat: baseCoords[0] + latJitter,
-            lng: baseCoords[1] + lngJitter
+            lng: baseCoords[1] + lngJitter,
+            ratings: {
+              connectivity: 3.5 + Math.random() * 1.5,
+              neighbourhood: 3.5 + Math.random() * 1.5,
+              safety: 3.5 + Math.random() * 1.5,
+              livability: 3.5 + Math.random() * 1.5
+            },
+            furnishings: [
+              { name: 'Sofa', count: 1 },
+              { name: 'Stove', count: 1 },
+              { name: 'Fan', count: 2 },
+              { name: 'Light', count: 4 },
+              { name: 'Wardrobe', count: 1 },
+              { name: 'TV', count: 1 },
+              { name: 'Bed', count: 1 }
+            ]
           });
         }
       });
