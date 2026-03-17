@@ -43,6 +43,7 @@ export interface House {
   market_predicted_price?: number;
   ratings?: HouseRatings;
   furnishings?: Furnishing[];
+  email: string;
 }
 
 // Booking interface representing a scheduled property visit

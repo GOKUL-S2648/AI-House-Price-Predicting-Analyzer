@@ -37,7 +37,7 @@ def calculate_property_match(house_price: float, user_income: float, amenities_c
     match_score = int(round(financial_score + amenity_score))
     return min(100, match_score)
 
-def forecast_rent_growth(historical_prices: List[Dict[str, Any]], target_year: int = 2025) -> Dict[str, Any]:
+def forecast_rent_growth(historical_prices: List[Dict[str, Any]], target_year: int = 2027) -> Dict[str, Any]:
     """
     Simple Linear Regression implementation (y = mx + b) for rent forecasting.
     """
@@ -66,7 +66,7 @@ def forecast_rent_growth(historical_prices: List[Dict[str, Any]], target_year: i
         "annual_delta": float(f"{m:.2f}")
     }
 
-def predict_rf(historical_prices: List[Dict[str, Any]], amenities_count: int, target_year: int = 2026) -> Dict[str, Any]:
+def predict_rf(historical_prices: List[Dict[str, Any]], amenities_count: int, target_year: int = 2027) -> Dict[str, Any]:
     """
     Random Forest Regression predicting price growth (deltas) instead of absolute values.
     """
@@ -103,7 +103,7 @@ def predict():
     data = request.json
     historical_prices = data.get('historicalPrices', [])
     amenities_count = data.get('amenitiesCount', 0)
-    target_year = data.get('targetYear', 2025)
+    target_year = data.get('targetYear', 2027)
     
     lr_result = forecast_rent_growth(historical_prices, target_year)
     rf_result = predict_rf(historical_prices, amenities_count, target_year)
@@ -127,7 +127,7 @@ def match():
 def cheap_deals():
     data = request.json
     houses = data.get('houses', [])
-    target_year = data.get('targetYear', 2025)
+    target_year = data.get('targetYear', 2027)
     threshold = data.get('threshold', 0.85)
     
     deals = []
@@ -232,7 +232,7 @@ def detect_suspicious():
     """
     data = request.json
     houses = data.get('houses', [])
-    target_year = data.get('targetYear', 2025)
+    target_year = data.get('targetYear', 2027)
     
     results = []
     for house in houses:

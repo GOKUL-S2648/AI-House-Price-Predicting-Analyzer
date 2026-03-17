@@ -8,7 +8,7 @@ interface HouseCardProps {
   house: House;
   onClick: () => void;
   user: User;
-}
+}  
 
 // Fix: Used React.FC<HouseCardProps> to correctly handle React props like 'key' in App.tsx
 const HouseCard: React.FC<HouseCardProps> = ({ house, onClick, user }) => {
@@ -82,4 +82,4 @@ const HouseCard: React.FC<HouseCardProps> = ({ house, onClick, user }) => {
   );
 };
 
-export default HouseCard;
+export default HouseCard;  

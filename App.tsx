@@ -16,23 +16,99 @@ import AdminDashboard from './components/AdminDashboard';
 import { User, House, Booking, SearchCriteria } from './types';
 
 const App: React.FC = () => {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [view, setView] = useState<'search' | 'details' | 'dashboard' | 'history' | 'list' | 'admin'>('search');
-  const [selectedHouse, setSelectedHouse] = useState<House | null>(null);
-  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [currentUser, setCurrentUser] = useState<User | null>(() => {
+    try {
+      const saved = sessionStorage.getItem('homesight_user');
+      return saved ? JSON.parse(saved) : null;
+    } catch (e) {
+      return null;
+    }
+  });
+
+  const [view, setView] = useState<'search' | 'details' | 'dashboard' | 'history' | 'list' | 'admin'>(() => {
+    const saved = sessionStorage.getItem('homesight_view');
+    return (saved as any) || 'search';
+  });
+
+  const [selectedHouse, setSelectedHouse] = useState<House | null>(() => {
+    try {
+      const saved = sessionStorage.getItem('homesight_selected_house');
+      return saved ? JSON.parse(saved) : null;
+    } catch (e) {
+      return null;
+    }
+  });
+
+  const [bookings, setBookings] = useState<Booking[]>(() => {
+    try {
+      const saved = sessionStorage.getItem('homesight_bookings');
+      return saved ? JSON.parse(saved) : [];
+    } catch (e) {
+      return [];
+    }
+  });
+
   const [filteredHouses, setFilteredHouses] = useState<House[]>([]);
-  const [isSearching, setIsSearching] = useState(false);
+  const [isSearching, setIsSearching] = useState(() => {
+    return sessionStorage.getItem('homesight_is_searching') === 'true';
+  });
   const [aiTips, setAiTips] = useState<Record<string, string[]>>({});
   const [isNavbarOpen, setIsNavbarOpen] = useState(false);
-  const [searchCriteria, setSearchCriteria] = useState<SearchCriteria>({
-    income: 0,
-    maxPrice: 0,
-    houseType: '',
-    district: '',
-    state: ''
+  const [searchCriteria, setSearchCriteria] = useState<SearchCriteria>(() => {
+    try {
+      const saved = sessionStorage.getItem('homesight_search_criteria');
+      return saved ? JSON.parse(saved) : {
+        income: 0,
+        maxPrice: 0,
+        houseType: '',
+        district: '',
+        state: ''
+      };
+    } catch (e) {
+      return {
+        income: 0,
+        maxPrice: 0,
+        houseType: '',
+        district: '',
+        state: ''
+      };
+    }
   });
   const [houses, setHouses] = useState<House[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // Persistence Effects
+  useEffect(() => {
+    if (currentUser) {
+      sessionStorage.setItem('homesight_user', JSON.stringify(currentUser));
+    } else {
+      sessionStorage.removeItem('homesight_user');
+    }
+  }, [currentUser]);
+
+  useEffect(() => {
+    sessionStorage.setItem('homesight_view', view);
+  }, [view]);
+
+  useEffect(() => {
+    if (selectedHouse) {
+      sessionStorage.setItem('homesight_selected_house', JSON.stringify(selectedHouse));
+    } else {
+      sessionStorage.removeItem('homesight_selected_house');
+    }
+  }, [selectedHouse]);
+
+  useEffect(() => {
+    sessionStorage.setItem('homesight_bookings', JSON.stringify(bookings));
+  }, [bookings]);
+
+  useEffect(() => {
+    sessionStorage.setItem('homesight_is_searching', isSearching.toString());
+  }, [isSearching]);
+
+  useEffect(() => {
+    sessionStorage.setItem('homesight_search_criteria', JSON.stringify(searchCriteria));
+  }, [searchCriteria]);
 
   const fetchHouses = useCallback(async () => {
     try {
@@ -43,66 +119,67 @@ const App: React.FC = () => {
 
       if (error) throw error;
 
+      let fetched: House[] = [];
       if (data && data.length > 0) {
-        // Map snake_case from DB to camelCase interfaces
-        const mappedHouses: House[] = data.map(h => ({
+        fetched = data.map((h: any) => ({
           ...h,
           id: h.listing_id || h.id,
           historicalPrices: h.historical_prices,
           isApproved: h.is_approved,
           ownerId: h.owner_id
         }));
+      }
+      
+      // Combine DB houses with Mock houses so the platform feels full
+      const combined = [...fetched, ...MOCK_HOUSES.filter(mh => !fetched.some(fh => fh.id === mh.id))];
+      const analyzed = await detectSuspiciousListings(combined);
+      setHouses(analyzed);
 
-        // Analyze for suspicious/overpriced listings
-        const analyzed = await detectSuspiciousListings(mappedHouses);
-        setHouses(analyzed);
-      } else {
-        const analyzed = await detectSuspiciousListings(MOCK_HOUSES);
-        setHouses(analyzed);
+      // Restore search state if refreshing while searching
+      if (isSearching) {
+        const query = (searchCriteria.district || '').toLowerCase().trim();
+        const results = analyzed.filter((h: House) => {
+          if (currentUser?.role !== 'admin' && !h.isApproved) return false;
+          const priceLimit = searchCriteria.maxPrice || 2000000;
+          const priceMatch = h.price <= (priceLimit + 10000);
+          const typeMatch = !searchCriteria.houseType || searchCriteria.houseType === 'Any' || h.type === searchCriteria.houseType;
+          const locationMatch = !query || h.location.toLowerCase().includes(query) || h.title.toLowerCase().includes(query);
+          return priceMatch && typeMatch && locationMatch;
+        });
+
+        if (currentUser) {
+          setFilteredHouses(rankProperties(results, currentUser));
+        } else {
+          setFilteredHouses(results);
+        }
       }
     } catch (err) {
-      console.error("Error fetching houses from Supabase:", err);
+      console.error("Error fetching houses:", err);
       const analyzed = await detectSuspiciousListings(MOCK_HOUSES);
       setHouses(analyzed);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [isSearching, searchCriteria, currentUser]);
 
   useEffect(() => {
     fetchHouses();
   }, [fetchHouses]);
-
-  // Persist bookings
-  useEffect(() => {
-    const saved = localStorage.getItem('homesight_bookings');
-    if (saved) {
-      try {
-        setBookings(JSON.parse(saved));
-      } catch (e) {
-        console.error("Failed to load bookings", e);
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('homesight_bookings', JSON.stringify(bookings));
-  }, [bookings]);
 
   const handleLogin = async (user: User) => {
     setCurrentUser(user);
     setView('search');
     setIsSearching(false);
 
-    const initialIncome = user.income || 50000;
     const approvedHouses = houses.filter(h => h.isApproved);
-    const ranked = rankProperties(approvedHouses.filter(h => h.price <= initialIncome * 0.5), user).slice(0, 15);
+    // Relaxed initial filter (allow up to 80% of income for visibility)
+    const ranked = rankProperties(approvedHouses.filter(h => h.price <= (user.income || 50000) * 0.8), user).slice(0, 15);
     setFilteredHouses(ranked);
 
     try {
       const tips = await getCategorizedSuggestions({
         income: user.income,
-        maxPrice: user.income * 0.5,
+        maxPrice: user.income * 0.8,
         district: 'your area',
         houseType: 'Any',
         state: ''
@@ -123,8 +200,8 @@ const App: React.FC = () => {
     const query = (criteria.district || '').toLowerCase().trim();
     const results = houses.filter(h => {
       if (currentUser?.role !== 'admin' && !h.isApproved) return false;
-      const priceLimit = criteria.maxPrice || 1000000;
-      const priceMatch = h.price <= (priceLimit + 5000);
+      const priceLimit = criteria.maxPrice || 2000000;
+      const priceMatch = h.price <= (priceLimit + 10000);
       const typeMatch = !criteria.houseType || criteria.houseType === 'Any' || h.type === criteria.houseType;
       const locationMatch = !query || h.location.toLowerCase().includes(query) || h.title.toLowerCase().includes(query);
       return priceMatch && typeMatch && locationMatch;
@@ -136,7 +213,7 @@ const App: React.FC = () => {
       setFilteredHouses(results);
     }
     setView('search');
-  }, [currentUser]);
+  }, [currentUser, houses]);
 
   const handleBook = (house: House) => {
     if (!currentUser) return;
@@ -156,8 +233,9 @@ const App: React.FC = () => {
     if (view === 'details' && selectedHouse) return [selectedHouse];
     if (isSearching) return filteredHouses;
     const approvedHouses = houses.filter(h => h.isApproved);
-    return rankProperties(approvedHouses.filter(h => h.price <= (currentUser.income || 50000) * 0.45), currentUser).slice(0, 12);
-  }, [currentUser, isSearching, filteredHouses, view, selectedHouse]);
+    // Removed strict price filter to show ALL approved houses
+    return rankProperties(approvedHouses, currentUser).slice(0, 20);
+  }, [currentUser, isSearching, filteredHouses, view, selectedHouse, houses]);
 
   const updateBookingStatus = (id: string, status: string) => {
     setBookings(prev => prev.map(b => b.id === id ? { ...b, status: status as any } : b));
@@ -170,7 +248,13 @@ const App: React.FC = () => {
       <Navbar
         user={currentUser}
         onNavigate={(v: any) => setView(v)}
-        onLogout={() => setCurrentUser(null)}
+        onLogout={() => {
+          setCurrentUser(null);
+          setView('search');
+          sessionStorage.removeItem('homesight_user');
+          sessionStorage.removeItem('homesight_view');
+          sessionStorage.removeItem('homesight_selected_house');
+        }}
         currentView={view}
         isOpen={isNavbarOpen}
         onClose={() => setIsNavbarOpen(false)}

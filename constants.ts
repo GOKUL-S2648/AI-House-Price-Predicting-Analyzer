@@ -76,10 +76,13 @@ const PROPERTY_IMAGES = [
 const generateMockData = () => {
   const houses: any[] = [];
 
-  const pgNames = ["Stanza Living", "Zolo Stay", "Hello World PG", "Sunrise Hostels", "Olive Living", "Nestaway"];
-  const aptNames = ["Prestige Heights", "Godrej Woods", "Sobha Dream", "Brigade Meadows", "Skyline Apartment", "Mantri Gardens"];
-  const villaNames = ["Serene Villas", "Emerald Heights", "Cloud 9 Retreat", "Mist View Manor", "Heritage Villa", "Palazzo"];
-  const indNames = ["Nivasam", "Illam", "Bhavan", "Sree Mansion", "Traditional House", "Santi Nilayam"];
+  const ownerNames = [
+    "Aravind Swamy", "Meera Krishnan", "Rahul Sharma", "Sneha Kapoor", 
+    "Vikram Reddy", "Priya Nair", "Sanjay Gupta", "Anjali Verma", 
+    "Arjun Malhotra", "Kavya Iyer", "Rohan Das", "Ishita Paul",
+    "David Miller", "Sarah Wilson", "Michael Brown", "Emma Watson",
+    "James Anderson", "Olivia Taylor"
+  ];
 
   STATES_AND_DISTRICTS.forEach((sObj, sIdx) => {
     sObj.districts.forEach((d, dIdx) => {
@@ -100,32 +103,33 @@ const generateMockData = () => {
           let title = "";
           let amenities: string[] = [];
 
-          const nameIndex = (nIdx + i + dIdx) % pgNames.length;
+          const nameIndex = (nIdx + i + dIdx + sIdx) % ownerNames.length;
+          const owner = ownerNames[nameIndex];
 
           switch (type) {
             case 'Pg':
               basePrice = Math.round(4500 + (nIdx * 250) + (i * 1200)) + priceJitter;
-              title = `${pgNames[nameIndex]} ${neighborhood}`;
+              title = `${owner}'s Managed PG`;
               amenities = ['WiFi', 'Food', 'Cleaning', 'Laundry'];
               break;
             case 'Apartment':
               basePrice = Math.round((9500 + (nIdx * 550) + (i * 2800)) * priceModifier) + priceJitter;
-              title = `${aptNames[nameIndex]} @ ${neighborhood}`;
+              title = `${owner}'s Luxury Flat`;
               amenities = ['Lift', 'Security', 'Parking', 'Gym'];
               break;
             case 'Villa':
               basePrice = Math.round((38000 + (nIdx * 1200) + (i * 12000)) * priceModifier) + priceJitter;
-              title = `${villaNames[nameIndex]} - ${neighborhood}`;
+              title = `${owner}'s Private Villa`;
               amenities = ['Private Garden', 'Swimming Pool', 'Luxury Interiors', 'Solar Power'];
               break;
             case 'Individual House':
               basePrice = Math.round((14500 + (nIdx * 850) + (i * 3500)) * priceModifier) + priceJitter;
-              title = `${neighborhood} ${indNames[nameIndex]}`;
+              title = `${owner}'s Independent Home`;
               amenities = ['Backyard', 'Own Water Source', 'Quiet Area', 'Pet Friendly'];
               break;
             case 'Studio':
               basePrice = Math.round(7500 + (nIdx * 350) + (i * 1800)) + priceJitter;
-              title = `Cozy Studio ${neighborhood}`;
+              title = `${owner}'s Compact Studio`;
               amenities = ['AC', 'Compact Kitchen', 'Near Transit', 'Balcony'];
               break;
           }
@@ -146,11 +150,13 @@ const generateMockData = () => {
             district: d,
             state: sObj.state,
             image: PROPERTY_IMAGES[imageIndex],
+            email: `${owner.toLowerCase().replace(/\s/g, '')}s@gmail.com`,
             amenities,
             historicalPrices: [
-              { year: 2023, price: Math.round(basePrice * 0.92) },
-              { year: 2024, price: Math.round(basePrice * 0.96) },
-              { year: 2025, price: basePrice }
+              { year: 2023, price: Math.round(basePrice * 0.88) },
+              { year: 2024, price: Math.round(basePrice * 0.92) },
+              { year: 2025, price: Math.round(basePrice * 0.96) },
+              { year: 2026, price: basePrice }
             ],
             description: `Beautifully maintained ${type} located in the heart of ${neighborhood}. Perfect for those seeking both comfort and accessibility in ${d}.`,
             isApproved: true,

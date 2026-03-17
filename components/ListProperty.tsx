@@ -18,6 +18,7 @@ const ListProperty: React.FC<ListPropertyProps> = ({ user, onSuccess, onBack }) 
         district: '',
         state: '',
         description: '',
+        email: user.email || '',
         image: 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=800&q=80'
     });
 
@@ -36,11 +37,12 @@ const ListProperty: React.FC<ListPropertyProps> = ({ user, onSuccess, onBack }) 
                     district: formData.district,
                     state: formData.state,
                     description: formData.description,
+                    email: formData.email,
                     image: formData.image,
                     owner_id: user.id,
                     is_approved: false, // Must be approved by admin
                     amenities: ['Basic Amenities'],
-                    historical_prices: [{ year: 2025, price: parseFloat(formData.price) }]
+                    historical_prices: [{ year: 2026, price: parseFloat(formData.price) }]
                 });
 
             if (error) throw error;
@@ -94,6 +96,18 @@ const ListProperty: React.FC<ListPropertyProps> = ({ user, onSuccess, onBack }) 
                     </div>
 
                     <div className="space-y-4">
+                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 ml-1">Owner Registry Email</label>
+                        <input
+                            required
+                            type="email"
+                            className="w-full bg-white text-[#0F172A] border border-black/5 rounded-2xl px-8 py-5 text-sm font-black focus:ring-4 focus:ring-[#00AEEF]/5 focus:border-[#00AEEF]/20 outline-none transition-all placeholder:text-gray-300 uppercase tracking-widest shadow-sm"
+                            placeholder="e.g. owner@properly.ai"
+                            value={formData.email}
+                            onChange={e => setFormData({ ...formData, email: e.target.value })}
+                        />
+                    </div>
+
+                    <div className="space-y-4">
                         <label className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 ml-1">Liquidity Units (₹)</label>
                         <input
                             required
@@ -115,6 +129,17 @@ const ListProperty: React.FC<ListPropertyProps> = ({ user, onSuccess, onBack }) 
                             onChange={e => setFormData({ ...formData, district: e.target.value })}
                         />
                     </div>
+
+                    <div className="space-y-4">
+                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 ml-1">Preferred State</label>
+                        <input
+                            required
+                            className="w-full bg-white text-[#0F172A] border border-black/5 rounded-2xl px-8 py-5 text-sm font-black focus:ring-4 focus:ring-[#00AEEF]/5 focus:border-[#00AEEF]/20 outline-none transition-all placeholder:text-gray-300 uppercase tracking-widest shadow-sm"
+                            placeholder="e.g. Kerala"
+                            value={formData.state}
+                            onChange={e => setFormData({ ...formData, state: e.target.value })}
+                        />
+                    </div>
                 </div>
 
                 <div className="space-y-4">
@@ -125,6 +150,17 @@ const ListProperty: React.FC<ListPropertyProps> = ({ user, onSuccess, onBack }) 
                         placeholder="e.g. MG Road, Kochi, Kerala"
                         value={formData.location}
                         onChange={e => setFormData({ ...formData, location: e.target.value })}
+                    />
+                </div>
+
+                <div className="space-y-4">
+                    <label className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 ml-1">Property Visual URL</label>
+                    <input
+                        required
+                        className="w-full bg-white text-[#0F172A] border border-black/5 rounded-2xl px-8 py-5 text-sm font-black focus:ring-4 focus:ring-[#00AEEF]/5 focus:border-[#00AEEF]/20 outline-none transition-all placeholder:text-gray-300 uppercase tracking-widest shadow-sm"
+                        placeholder="e.g. https://images.com/house.jpg"
+                        value={formData.image}
+                        onChange={e => setFormData({ ...formData, image: e.target.value })}
                     />
                 </div>
 

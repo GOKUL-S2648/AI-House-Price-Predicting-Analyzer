@@ -1,82 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>HomeSight AI - Verified Housing</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <style>
-      :root {
-        --brand-cyan: #00AEEF;
-        --brand-cyan-muted: rgba(0, 174, 239, 0.05);
-        --brand-cyan-glow: rgba(0, 174, 239, 0.1);
-        --bg-main: #FFFFFF;
-        --bg-secondary: #F8FAFC;
-        --text-main: #0F172A;
-        --text-muted: #64748B;
-        --border-main: rgba(0, 0, 0, 0.05);
-      }
-      body {
-        font-family: 'Plus Jakarta Sans', sans-serif;
-        background-color: var(--bg-main);
-        color: var(--text-main);
-        margin: 0;
-      }
-      ::selection {
-        background-color: var(--brand-cyan);
-        color: white;
-      }
-      /* Custom Scrollbar for Premium Feel */
-      ::-webkit-scrollbar {
-        width: 8px;
-        background: var(--bg-secondary);
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #E2E8F0;
-        border-radius: 10px;
-        border: 2px solid var(--bg-secondary);
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: var(--brand-cyan);
-      }
-      .glass {
-        background: rgba(255, 255, 255, 0.8);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-      }
-      .custom-price-marker {
-        background: white;
-        border: 2px solid #4F46E5;
-        border-radius: 8px;
-        padding: 2px 6px;
-        font-weight: 800;
-        font-size: 11px;
-        color: #4F46E5;
-        white-space: nowrap;
-        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-        transition: all 0.2s;
-      }
-    </style>
-    <script type="importmap">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>HomeSight AI | Verified Housing Platform</title>
+
+<meta name="description" content="AI powered house price prediction and housing analysis platform with verified listings and interactive maps.">
+
+<link rel="icon" href="/favicon.ico">
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+<style>
+
+:root{
+--brand-cyan:#00AEEF;
+--brand-cyan-muted:rgba(0,174,239,0.05);
+--brand-cyan-glow:rgba(0,174,239,0.1);
+
+--bg-main:#FFFFFF;
+--bg-secondary:#F8FAFC;
+
+--text-main:#0F172A;
+--text-muted:#64748B;
+
+--border-main:rgba(0,0,0,0.05);
+}
+
+body{
+font-family:'Plus Jakarta Sans',sans-serif;
+background:var(--bg-main);
+color:var(--text-main);
+margin:0;
+}
+
+/* text selection */
+
+::selection{
+background:var(--brand-cyan);
+color:white;
+}
+
+/* scrollbar */
+
+::-webkit-scrollbar{
+width:8px;
+background:var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb{
+background:#E2E8F0;
+border-radius:10px;
+border:2px solid var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb:hover{
+background:var(--brand-cyan);
+}
+
+/* glass effect */
+
+.glass{
+background:rgba(255,255,255,0.85);
+backdrop-filter:blur(12px);
+-webkit-backdrop-filter:blur(12px);
+}
+
+/* map marker */
+
+.custom-price-marker{
+background:white;
+border:2px solid #4F46E5;
+border-radius:8px;
+padding:2px 6px;
+font-weight:800;
+font-size:11px;
+color:#4F46E5;
+white-space:nowrap;
+box-shadow:0 4px 6px rgba(0,0,0,0.1);
+transition:all 0.2s;
+}
+
+.custom-price-marker:hover{
+transform:scale(1.1);
+}
+
+</style>
+
+<script type="importmap">
 {
-  "imports": {
-    "react": "https://esm.sh/react@19.0.0",
-    "react-dom": "https://esm.sh/react-dom@19.0.0",
-    "react-dom/": "https://esm.sh/react-dom@19.0.0/",
-    "@google/genai": "https://esm.sh/@google/genai@1.40.0",
-    "recharts": "https://esm.sh/recharts@2.15.0",
-    "leaflet": "https://esm.sh/leaflet@1.9.4",
-    "react/": "https://esm.sh/react@^19.2.4/",
-    "vite": "https://esm.sh/vite@^7.3.1",
-    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.4"
-  }
+"imports":{
+"react":"https://esm.sh/react@19.0.0",
+"react-dom":"https://esm.sh/react-dom@19.0.0",
+"react-dom/":"https://esm.sh/react-dom@19.0.0/",
+"@google/genai":"https://esm.sh/@google/genai@1.40.0",
+"recharts":"https://esm.sh/recharts@2.15.0",
+"leaflet":"https://esm.sh/leaflet@1.9.4"
+}
 }
 </script>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/index.tsx"></script>
-  </body>
+
+</head>
+
+<body>
+
+<!-- React App Root -->
+<div id="root"></div>
+
+<!-- React Entry File -->
+<script type="module" src="/index.tsx"></script>
+
+</body>
 </html>
