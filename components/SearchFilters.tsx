@@ -59,7 +59,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({ onSearch, initialCriteria
         <form onSubmit={handleSubmit} className="space-y-10 md:space-y-14">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="space-y-3">
-              <label className="block text-[10px] font-black text-gray-500 uppercase tracking-[0.3em] ml-1">Type of Living</label>
+              <label className="block text-xs font-black text-gray-500 uppercase tracking-[0.3em] ml-1">Type of Living</label>
               <div className="relative group">
                 <select
                   value={houseType}
@@ -81,7 +81,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({ onSearch, initialCriteria
             </div>
 
             <div className="space-y-3">
-              <label className="block text-[10px] font-black text-gray-500 uppercase tracking-[0.3em] ml-1">Preferred State</label>
+              <label className="block text-xs font-black text-gray-500 uppercase tracking-[0.3em] ml-1">Preferred State</label>
               <input
                 type="text"
                 value={stateName}
@@ -92,7 +92,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({ onSearch, initialCriteria
             </div>
 
             <div className="space-y-3">
-              <label className="block text-[10px] font-black text-gray-500 uppercase tracking-[0.3em] ml-1">Location / Area</label>
+              <label className="block text-xs font-black text-gray-500 uppercase tracking-[0.3em] ml-1">Location / Area</label>
               <input
                 type="text"
                 value={district}
@@ -103,7 +103,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({ onSearch, initialCriteria
             </div>
 
             <div className="space-y-3">
-              <label className="block text-[10px] font-black text-gray-500 uppercase tracking-[0.3em] ml-1">Budget Confidence</label>
+              <label className="block text-xs font-black text-gray-500 uppercase tracking-[0.3em] ml-1">Budget Confidence</label>
               <input
                 type="text"
                 value={income}

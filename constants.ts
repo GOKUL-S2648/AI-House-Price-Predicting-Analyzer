@@ -141,22 +141,27 @@ const generateMockData = () => {
           const lngJitter = (Math.random() - 0.5) * 0.08;
           const imageIndex = (sIdx + dIdx + nIdx + i) % PROPERTY_IMAGES.length;
 
+          const roundTo500 = (num: number) => Math.round(num / 500) * 500;
+          const finalPrice = roundTo500(basePrice);
+
           houses.push({
             id: `listing_${sIdx}_${dIdx}_${nIdx}_${i}_${Math.floor(Math.random() * 1000)}`,
             title,
             type,
-            price: basePrice,
+            price: finalPrice,
             location: `${neighborhood}, ${d}`,
             district: d,
             state: sObj.state,
             image: PROPERTY_IMAGES[imageIndex],
             email: `${owner.toLowerCase().replace(/\s/g, '')}s@gmail.com`,
+            phone: `+91 9${Math.floor(1000 + Math.random() * 9000)}-${Math.floor(100000 + Math.random() * 900000)}`,
+            ownerName: owner,
             amenities,
             historicalPrices: [
-              { year: 2023, price: Math.round(basePrice * 0.88) },
-              { year: 2024, price: Math.round(basePrice * 0.92) },
-              { year: 2025, price: Math.round(basePrice * 0.96) },
-              { year: 2026, price: basePrice }
+              { year: 2023, price: roundTo500(finalPrice * 0.88) },
+              { year: 2024, price: roundTo500(finalPrice * 0.92) },
+              { year: 2025, price: roundTo500(finalPrice * 0.96) },
+              { year: 2026, price: finalPrice }
             ],
             description: `Beautifully maintained ${type} located in the heart of ${neighborhood}. Perfect for those seeking both comfort and accessibility in ${d}.`,
             isApproved: true,

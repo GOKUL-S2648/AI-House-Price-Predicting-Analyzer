@@ -41,7 +41,7 @@ const predictRandomForestLocal = (historicalData: { year: number, price: number 
   const trend = delta > 500 ? 'rising' : delta < -500 ? 'declining' : 'stable';
 
   return {
-    predictedPrice: Math.round(averagePrediction),
+    predictedPrice: Math.round(averagePrediction / 500) * 500,
     trend: trend,
     model: 'Forest Ensemble (Local)'
   };
@@ -60,11 +60,11 @@ export const predictFuturePrice = async (historicalData: { year: number, price: 
 
     const data = await response.json();
     return {
-      rfPrice: data.random_forest.predicted_price,
+      rfPrice: Math.round(data.random_forest.predicted_price / 500) * 500,
       rfTrend: data.random_forest.trend,
-      lrPrice: data.linear_regression.predicted_price,
+      lrPrice: Math.round(data.linear_regression.predicted_price / 500) * 500,
       lrTrend: data.linear_regression.trend,
-      predictedPrice: data.random_forest.predicted_price,
+      predictedPrice: Math.round(data.random_forest.predicted_price / 500) * 500,
       trend: data.random_forest.trend,
       isRF: true
     };

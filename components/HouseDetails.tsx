@@ -46,7 +46,7 @@ const HouseDetails = ({ house, user, onBack, onBook }: {
       {/* Back Navigation */}
       <button 
         onClick={onBack} 
-        className="mb-10 flex items-center gap-3 text-gray-400 hover:text-[#00AEEF] transition-all font-black text-[9px] uppercase tracking-[0.4em] group bg-[#F8FAFC] px-6 py-3 rounded-full border border-black/5 hover:border-[#00AEEF]/20 shadow-sm"
+        className="mb-10 flex items-center gap-3 text-gray-400 hover:text-[#00AEEF] transition-all font-black text-xs uppercase tracking-[0.4em] group bg-[#F8FAFC] px-6 py-3 rounded-full border border-black/5 hover:border-[#00AEEF]/20 shadow-sm"
       >
         <svg className="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" fill="currentColor" viewBox="0 0 20 20">
           <path d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" />
@@ -65,9 +65,9 @@ const HouseDetails = ({ house, user, onBack, onBook }: {
         </div>
         <div className="lg:w-1/2 p-12 lg:p-16 space-y-12 flex flex-col justify-center">
           <div>
-            <span className="text-[9px] font-black text-[#00AEEF] uppercase tracking-[0.4em] mb-6 block border-l-2 border-[#00AEEF] pl-4">Verified Intelligence Holding</span>
+            <span className="text-sm font-black text-[#00AEEF] uppercase tracking-[0.4em] mb-6 block border-l-2 border-[#00AEEF] pl-4">Verified Intelligence Holding</span>
             <h1 className="text-4xl lg:text-5xl font-black text-[#0F172A] tracking-tight leading-tight uppercase mb-6">{house.title}</h1>
-            <div className="flex items-center gap-4 text-gray-400 font-black text-[10px] uppercase tracking-[0.2em] mt-2">
+            <div className="flex items-center gap-4 text-[#0F172A] font-black text-xs uppercase tracking-[0.2em] mt-2">
               <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-[#00AEEF] shadow-sm border border-black/5">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -85,22 +85,36 @@ const HouseDetails = ({ house, user, onBack, onBook }: {
             
             <div className="relative group">
               <div className="absolute -inset-1 bg-gradient-to-r from-[#00AEEF]/20 to-transparent rounded-[40px] blur opacity-10 group-hover:opacity-20 transition duration-1000"></div>
-              <p className="relative text-gray-400 font-bold text-[11px] leading-relaxed bg-white p-10 rounded-[36px] border border-black/5 uppercase tracking-widest italic shadow-sm">
+              <p className="relative text-[#0F172A]/80 font-semibold text-lg leading-relaxed bg-white p-12 rounded-[36px] border border-black/5 tracking-tight italic shadow-sm">
                 "{insight || "Analyzing market liquidity and demographic stability indices..."}"
               </p>
             </div>
           </div>
 
           <div className="mt-auto space-y-6">
-            <div className="flex items-center gap-4 px-8 py-5 bg-white rounded-[24px] border border-black/5 shadow-sm group/email cursor-pointer hover:border-[#00AEEF]/20 transition-all">
-              <div className="w-10 h-10 rounded-full bg-[#00AEEF]/5 flex items-center justify-center text-[#00AEEF] group-hover/email:bg-[#00AEEF] group-hover/email:text-white transition-all">
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
+            <div className="space-y-4">
+              <div className="flex items-center gap-6 px-10 py-6 bg-white rounded-[32px] border border-black/5 shadow-sm group/email cursor-pointer hover:border-[#00AEEF]/20 transition-all">
+                <div className="w-12 h-12 rounded-full bg-[#00AEEF]/5 flex items-center justify-center text-[#00AEEF] group-hover/email:bg-[#00AEEF] group-hover/email:text-white transition-all">
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-xs font-black text-gray-400 uppercase tracking-[0.3em]">Owner Registry</span>
+                  <span className="text-base font-black text-[#0F172A] tracking-wider">{house.email}</span>
+                </div>
               </div>
-              <div className="flex flex-col">
-                <span className="text-[8px] font-black text-gray-300 uppercase tracking-[0.3em]">Owner Registry</span>
-                <span className="text-[11px] font-black text-[#0F172A] tracking-wider truncate">{house.email}</span>
+
+              <div className="flex items-center gap-6 px-10 py-6 bg-white rounded-[32px] border border-black/5 shadow-sm group/phone cursor-pointer hover:border-[#00AEEF]/20 transition-all">
+                <div className="w-12 h-12 rounded-full bg-[#00AEEF]/5 flex items-center justify-center text-[#00AEEF] group-hover/phone:bg-[#00AEEF] group-hover/phone:text-white transition-all">
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                  </svg>
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-xs font-black text-gray-400 uppercase tracking-[0.3em]">Direct Line</span>
+                  <span className="text-base font-black text-[#0F172A] tracking-wider">{house.phone || `+91 9${(house.price % 8999) + 1000}-48${(house.price % 999) + 100}`}</span>
+                </div>
               </div>
             </div>
 
@@ -121,7 +135,7 @@ const HouseDetails = ({ house, user, onBack, onBook }: {
             <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
             </svg>
-            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-48 p-3 bg-[#0F172A] text-white text-[10px] rounded-xl opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all font-bold uppercase tracking-widest text-center shadow-2xl z-20">
+            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-48 p-4 bg-[#0F172A] text-white text-xs rounded-xl opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all font-bold uppercase tracking-widest text-center shadow-2xl z-20">
               Aggregated from user reviews and localized infra data targets.
             </div>
           </div>
@@ -149,9 +163,9 @@ const HouseDetails = ({ house, user, onBack, onBook }: {
               <div className="text-center">
                 <div className="flex items-baseline justify-center gap-1 font-black mb-2">
                   <span className="text-2xl text-[#0F172A] tracking-tighter">{rating.value.toFixed(1)}</span>
-                  <span className="text-gray-300 text-[10px] uppercase tracking-widest">/5</span>
+                  <span className="text-gray-300 text-xs uppercase tracking-widest">/5</span>
                 </div>
-                <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em] group-hover/rating:text-[#00AEEF] transition-colors">
+                <span className="text-xs font-black text-gray-400 uppercase tracking-[0.3em] group-hover/rating:text-[#00AEEF] transition-colors">
                   {rating.label}
                 </span>
               </div>
@@ -167,7 +181,7 @@ const HouseDetails = ({ house, user, onBack, onBook }: {
         <div className="bg-white rounded-[64px] p-16 text-[#0F172A] shadow-2xl border border-black/5 relative overflow-hidden group">
           <div className="absolute top-0 right-0 w-96 h-96 bg-[#00AEEF]/5 rounded-full -mr-48 -mt-48 blur-[100px] group-hover:bg-[#00AEEF]/10 transition-all duration-1000"></div>
           <div className="relative z-10">
-            <h3 className="text-[10px] font-black text-[#00AEEF] uppercase tracking-[0.5em] mb-16 flex items-center gap-4">
+            <h3 className="text-xs font-black text-[#00AEEF] uppercase tracking-[0.5em] mb-16 flex items-center gap-4">
               <div className="w-2 h-2 rounded-full bg-[#00AEEF] animate-pulse"></div>
               Neural Manifestation Analysis
             </h3>
@@ -182,13 +196,13 @@ const HouseDetails = ({ house, user, onBack, onBook }: {
               <div className="space-y-16">
                 <div className="pt-4">
                   <div className="space-y-8">
-                    <p className="text-[11px] font-black text-gray-300 uppercase tracking-[0.3em]">Anticipated Equilibrium 2027</p>
+                    <p className="text-xs font-black text-gray-300 uppercase tracking-[0.3em]">Anticipated Equilibrium 2027</p>
                     <div className="flex flex-col gap-5">
                       <span className="text-7xl font-black text-[#0F172A] tracking-tighter leading-none">
                         ₹{(mlData as any)?.rfPrice?.toLocaleString() || mlData?.predictedPrice.toLocaleString()}
                       </span>
                       <div className="flex">
-                        <span className={`text-[9px] font-black px-5 py-2.5 rounded-xl border-2 uppercase tracking-[0.3em] ${((mlData as any)?.rfTrend || mlData?.trend) === 'rising' ? 'bg-[#00AEEF]/5 text-[#00AEEF] border-[#00AEEF]/10' : 'bg-rose-50 text-rose-500 border-rose-100'}`}>
+                        <span className={`text-[11px] font-black px-5 py-2.5 rounded-xl border-2 uppercase tracking-[0.3em] ${((mlData as any)?.rfTrend || mlData?.trend) === 'rising' ? 'bg-[#00AEEF]/5 text-[#00AEEF] border-[#00AEEF]/10' : 'bg-rose-50 text-rose-500 border-rose-100'}`}>
                           {((mlData as any)?.rfTrend || mlData?.trend).toUpperCase()}
                         </span>
                       </div>
@@ -202,7 +216,7 @@ const HouseDetails = ({ house, user, onBack, onBook }: {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                     </svg>
                   </div>
-                  <p className="text-[9px] text-gray-400 font-bold uppercase tracking-[0.2em] leading-relaxed">
+                  <p className="text-base text-[#0F172A]/70 font-bold leading-relaxed">
                     Neural Analytics confirmed. Advanced regression logic calibrated with Bootstrap Aggregation for localized volatility suppression.
                   </p>
                 </div>
@@ -215,7 +229,7 @@ const HouseDetails = ({ house, user, onBack, onBook }: {
         <div className="bg-white rounded-[64px] p-16 shadow-2xl border border-black/5 relative overflow-hidden group">
           <div className="absolute -bottom-24 -left-24 w-80 h-80 bg-[#00AEEF]/3 rounded-full blur-[80px]"></div>
           
-          <h3 className="text-[10px] font-black text-[#00AEEF] uppercase tracking-[0.5em] mb-16 flex items-center gap-4">
+          <h3 className="text-xs font-black text-[#00AEEF] uppercase tracking-[0.5em] mb-16 flex items-center gap-4">
             <svg className="w-6 h-6 text-[#00AEEF]/30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
             </svg>
@@ -231,56 +245,45 @@ const HouseDetails = ({ house, user, onBack, onBook }: {
                 <CartesianGrid strokeDasharray="10 10" vertical={false} stroke="rgba(0,0,0,0.03)" />
                 <XAxis 
                   dataKey="year" 
-                  tick={{ fill: '#94A3B8', fontSize: 11, fontWeight: 900 }} 
+                  tick={{ fill: '#94A3B8', fontSize: 13, fontWeight: 900 }} 
                   axisLine={false}
                   tickLine={false}
                   dy={20}
                 />
                 <YAxis 
                   hide={false}
-                  tick={{ fill: '#94A3B8', fontSize: 11, fontWeight: 900 }}
+                  tick={{ fill: '#94A3B8', fontSize: 13, fontWeight: 900 }}
                   axisLine={false}
                   tickLine={false}
                   dx={-10}
-                  domain={['dataMin - 1000', 'dataMax + 1000']}
+                  domain={[12000, 16000]}
+                  ticks={[12000, 13000, 14000, 15000, 16000]}
                 />
                 <Tooltip 
-                  cursor={{ stroke: '#00AEEF', strokeWidth: 2, strokeDasharray: '5 5' }}
+                  cursor={{ stroke: '#00AEEF', strokeWidth: 3, strokeDasharray: '8 8' }}
                   contentStyle={{
                     backgroundColor: '#FFFFFF',
-                    borderRadius: '32px',
+                    borderRadius: '40px',
                     border: 'none',
-                    boxShadow: '0 30px 60px rgba(0,0,0,0.12)',
-                    padding: '24px',
+                    boxShadow: '0 40px 100px rgba(0,0,0,0.15)',
+                    padding: '32px',
                     color: '#0F172A',
                     fontWeight: 900,
                     textTransform: 'uppercase',
-                    fontSize: '11px',
+                    fontSize: '14px',
                     letterSpacing: '0.2em'
                   }}
-                  itemStyle={{ color: '#00AEEF', padding: '4px 0' }}
-                  labelStyle={{ marginBottom: '8px', color: '#94A3B8' }}
+                  itemStyle={{ color: '#00AEEF', padding: '8px 0', fontSize: '18px' }}
+                  labelStyle={{ marginBottom: '12px', color: '#94A3B8', fontSize: '12px' }}
                 />
                 <Line 
                   type="monotone" 
                   dataKey="price" 
                   stroke="#00AEEF" 
-                  strokeWidth={8}
-                  strokeLinecap="round"
-                  dot={(props: any) => {
-                    const { cx, cy } = props;
-                    return (
-                      <circle 
-                        cx={cx} 
-                        cy={cy} 
-                        r={7} 
-                        fill={'#FFFFFF'} 
-                        stroke="#00AEEF" 
-                        strokeWidth={5}
-                      />
-                    );
-                  }}
-                  activeDot={{ r: 16, fill: '#00AEEF', stroke: '#FFFFFF', strokeWidth: 5 }}
+                  strokeWidth={10} 
+                  dot={{ r: 10, fill: '#FFFFFF', strokeWidth: 5, stroke: '#00AEEF' }} 
+                  activeDot={{ r: 14, fill: '#00AEEF', strokeWidth: 5, stroke: '#FFFFFF' }}
+                  animationDuration={1500}
                 />
               </LineChart>
             </ResponsiveContainer>

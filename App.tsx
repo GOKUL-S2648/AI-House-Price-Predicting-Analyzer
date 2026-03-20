@@ -217,6 +217,13 @@ const App: React.FC = () => {
 
   const handleBook = (house: House) => {
     if (!currentUser) return;
+
+    // Send personalized email to owner
+    const subject = `INQUIRY: ${house.title} - HOLDING INITIALIZATION`;
+    const body = `Hi ${house.ownerName || 'Property Owner'},\n\nI am ${currentUser.name} and I am reaching out to initialize a holding for your property: "${house.title}" located in ${house.location}.\n\nI have reviewed the Neural Manifestation Analysis and Historical Delta Matrix, and I would like to proceed with the holding fee of ₹${house.price.toLocaleString()}.\n\nPlease provide me with the specific documentation requirements and next steps.\n\nBest Regards,\n${currentUser.name}\nAntigravity Intelligence Portfolio Holder`;
+
+    window.location.href = `mailto:${house.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
     const newBooking: Booking = {
       id: `book_${Date.now()}`,
       houseId: house.id,
@@ -244,7 +251,7 @@ const App: React.FC = () => {
   if (!currentUser) return <Auth onLogin={handleLogin} />;
 
   return (
-    <div className="min-h-screen flex bg-white text-[#0F172A] selection:bg-[#00AEEF]/10">
+    <div className="min-h-screen flex bg-[#F1F5F9] text-[#0F172A] selection:bg-[#00AEEF]/10">
       <Navbar
         user={currentUser}
         onNavigate={(v: any) => setView(v)}
@@ -265,7 +272,7 @@ const App: React.FC = () => {
         <div className="flex items-center justify-between md:justify-end mb-8">
           <button
             onClick={() => setIsNavbarOpen(true)}
-            className="md:hidden p-3 rounded-2xl bg-[#F8FAFC] border border-black/5 text-gray-400 hover:text-[#00AEEF] transition-all"
+            className="md:hidden p-3 rounded-2xl bg-[#E2E8F0] border border-black/5 text-gray-400 hover:text-[#00AEEF] transition-all"
           >
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 6h16M4 12h16m-7 6h7" /></svg>
           </button>

@@ -52,7 +52,7 @@ const RiskZoneMap: React.FC<RiskZoneMapProps> = ({ houses }) => {
                     >
                         <div className="flex justify-between items-start mb-4">
                             <h4 className="text-lg font-black text-[#1E1B4B]">{item.district}</h4>
-                            <div className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${item.risk_score > 70 ? 'bg-rose-600 text-white' :
+                            <div className={`px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider ${item.risk_score > 70 ? 'bg-rose-600 text-white' :
                                     item.risk_score > 40 ? 'bg-amber-500 text-white' :
                                         'bg-emerald-600 text-white'
                                 }`}>
@@ -62,7 +62,7 @@ const RiskZoneMap: React.FC<RiskZoneMapProps> = ({ houses }) => {
 
                         <div className="space-y-4">
                             <div>
-                                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Status</p>
+                                <p className="text-xs font-black text-gray-400 uppercase tracking-widest mb-1">Status</p>
                                 <p className={`text-sm font-bold ${item.risk_score > 70 ? 'text-rose-600' :
                                         item.risk_score > 40 ? 'text-amber-600' :
                                             'text-emerald-600'
@@ -71,11 +71,11 @@ const RiskZoneMap: React.FC<RiskZoneMapProps> = ({ houses }) => {
 
                             <div className="flex justify-between">
                                 <div>
-                                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Growth</p>
+                                    <p className="text-xs font-black text-gray-400 uppercase tracking-widest mb-1">Growth</p>
                                     <p className="text-sm font-bold text-gray-700">{item.avg_growth}%</p>
                                 </div>
                                 <div>
-                                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Data Points</p>
+                                    <p className="text-xs font-black text-gray-400 uppercase tracking-widest mb-1">Data Points</p>
                                     <p className="text-sm font-bold text-gray-700">{item.house_count} Listings</p>
                                 </div>
                             </div>

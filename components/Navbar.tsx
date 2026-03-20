@@ -22,7 +22,7 @@ const Navbar: React.FC<NavbarProps> = ({ user, currentView, onNavigate, onLogout
         />
       )}
 
-      <nav className={`fixed md:sticky top-0 left-0 h-screen w-80 bg-[#F8FAFC] border-r border-black/5 flex flex-col p-10 z-[70] shrink-0 transition-all duration-300 transform ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
+      <nav className={`fixed md:sticky top-0 left-0 h-screen w-80 bg-[#E2E8F0] border-r border-black/5 flex flex-col p-10 z-[70] shrink-0 transition-all duration-300 transform ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
         {/* Mobile Close Button */}
         <button
           onClick={onClose}
@@ -84,7 +84,7 @@ const Navbar: React.FC<NavbarProps> = ({ user, currentView, onNavigate, onLogout
         </div>
 
         <div className="pt-10 border-t border-black/5">
-          <div className="flex items-center gap-5 p-5 bg-white rounded-3xl border border-black/5 shadow-md">
+          <div className="flex items-center gap-5 p-5 bg-[#F1F5F9] rounded-3xl border border-black/5 shadow-md">
             <div className="w-12 h-12 rounded-full border-2 border-[#00AEEF]/20 flex items-center justify-center text-lg font-black text-[#00AEEF] p-[2px]">
               <img src={`https://ui-avatars.com/api/?name=${user.name}&background=F8FAFC&color=00AEEF&bold=true`} alt={user.name} className="w-full h-full rounded-full" />
             </div>

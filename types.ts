@@ -44,6 +44,8 @@ export interface House {
   ratings?: HouseRatings;
   furnishings?: Furnishing[];
   email: string;
+  phone: string;
+  ownerName: string;
 }
 
 // Booking interface representing a scheduled property visit

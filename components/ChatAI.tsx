@@ -94,14 +94,14 @@ const ChatAI: React.FC<ChatAIProps> = ({ contextHouses = [], user }) => {
   return (
     <div className="fixed bottom-10 right-10 z-[100] flex flex-col items-end">
       {isOpen && (
-        <div className="mb-8 w-[450px] h-[700px] bg-white rounded-[48px] shadow-[0_40px_100px_rgba(0,0,0,0.1)] border border-black/5 flex flex-col overflow-hidden animate-in slide-in-from-bottom-12 duration-700">
+        <div className="mb-8 w-[600px] h-[800px] bg-white rounded-[56px] shadow-[0_50px_150px_rgba(0,0,0,0.2)] border border-black/10 flex flex-col overflow-hidden animate-in slide-in-from-bottom-12 duration-700">
           <div className="bg-white p-8 text-[#0F172A] flex items-center justify-between border-b border-black/5">
             <div>
                 <div className="flex items-center gap-2 mb-1">
                     <span className="text-xl font-black tracking-[0.2em] text-[#0F172A]">PR</span>
                     <div className="w-2.5 h-2.5 bg-[#00AEEF] rounded-full animate-pulse"></div>
                 </div>
-              <p className="text-[9px] text-[#00AEEF] font-black uppercase tracking-[0.4em]">Navigator Layer</p>
+              <p className="text-[10px] text-[#00AEEF] font-black uppercase tracking-[0.4em]">Navigator Layer</p>
             </div>
             <button onClick={() => setIsOpen(false)} className="p-3 bg-[#F8FAFC] hover:bg-gray-100 rounded-2xl transition-all border border-black/5 text-gray-400">
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" /></svg>
@@ -111,7 +111,7 @@ const ChatAI: React.FC<ChatAIProps> = ({ contextHouses = [], user }) => {
           <div ref={scrollRef} className="flex-1 overflow-y-auto p-10 space-y-8 scrollbar-hide">
             {messages.map((msg, i) => (
               <div key={i} className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
-                <div className={`max-w-[90%] px-6 py-4 rounded-[28px] text-[13px] font-black tracking-wide leading-relaxed shadow-sm ${msg.role === 'user' ? 'bg-[#00AEEF] text-white rounded-tr-none' : 'bg-[#F8FAFC] text-gray-500 rounded-tl-none border border-black/5'
+                <div className={`max-w-[90%] px-8 py-6 rounded-[32px] text-base font-bold tracking-tight leading-relaxed shadow-md ${msg.role === 'user' ? 'bg-[#00AEEF] text-white rounded-tr-none' : 'bg-[#F1F5F9] text-[#0F172A] rounded-tl-none border border-black/5'
                    }`}>
                   {msg.role === 'ai' ? formatResponse(msg.text) : msg.text}
                 </div>
@@ -129,7 +129,7 @@ const ChatAI: React.FC<ChatAIProps> = ({ contextHouses = [], user }) => {
           <div className="p-10 bg-[#F1F5F9]/30 border-t border-black/5">
             <div className="flex flex-wrap gap-3 mb-8">
               {SUGGESTIONS.map((s, idx) => (
-                <button key={idx} onClick={() => handleSend(s)} className="text-[8px] font-black text-gray-400 border border-black/5 px-4 py-2 rounded-xl hover:bg-[#00AEEF]/10 hover:text-[#00AEEF] hover:border-[#00AEEF]/20 transition-all uppercase tracking-widest bg-white">{s}</button>
+                <button key={idx} onClick={() => handleSend(s)} className="text-[10px] font-black text-gray-400 border border-black/5 px-4 py-2.5 rounded-xl hover:bg-[#00AEEF]/10 hover:text-[#00AEEF] hover:border-[#00AEEF]/20 transition-all uppercase tracking-widest bg-white shadow-sm">{s}</button>
               ))}
             </div>
             <form onSubmit={(e) => { e.preventDefault(); handleSend(); }} className="relative">
@@ -142,7 +142,7 @@ const ChatAI: React.FC<ChatAIProps> = ({ contextHouses = [], user }) => {
         </div>
       )}
 
-      <button onClick={() => setIsOpen(!isOpen)} className="group relative w-24 h-24 rounded-[32px] bg-[#00AEEF] shadow-[0_20px_50px_rgba(0,174,239,0.25)] flex items-center justify-center hover:scale-110 active:scale-90 transition-all text-white border-4 border-white">
+      <button onClick={() => setIsOpen(!isOpen)} className="group relative w-28 h-28 rounded-[40px] bg-[#00AEEF] shadow-[0_30px_70px_rgba(0,174,239,0.35)] flex items-center justify-center hover:scale-110 active:scale-90 transition-all text-white border-8 border-white">
         {isOpen ? <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" /></svg> : (
           <div className="flex flex-col items-center">
             <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>

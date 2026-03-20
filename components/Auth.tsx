@@ -65,7 +65,7 @@ const Auth: React.FC<AuthProps> = ({ onLogin }) => {
   };
 
   return (
-    <div className="min-h-screen w-full relative flex items-center justify-center font-['Plus_Jakarta_Sans',_sans-serif] overflow-hidden">
+    <div className="min-h-screen w-full relative flex items-center justify-center font-sans overflow-hidden">
       {/* Cinematic Background */}
       <div className="absolute inset-0 overflow-hidden">
         <img 
