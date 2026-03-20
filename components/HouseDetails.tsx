@@ -252,12 +252,12 @@ const HouseDetails = ({ house, user, onBack, onBook }: {
                 />
                 <YAxis 
                   hide={false}
-                  tick={{ fill: '#94A3B8', fontSize: 13, fontWeight: 900 }}
+                  tick={{ fill: '#94A3B8', fontSize: 11, fontWeight: 800 }}
                   axisLine={false}
                   tickLine={false}
                   dx={-10}
-                  domain={[12000, 16000]}
-                  ticks={[12000, 13000, 14000, 15000, 16000]}
+                  domain={['auto', 'auto']}
+                  tickFormatter={(value) => `₹${value > 1000 ? (value / 1000).toFixed(0) + 'k' : value}`}
                 />
                 <Tooltip 
                   cursor={{ stroke: '#00AEEF', strokeWidth: 3, strokeDasharray: '8 8' }}
