@@ -1,0 +1,7 @@
+{
+  "name": "HomeSight Analytics: Verified Housing",
+  "description": "An AI-powered platform to find and verify affordable housing in India.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}

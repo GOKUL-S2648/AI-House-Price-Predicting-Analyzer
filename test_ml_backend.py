@@ -1,0 +1,24 @@
+import requests
+import json
+
+def test_predict():
+    url = "http://localhost:5000/predict"
+    data = {
+        "historicalPrices": [
+            {"year": 2023, "price": 10000},
+            {"year": 2024, "price": 11000},
+            {"year": 2025, "price": 12000}
+        ],
+        "amenitiesCount": 5,
+        "targetYear": 2026
+    }
+    
+    try:
+        response = requests.post(url, json=data)
+        print(f"Status: {response.status_code}")
+        print(f"Response: {json.dumps(response.json(), indent=2)}")
+    except Exception as e:
+        print(f"Error connecting to backend: {e}")
+
+if __name__ == "__main__":
+    test_predict()
