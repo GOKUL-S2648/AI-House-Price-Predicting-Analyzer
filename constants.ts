@@ -158,15 +158,9 @@ const generateMockData = () => {
             ownerName: owner,
             amenities,
             historicalPrices: [
-<<<<<<< HEAD
               { year: 2023, price: roundTo500(finalPrice * 0.5) },
               { year: 2024, price: roundTo500((finalPrice * 2) / 3) },
               { year: 2025, price: roundTo500((finalPrice * 5) / 6) },
-=======
-              { year: 2023, price: roundTo500(finalPrice * 0.88) },
-              { year: 2024, price: roundTo500(finalPrice * 0.92) },
-              { year: 2025, price: roundTo500(finalPrice * 0.96) },
->>>>>>> 4edcee13c4de425d6c00fea37116f73f2f7d8146
               { year: 2026, price: finalPrice }
             ],
             description: `Beautifully maintained ${type} located in the heart of ${neighborhood}. Perfect for those seeking both comfort and accessibility in ${d}.`,

@@ -48,7 +48,6 @@ const predictRandomForestLocal = (historicalData: { year: number, price: number 
 };
 
 export const predictFuturePrice = async (historicalData: { year: number, price: number }[], targetYear: number, amenitiesCount: number = 0) => {
-<<<<<<< HEAD
   const lastPrice = historicalData[historicalData.length - 1]?.price || 0;
   
   // Rule: Current price + 1000 or 1500 extra based on amenities density
@@ -64,43 +63,6 @@ export const predictFuturePrice = async (historicalData: { year: number, price: 
     trend: 'rising',
     isRF: true
   };
-=======
-  try {
-    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-    const response = await fetch(`${API_URL}/predict`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ historicalPrices: historicalData, targetYear, amenitiesCount })
-    });
-
-    if (!response.ok) throw new Error('Backend offline');
-
-    const data = await response.json();
-    return {
-      rfPrice: Math.round(data.random_forest.predicted_price / 500) * 500,
-      rfTrend: data.random_forest.trend,
-      lrPrice: Math.round(data.linear_regression.predicted_price / 500) * 500,
-      lrTrend: data.linear_regression.trend,
-      predictedPrice: Math.round(data.random_forest.predicted_price / 500) * 500,
-      trend: data.random_forest.trend,
-      isRF: true
-    };
-
-  } catch (error) {
-    console.warn("ML Backend unavailable, deploying Local Random Forest Engine:", error);
-    const localRF = predictRandomForestLocal(historicalData, targetYear, amenitiesCount);
-    
-    return {
-      rfPrice: localRF.predictedPrice,
-      rfTrend: localRF.trend,
-      lrPrice: localRF.predictedPrice, // Same for local ensemble
-      lrTrend: localRF.trend,
-      predictedPrice: localRF.predictedPrice,
-      trend: localRF.trend,
-      isRF: true
-    };
-  }
->>>>>>> 4edcee13c4de425d6c00fea37116f73f2f7d8146
 };
 
 export const getCheapDeals = async (houses: House[]) => {
