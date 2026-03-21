@@ -13,7 +13,10 @@ import { rankProperties, detectSuspiciousListings } from './mlService';
 import { supabase } from './supabaseClient';
 import ListProperty from './components/ListProperty';
 import AdminDashboard from './components/AdminDashboard';
+<<<<<<< HEAD
 import { sendAutomaticHoldingEmail } from './emailService';
+=======
+>>>>>>> 4edcee13c4de425d6c00fea37116f73f2f7d8146
 import { User, House, Booking, SearchCriteria } from './types';
 
 const App: React.FC = () => {
@@ -120,19 +123,26 @@ const App: React.FC = () => {
 
       if (error) throw error;
 
+<<<<<<< HEAD
       const roundTo500 = (num: number) => Math.round(num / 500) * 500;
 
+=======
+>>>>>>> 4edcee13c4de425d6c00fea37116f73f2f7d8146
       let fetched: House[] = [];
       if (data && data.length > 0) {
         fetched = data.map((h: any) => ({
           ...h,
           id: h.listing_id || h.id,
+<<<<<<< HEAD
           historicalPrices: [
             { year: 2023, price: roundTo500(h.price * 0.5) },
             { year: 2024, price: roundTo500((h.price * 2) / 3) },
             { year: 2025, price: roundTo500((h.price * 5) / 6) },
             { year: 2026, price: h.price }
           ],
+=======
+          historicalPrices: h.historical_prices,
+>>>>>>> 4edcee13c4de425d6c00fea37116f73f2f7d8146
           isApproved: h.is_approved,
           ownerId: h.owner_id
         }));
@@ -232,12 +242,15 @@ const App: React.FC = () => {
 
     window.location.href = `mailto:${house.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
+<<<<<<< HEAD
     // Try background automated dispatch
     console.log("Attempting background automated email dispatch...");
     sendAutomaticHoldingEmail(house, currentUser).then(success => {
       console.log(success ? "Automatic email sent." : "Automatic email failed (Expected on Resend Free without domain).");
     });
 
+=======
+>>>>>>> 4edcee13c4de425d6c00fea37116f73f2f7d8146
     const newBooking: Booking = {
       id: `book_${Date.now()}`,
       houseId: house.id,
