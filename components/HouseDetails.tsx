@@ -295,10 +295,7 @@ const HouseDetails = ({ house, user, onBack, onBook }: {
             </ResponsiveContainer>
           </div>
         </div>
-      </div>
-
-
-    </div>
+      </div>    </div>
   );
 };
 

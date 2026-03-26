@@ -22,6 +22,12 @@ const ListProperty: React.FC<ListPropertyProps> = ({ user, onSuccess, onBack }) 
         image: 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=800&q=80'
     });
 
+    React.useEffect(() => {
+        if (user.email && !formData.email) {
+            setFormData(prev => ({ ...prev, email: user.email }));
+        }
+    }, [user.email]);
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
@@ -55,7 +61,7 @@ const ListProperty: React.FC<ListPropertyProps> = ({ user, onSuccess, onBack }) 
     };
 
     return (
-        <div className="max-w-2xl mx-auto bg-[#F8FAFC] p-12 md:p-16 rounded-[56px] shadow-2xl border border-black/5 animate-in fade-in zoom-in-95 duration-1000">
+        <div className="max-w-5xl mx-auto bg-[#F8FAFC] p-12 md:p-16 rounded-[56px] shadow-2xl border border-black/5 animate-in fade-in zoom-in-95 duration-1000" style={{ fontFamily: 'Arial, sans-serif' }}>
             <div className="flex items-center justify-between mb-16">
                 <div>
                     <h2 className="text-4xl font-black text-[#0F172A] tracking-tight uppercase">Manifest Property</h2>
@@ -67,7 +73,7 @@ const ListProperty: React.FC<ListPropertyProps> = ({ user, onSuccess, onBack }) 
             <form onSubmit={handleSubmit} className="space-y-12">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                     <div className="space-y-4">
-                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 ml-1">Manifest Title</label>
+                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-700 ml-1">Manifest Title</label>
                         <input
                             required
                             className="w-full bg-white text-[#0F172A] border border-black/5 rounded-2xl px-8 py-5 text-sm font-black focus:ring-4 focus:ring-[#00AEEF]/5 focus:border-[#00AEEF]/20 outline-none transition-all placeholder:text-gray-300 uppercase tracking-widest shadow-sm"
@@ -78,7 +84,7 @@ const ListProperty: React.FC<ListPropertyProps> = ({ user, onSuccess, onBack }) 
                     </div>
 
                     <div className="space-y-4">
-                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 ml-1">Holding Type</label>
+                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-700 ml-1">Holding Type</label>
                         <div className="relative group">
                             <select
                                 className="w-full bg-white text-[#0F172A] border border-black/5 rounded-2xl px-8 py-5 text-sm font-black focus:ring-4 focus:ring-[#00AEEF]/5 focus:border-[#00AEEF]/20 outline-none transition-all appearance-none cursor-pointer uppercase tracking-widest shadow-sm"
@@ -96,7 +102,7 @@ const ListProperty: React.FC<ListPropertyProps> = ({ user, onSuccess, onBack }) 
                     </div>
 
                     <div className="space-y-4">
-                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 ml-1">Owner Registry Email</label>
+                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-700 ml-1">Owner Registry Email</label>
                         <input
                             required
                             type="email"
@@ -108,7 +114,7 @@ const ListProperty: React.FC<ListPropertyProps> = ({ user, onSuccess, onBack }) 
                     </div>
 
                     <div className="space-y-4">
-                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 ml-1">Liquidity Units (₹)</label>
+                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-700 ml-1">Liquidity Units (₹)</label>
                         <input
                             required
                             type="number"
@@ -120,7 +126,7 @@ const ListProperty: React.FC<ListPropertyProps> = ({ user, onSuccess, onBack }) 
                     </div>
 
                     <div className="space-y-4">
-                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 ml-1">District Focus</label>
+                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-700 ml-1">District Focus</label>
                         <input
                             required
                             className="w-full bg-white text-[#0F172A] border border-black/5 rounded-2xl px-8 py-5 text-sm font-black focus:ring-4 focus:ring-[#00AEEF]/5 focus:border-[#00AEEF]/20 outline-none transition-all placeholder:text-gray-300 uppercase tracking-widest shadow-sm"
@@ -131,7 +137,7 @@ const ListProperty: React.FC<ListPropertyProps> = ({ user, onSuccess, onBack }) 
                     </div>
 
                     <div className="space-y-4">
-                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 ml-1">Preferred State</label>
+                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-700 ml-1">Preferred State</label>
                         <input
                             required
                             className="w-full bg-white text-[#0F172A] border border-black/5 rounded-2xl px-8 py-5 text-sm font-black focus:ring-4 focus:ring-[#00AEEF]/5 focus:border-[#00AEEF]/20 outline-none transition-all placeholder:text-gray-300 uppercase tracking-widest shadow-sm"
@@ -143,7 +149,7 @@ const ListProperty: React.FC<ListPropertyProps> = ({ user, onSuccess, onBack }) 
                 </div>
 
                 <div className="space-y-4">
-                    <label className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 ml-1">Vector Coordinates</label>
+                    <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-700 ml-1">Vector Coordinates</label>
                     <input
                         required
                         className="w-full bg-white text-[#0F172A] border border-black/5 rounded-2xl px-8 py-5 text-sm font-black focus:ring-4 focus:ring-[#00AEEF]/5 focus:border-[#00AEEF]/20 outline-none transition-all placeholder:text-gray-300 uppercase tracking-widest shadow-sm"
@@ -154,7 +160,7 @@ const ListProperty: React.FC<ListPropertyProps> = ({ user, onSuccess, onBack }) 
                 </div>
 
                 <div className="space-y-4">
-                    <label className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 ml-1">Property Visual URL</label>
+                    <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-700 ml-1">Property Visual URL</label>
                     <input
                         required
                         className="w-full bg-white text-[#0F172A] border border-black/5 rounded-2xl px-8 py-5 text-sm font-black focus:ring-4 focus:ring-[#00AEEF]/5 focus:border-[#00AEEF]/20 outline-none transition-all placeholder:text-gray-300 uppercase tracking-widest shadow-sm"
@@ -165,7 +171,7 @@ const ListProperty: React.FC<ListPropertyProps> = ({ user, onSuccess, onBack }) 
                 </div>
 
                 <div className="space-y-4">
-                    <label className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 ml-1">Holding Analysis</label>
+                    <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-700 ml-1">Holding Analysis</label>
                     <textarea
                         required
                         rows={5}

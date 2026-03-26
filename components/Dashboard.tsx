@@ -1,7 +1,6 @@
 import React from 'react';
 import { Booking, House, User } from '../types';
 import Alerts from './Alerts';
-import RiskZoneMap from './RiskZoneMap';
 
 interface DashboardProps {
   bookings: Booking[];
@@ -149,10 +148,6 @@ const Dashboard: React.FC<DashboardProps> = ({ bookings, houses, user, onViewHou
             </div>
           </div>
         )}
-      </section>
-
-      <section className="pt-12 border-t border-gray-100">
-        <RiskZoneMap houses={houses} />
       </section>
     </div>
   );

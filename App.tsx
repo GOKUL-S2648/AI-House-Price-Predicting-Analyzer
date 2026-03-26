@@ -127,7 +127,7 @@ const App: React.FC = () => {
         fetched = data.map((h: any) => ({
           ...h,
           id: h.listing_id || h.id,
-          historicalPrices: [
+          historicalPrices: h.historical_prices && h.historical_prices.length > 0 ? h.historical_prices : [
             { year: 2023, price: roundTo500(h.price * 0.5) },
             { year: 2024, price: roundTo500((h.price * 2) / 3) },
             { year: 2025, price: roundTo500((h.price * 5) / 6) },

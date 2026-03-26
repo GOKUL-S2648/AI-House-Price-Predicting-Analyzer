@@ -18,11 +18,11 @@ interface AuthProps {
 const Auth: React.FC<AuthProps> = ({ onLogin }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [formData, setFormData] = useState({ name: '', email: '', password: '', income: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', password: '' });
 
   useEffect(() => {
     setError(null);
-    setFormData({ name: '', email: '', password: '', income: '' });
+    setFormData({ name: '', email: '', password: '' });
   }, [isLogin]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,7 +56,6 @@ const Auth: React.FC<AuthProps> = ({ onLogin }) => {
         name: formData.name.trim(),
         email: emailInput,
         password: passwordInput,
-        income: parseFloat(formData.income) || 50000,
         role: 'user'
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify([...storedUsers.slice(1), newUser]));
@@ -113,24 +112,14 @@ const Auth: React.FC<AuthProps> = ({ onLogin }) => {
 
             <div className="space-y-4">
               {!isLogin && (
-                <>
-                  <input
-                    name="name"
-                    type="text"
-                    value={formData.name}
-                    onChange={handleChange}
-                    placeholder="Full Name"
-                    className="w-full bg-[#F8FAFC] border border-black/5 rounded-2xl px-6 py-4 text-[#0F172A] focus:outline-none focus:border-[#00AEEF] focus:ring-4 focus:ring-[#00AEEF]/5 transition-all placeholder:text-gray-400 font-semibold"
-                  />
-                  <input
-                    name="income"
-                    type="number"
-                    value={formData.income}
-                    onChange={handleChange}
-                    placeholder="Annual Income (₹)"
-                    className="w-full bg-[#F8FAFC] border border-black/5 rounded-2xl px-6 py-4 text-[#0F172A] focus:outline-none focus:border-[#00AEEF] focus:ring-4 focus:ring-[#00AEEF]/5 transition-all placeholder:text-gray-400 font-semibold"
-                  />
-                </>
+                <input
+                  name="name"
+                  type="text"
+                  value={formData.name}
+                  onChange={handleChange}
+                  placeholder="Full Name"
+                  className="w-full bg-[#F8FAFC] border border-black/5 rounded-2xl px-6 py-4 text-[#0F172A] focus:outline-none focus:border-[#00AEEF] focus:ring-4 focus:ring-[#00AEEF]/5 transition-all placeholder:text-gray-400 font-semibold"
+                />
               )}
               <input
                 name="email"
