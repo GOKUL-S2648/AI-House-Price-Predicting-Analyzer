@@ -119,7 +119,7 @@ const HouseDetails = ({ house, user, onBack, onBook }: {
                 </div>
                 <div className="flex flex-col">
                   <span className="text-xs font-black text-gray-400 uppercase tracking-[0.3em]">Direct Line</span>
-                  <span className="text-base font-black text-[#0F172A] tracking-wider">{house.phone || `+91 9${(house.price % 8999) + 1000}-48${(house.price % 999) + 100}`}</span>
+                  <span className="text-base font-black text-[#0F172A] tracking-wider">{house.phone || `+91 7${((house.price * 17) % 899999999) + 100000000}`}</span>
                 </div>
               </div>
             </div>
@@ -202,7 +202,7 @@ const HouseDetails = ({ house, user, onBack, onBook }: {
               <div className="space-y-16">
                 <div className="pt-4">
                   <div className="space-y-8">
-                    <p className="text-xs font-black text-gray-300 uppercase tracking-[0.3em]">Anticipated Equilibrium 2027</p>
+                    <p className="text-xs font-black text-gray-500 uppercase tracking-[0.3em]">Anticipated Equilibrium 2027</p>
                     <div className="flex flex-col gap-5">
                       <span className="text-7xl font-black text-[#0F172A] tracking-tighter leading-none">
                         ₹{(mlData as any)?.rfPrice?.toLocaleString() || mlData?.predictedPrice.toLocaleString()}

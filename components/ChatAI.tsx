@@ -94,7 +94,7 @@ const ChatAI: React.FC<ChatAIProps> = ({ contextHouses = [], user }) => {
   return (
     <div className="fixed bottom-10 right-10 z-[100] flex flex-col items-end">
       {isOpen && (
-        <div className="mb-8 w-[600px] h-[800px] bg-white rounded-[56px] shadow-[0_50px_150px_rgba(0,0,0,0.2)] border border-black/10 flex flex-col overflow-hidden animate-in slide-in-from-bottom-12 duration-700">
+        <div className="mb-8 w-[700px] h-[900px] bg-white rounded-[56px] shadow-[0_50px_150px_rgba(0,0,0,0.2)] border border-black/10 flex flex-col overflow-hidden animate-in slide-in-from-bottom-12 duration-700 max-h-[85vh] max-w-[90vw]">
           <div className="bg-white p-8 text-[#0F172A] flex items-center justify-between border-b border-black/5">
             <div>
                 <div className="flex items-center gap-2 mb-1">

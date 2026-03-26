@@ -179,12 +179,32 @@ const App: React.FC = () => {
     setView('search');
     setIsSearching(false);
 
+    // 1. Log to history table immediately (Independent of AI tips)
+    try {
+      const { error: historyError } = await supabase
+        .from('login_history')
+        .insert({
+          user_id: user.id || null, // Accepts UUID or mock ID
+          email: user.email,
+          ip_address: 'Logged in successfully'
+        });
+      
+      if (historyError) {
+        console.error("Could not save login history (Supabase):", historyError);
+      } else {
+        console.log("Login history updated successfully for:", user.email);
+      }
+    } catch (e) {
+      console.error("Critical error saving login history:", e);
+    }
+
     const approvedHouses = houses.filter(h => h.isApproved);
     // Relaxed initial filter (allow up to 80% of income for visibility)
     const ranked = rankProperties(approvedHouses.filter(h => h.price <= (user.income || 50000) * 0.8), user).slice(0, 15);
     setFilteredHouses(ranked);
 
     try {
+      // 2. Fetch AI tips (Secondary)
       const tips = await getCategorizedSuggestions({
         income: user.income,
         maxPrice: user.income * 0.8,
@@ -193,7 +213,9 @@ const App: React.FC = () => {
         state: ''
       }, ranked);
       setAiTips(tips);
-    } catch (e) { }
+    } catch (e) {
+      console.warn("AI Tips failed to load, continue login flow.");
+    }
   };
 
   const handleViewDetails = (house: House) => {

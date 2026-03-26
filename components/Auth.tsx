@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 const STORAGE_KEY = 'affordhome_v1_users';
 
 const DEFAULT_USER = {
-  id: 'admin_001',
+  id: '00000000-0000-0000-0000-000000000000',
   name: 'Admin Demo',
   email: 'admin@affordhome.ai',
   password: 'password123',
@@ -52,7 +52,7 @@ const Auth: React.FC<AuthProps> = ({ onLogin }) => {
     } else {
       if (!formData.name.trim()) return setError('Name is required.');
       const newUser = {
-        id: 'user_' + Math.random().toString(36).substr(2, 9),
+        id: crypto.randomUUID ? crypto.randomUUID() : 'user_' + Math.random().toString(36).substr(2, 9),
         name: formData.name.trim(),
         email: emailInput,
         password: passwordInput,
