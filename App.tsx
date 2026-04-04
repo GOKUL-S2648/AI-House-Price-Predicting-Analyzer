@@ -13,6 +13,7 @@ import { rankProperties, detectSuspiciousListings } from './mlService';
 import { supabase } from './supabaseClient';
 import ListProperty from './components/ListProperty';
 import AdminDashboard from './components/AdminDashboard';
+import Profile from './components/Profile';
 import { sendAutomaticHoldingEmail } from './emailService';
 import { User, House, Booking, SearchCriteria } from './types';
 
@@ -26,7 +27,7 @@ const App: React.FC = () => {
     }
   });
 
-  const [view, setView] = useState<'search' | 'details' | 'dashboard' | 'history' | 'list' | 'admin'>(() => {
+  const [view, setView] = useState<'search' | 'details' | 'dashboard' | 'history' | 'list' | 'admin' | 'profile'>(() => {
     const saved = sessionStorage.getItem('homesight_view');
     return (saved as any) || 'search';
   });
@@ -381,6 +382,13 @@ const App: React.FC = () => {
             <AdminDashboard
               pendingHouses={houses.filter(h => !h.isApproved && !h.id.toString().startsWith('listing_'))}
               onAction={() => fetchHouses()}
+            />
+          )}
+
+          {view === 'profile' && (
+            <Profile
+              user={currentUser}
+              onBack={() => setView('search')}
             />
           )}
         </div>

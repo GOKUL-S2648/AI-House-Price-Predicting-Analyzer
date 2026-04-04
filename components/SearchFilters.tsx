@@ -62,12 +62,12 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({ onSearch, initialCriteria
         <form onSubmit={handleSubmit} className="space-y-10 md:space-y-14">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
             <div className="space-y-3">
-              <label className="block text-xs font-black text-slate-700 uppercase tracking-[0.3em] ml-1">Type of Living</label>
+              <label className="block text-[10px] font-black text-slate-700 uppercase tracking-widest ml-1">Type of Living</label>
               <div className="relative group">
                 <select
                   value={houseType}
                   onChange={e => setHouseType(e.target.value)}
-                  className="w-full bg-white/40 backdrop-blur-md border border-black/5 rounded-2xl px-6 py-5 text-sm font-black text-[#0F172A] appearance-none outline-none ring-2 ring-transparent focus:ring-[#00AEEF]/10 focus:border-[#00AEEF]/30 focus:bg-white/60 transition-all cursor-pointer uppercase tracking-widest"
+                  className="w-full bg-white/40 backdrop-blur-md border border-black/5 rounded-2xl px-5 py-4 text-sm font-black text-[#0F172A] appearance-none outline-none ring-2 ring-transparent focus:ring-[#00AEEF]/10 focus:border-[#00AEEF]/30 focus:bg-white/60 transition-all cursor-pointer uppercase tracking-widest"
                 >
                   <option value="" disabled hidden className="bg-white">Choose Type</option>
                   <option value="Any" className="bg-white">All Options</option>
@@ -84,12 +84,12 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({ onSearch, initialCriteria
             </div>
 
             <div className="space-y-3">
-              <label className="block text-xs font-black text-slate-700 uppercase tracking-[0.3em] ml-1">BHK Type</label>
+              <label className="block text-[10px] font-black text-slate-700 uppercase tracking-widest ml-1">BHK Type</label>
               <div className="relative group">
                 <select
                   value={bhkType}
                   onChange={e => setBhkType(e.target.value)}
-                  className="w-full bg-white/40 backdrop-blur-md border border-black/5 rounded-2xl px-6 py-5 text-sm font-black text-[#0F172A] appearance-none outline-none ring-2 ring-transparent focus:ring-[#00AEEF]/10 focus:border-[#00AEEF]/30 focus:bg-white/60 transition-all cursor-pointer uppercase tracking-widest"
+                  className="w-full bg-white/40 backdrop-blur-md border border-black/5 rounded-2xl px-5 py-4 text-sm font-black text-[#0F172A] appearance-none outline-none ring-2 ring-transparent focus:ring-[#00AEEF]/10 focus:border-[#00AEEF]/30 focus:bg-white/60 transition-all cursor-pointer uppercase tracking-widest"
                 >
                   <option value="" disabled hidden className="bg-white">Choose BHK</option>
                   <option value="Any" className="bg-white">All BHK</option>
@@ -105,34 +105,34 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({ onSearch, initialCriteria
 
 
             <div className="space-y-3">
-              <label className="block text-xs font-black text-slate-700 uppercase tracking-[0.3em] ml-1">Preferred State</label>
+              <label className="block text-[10px] font-black text-slate-700 uppercase tracking-widest ml-1">Preferred State</label>
               <input
                 type="text"
                 value={stateName}
                 onChange={e => setStateName(e.target.value)}
-                className="w-full bg-white/40 backdrop-blur-md border border-black/5 rounded-2xl px-6 py-5 text-sm font-black text-[#0F172A] outline-none ring-2 ring-transparent focus:ring-[#00AEEF]/10 focus:border-[#00AEEF]/30 focus:bg-white/60 transition-all placeholder:text-gray-300 uppercase tracking-widest"
+                className="w-full bg-white/40 backdrop-blur-md border border-black/5 rounded-2xl px-5 py-4 text-sm font-black text-[#0F172A] outline-none ring-2 ring-transparent focus:ring-[#00AEEF]/10 focus:border-[#00AEEF]/30 focus:bg-white/60 transition-all placeholder:text-gray-300 uppercase tracking-widest"
                 placeholder="e.g. Kerala"
               />
             </div>
 
             <div className="space-y-3">
-              <label className="block text-xs font-black text-slate-700 uppercase tracking-[0.3em] ml-1">Location / Area</label>
+              <label className="block text-[10px] font-black text-slate-700 uppercase tracking-widest ml-1">Location / Area</label>
               <input
                 type="text"
                 value={district}
                 onChange={e => setDistrict(e.target.value)}
-                className="w-full bg-white/40 backdrop-blur-md border border-black/5 rounded-2xl px-6 py-5 text-sm font-black text-[#0F172A] outline-none ring-2 ring-transparent focus:ring-[#00AEEF]/10 focus:border-[#00AEEF]/30 focus:bg-white/60 transition-all placeholder:text-gray-300 uppercase tracking-widest"
+                className="w-full bg-white/40 backdrop-blur-md border border-black/5 rounded-2xl px-5 py-4 text-sm font-black text-[#0F172A] outline-none ring-2 ring-transparent focus:ring-[#00AEEF]/10 focus:border-[#00AEEF]/30 focus:bg-white/60 transition-all placeholder:text-gray-300 uppercase tracking-widest"
                 placeholder="e.g. Kochi"
               />
             </div>
 
             <div className="space-y-3">
-              <label className="block text-xs font-black text-slate-700 uppercase tracking-[0.3em] ml-1">Budget Confidence</label>
+              <label className="block text-[10px] font-black text-slate-700 uppercase tracking-widest ml-1">Budget Confidence</label>
               <input
                 type="text"
                 value={income}
                 onChange={e => setIncome(e.target.value.replace(/\D/g, ''))}
-                className="w-full bg-white/40 backdrop-blur-md border border-black/5 rounded-2xl px-6 py-5 text-sm font-black text-[#0F172A] outline-none ring-2 ring-transparent focus:ring-[#00AEEF]/10 focus:border-[#00AEEF]/30 focus:bg-white/60 transition-all placeholder:text-gray-300 uppercase tracking-widest"
+                className="w-full bg-white/40 backdrop-blur-md border border-black/5 rounded-2xl px-5 py-4 text-sm font-black text-[#0F172A] outline-none ring-2 ring-transparent focus:ring-[#00AEEF]/10 focus:border-[#00AEEF]/30 focus:bg-white/60 transition-all placeholder:text-gray-300 uppercase tracking-widest"
                 placeholder="Income ₹/mo"
               />
             </div>

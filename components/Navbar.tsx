@@ -69,10 +69,22 @@ const Navbar: React.FC<NavbarProps> = ({ user, currentView, onNavigate, onLogout
 
           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.3em] mt-10 mb-4 ml-2">Services</p>
           {user.role !== 'admin' && (
-            <button onClick={() => { onNavigate('list'); onClose(); }} className={`px-5 py-5 rounded-2xl font-black text-left transition-all flex items-center gap-4 uppercase tracking-[0.1em] text-xs ${currentView === 'list' ? 'bg-[#00AEEF]/5 text-[#0F172A] border border-[#00AEEF]/10 shadow-xl shadow-black/5' : 'text-gray-400 hover:bg-black/[0.02] hover:text-[#0F172A]'}`}>
-              <svg className={`w-5 h-5 ${currentView === 'list' ? 'text-[#00AEEF]' : 'text-gray-300'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" /></svg>
-              List Property
-            </button>
+            <>
+              <button 
+                onClick={() => { onNavigate('list'); onClose(); }} 
+                className={`px-5 py-5 rounded-2xl font-black text-left transition-all flex items-center gap-4 uppercase tracking-[0.1em] text-xs ${currentView === 'list' ? 'bg-[#00AEEF]/5 text-[#0F172A] border border-[#00AEEF]/10 shadow-xl shadow-black/5' : 'text-gray-400 hover:bg-black/[0.02] hover:text-[#0F172A]'}`}
+              >
+                <svg className={`w-5 h-5 ${currentView === 'list' ? 'text-[#00AEEF]' : 'text-gray-300'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" /></svg>
+                List Property
+              </button>
+              <button 
+                onClick={() => { onNavigate('profile'); onClose(); }} 
+                className={`px-5 py-5 rounded-2xl font-black text-left transition-all flex items-center gap-4 uppercase tracking-[0.1em] text-xs ${currentView === 'profile' ? 'bg-[#00AEEF]/5 text-[#0F172A] border border-[#00AEEF]/10 shadow-xl shadow-black/5' : 'text-gray-400 hover:bg-black/[0.02] hover:text-[#0F172A]'}`}
+              >
+                <svg className={`w-5 h-5 ${currentView === 'profile' ? 'text-[#00AEEF]' : 'text-gray-300'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
+                Terms & Conditions
+              </button>
+            </>
           )}
 
           {user.role === 'admin' && (
@@ -84,12 +96,15 @@ const Navbar: React.FC<NavbarProps> = ({ user, currentView, onNavigate, onLogout
         </div>
 
         <div className="pt-10 border-t border-black/5">
-          <div className="flex items-center gap-5 p-5 bg-[#F1F5F9] rounded-3xl border border-black/5 shadow-md">
-            <div className="w-12 h-12 rounded-full border-2 border-[#00AEEF]/20 flex items-center justify-center text-lg font-black text-[#00AEEF] p-[2px]">
+          <div 
+            onClick={() => { onNavigate('profile'); onClose(); }}
+            className="flex items-center gap-5 p-5 bg-[#F1F5F9] rounded-3xl border border-black/5 shadow-md cursor-pointer hover:bg-white transition-all hover:scale-[1.02] active:scale-[0.98] group"
+          >
+            <div className="w-12 h-12 rounded-full border-2 border-[#00AEEF]/20 flex items-center justify-center text-lg font-black text-[#00AEEF] p-[2px] group-hover:border-[#00AEEF]">
               <img src={`https://ui-avatars.com/api/?name=${user.name}&background=F8FAFC&color=00AEEF&bold=true`} alt={user.name} className="w-full h-full rounded-full" />
             </div>
             <div className="flex flex-col overflow-hidden">
-              <span className="text-xs font-black text-[#0F172A] truncate uppercase tracking-tight">{user.name}</span>
+              <span className="text-xs font-black text-[#0F172A] truncate uppercase tracking-tight group-hover:text-[#00AEEF] transition-colors">{user.name}</span>
               <span className="text-[9px] text-[#00AEEF] font-bold uppercase tracking-[0.2em]">{user.role || 'User'}</span>
             </div>
           </div>
