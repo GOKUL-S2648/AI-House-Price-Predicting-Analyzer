@@ -46,6 +46,7 @@ export interface House {
   email: string;
   phone: string;
   ownerName: string;
+  bhkType?: string;
 }
 
 // Booking interface representing a scheduled property visit
@@ -62,6 +63,7 @@ export interface SearchCriteria {
   income: number;
   maxPrice: number;
   houseType: string;
+  bhkType?: string;
   district: string;
   state: string;
 }

@@ -62,6 +62,7 @@ const App: React.FC = () => {
         income: 0,
         maxPrice: 0,
         houseType: '',
+        bhkType: '',
         district: '',
         state: ''
       };
@@ -70,6 +71,7 @@ const App: React.FC = () => {
         income: 0,
         maxPrice: 0,
         houseType: '',
+        bhkType: '',
         district: '',
         state: ''
       };
@@ -148,11 +150,12 @@ const App: React.FC = () => {
         const query = (searchCriteria.district || '').toLowerCase().trim();
         const results = analyzed.filter((h: House) => {
           if (currentUser?.role !== 'admin' && !h.isApproved) return false;
-          const priceLimit = searchCriteria.maxPrice || 2000000;
+          const priceLimit = searchCriteria.maxPrice || 10000000;
           const priceMatch = h.price <= (priceLimit + 10000);
           const typeMatch = !searchCriteria.houseType || searchCriteria.houseType === 'Any' || h.type === searchCriteria.houseType;
+          const bhkMatch = !searchCriteria.bhkType || searchCriteria.bhkType === 'Any' || h.bhkType === searchCriteria.bhkType;
           const locationMatch = !query || h.location.toLowerCase().includes(query) || h.title.toLowerCase().includes(query);
-          return priceMatch && typeMatch && locationMatch;
+          return priceMatch && typeMatch && bhkMatch && locationMatch;
         });
 
         if (currentUser) {
@@ -230,11 +233,12 @@ const App: React.FC = () => {
     const query = (criteria.district || '').toLowerCase().trim();
     const results = houses.filter(h => {
       if (currentUser?.role !== 'admin' && !h.isApproved) return false;
-      const priceLimit = criteria.maxPrice || 2000000;
+      const priceLimit = criteria.maxPrice || 10000000;
       const priceMatch = h.price <= (priceLimit + 10000);
       const typeMatch = !criteria.houseType || criteria.houseType === 'Any' || h.type === criteria.houseType;
+      const bhkMatch = !criteria.bhkType || criteria.bhkType === 'Any' || h.bhkType === criteria.bhkType;
       const locationMatch = !query || h.location.toLowerCase().includes(query) || h.title.toLowerCase().includes(query);
-      return priceMatch && typeMatch && locationMatch;
+      return priceMatch && typeMatch && bhkMatch && locationMatch;
     });
 
     if (currentUser) {

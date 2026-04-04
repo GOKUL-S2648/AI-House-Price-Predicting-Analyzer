@@ -19,6 +19,7 @@ const ListProperty: React.FC<ListPropertyProps> = ({ user, onSuccess, onBack }) 
         state: '',
         description: '',
         email: user.email || '',
+        bhkType: '1BHK',
         image: 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=800&q=80'
     });
 
@@ -44,6 +45,7 @@ const ListProperty: React.FC<ListPropertyProps> = ({ user, onSuccess, onBack }) 
                     state: formData.state,
                     description: formData.description,
                     email: formData.email,
+                    bhk_type: formData.bhkType,
                     image: formData.image,
                     owner_id: user.id,
                     is_approved: false, // Must be approved by admin
@@ -100,6 +102,25 @@ const ListProperty: React.FC<ListPropertyProps> = ({ user, onSuccess, onBack }) 
                             </div>
                         </div>
                     </div>
+
+                    <div className="space-y-4">
+                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-700 ml-1">BHK Magnitude</label>
+                        <div className="relative group">
+                            <select
+                                className="w-full bg-white text-[#0F172A] border border-black/5 rounded-2xl px-8 py-5 text-sm font-black focus:ring-4 focus:ring-[#00AEEF]/5 focus:border-[#00AEEF]/20 outline-none transition-all appearance-none cursor-pointer uppercase tracking-widest shadow-sm"
+                                value={formData.bhkType}
+                                onChange={e => setFormData({ ...formData, bhkType: e.target.value })}
+                            >
+                                {['1BHK', '2BHK', '3BHK'].map(t => (
+                                    <option key={t} value={t} className="bg-white text-[#0F172A]">{t}</option>
+                                ))}
+                            </select>
+                            <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-gray-300 group-focus-within:text-[#00AEEF] transition-colors">
+                                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" /></svg>
+                            </div>
+                        </div>
+                    </div>
+
 
                     <div className="space-y-4">
                         <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-700 ml-1">Owner Registry Email</label>

@@ -9,12 +9,14 @@ interface SearchFiltersProps {
 
 const SearchFilters: React.FC<SearchFiltersProps> = ({ onSearch, initialCriteria }) => {
   const [houseType, setHouseType] = useState(initialCriteria.houseType || '');
+  const [bhkType, setBhkType] = useState(initialCriteria.bhkType || '');
   const [stateName, setStateName] = useState(initialCriteria.state || '');
   const [district, setDistrict] = useState(initialCriteria.district || '');
   const [income, setIncome] = useState(initialCriteria.income > 0 ? initialCriteria.income.toString() : '');
 
   useEffect(() => {
     if (initialCriteria.houseType) setHouseType(initialCriteria.houseType);
+    if (initialCriteria.bhkType) setBhkType(initialCriteria.bhkType);
     if (initialCriteria.state) setStateName(initialCriteria.state);
     if (initialCriteria.district) setDistrict(initialCriteria.district);
     if (initialCriteria.income > 0) setIncome(initialCriteria.income.toString());
@@ -24,6 +26,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({ onSearch, initialCriteria
     const incomeValue = parseInt(income) || 0;
     onSearch({
       houseType: houseType || 'Any',
+      bhkType: bhkType || 'Any',
       state: stateName.trim(),
       district: district.trim(),
       income: incomeValue,
@@ -57,7 +60,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({ onSearch, initialCriteria
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-10 md:space-y-14">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
             <div className="space-y-3">
               <label className="block text-xs font-black text-slate-700 uppercase tracking-[0.3em] ml-1">Type of Living</label>
               <div className="relative group">
@@ -79,6 +82,27 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({ onSearch, initialCriteria
                 </div>
               </div>
             </div>
+
+            <div className="space-y-3">
+              <label className="block text-xs font-black text-slate-700 uppercase tracking-[0.3em] ml-1">BHK Type</label>
+              <div className="relative group">
+                <select
+                  value={bhkType}
+                  onChange={e => setBhkType(e.target.value)}
+                  className="w-full bg-white/40 backdrop-blur-md border border-black/5 rounded-2xl px-6 py-5 text-sm font-black text-[#0F172A] appearance-none outline-none ring-2 ring-transparent focus:ring-[#00AEEF]/10 focus:border-[#00AEEF]/30 focus:bg-white/60 transition-all cursor-pointer uppercase tracking-widest"
+                >
+                  <option value="" disabled hidden className="bg-white">Choose BHK</option>
+                  <option value="Any" className="bg-white">All BHK</option>
+                  <option value="1BHK" className="bg-white">1 BHK</option>
+                  <option value="2BHK" className="bg-white">2 BHK</option>
+                  <option value="3BHK" className="bg-white">3 BHK</option>
+                </select>
+                <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 group-focus-within:text-[#00AEEF] transition-colors">
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" /></svg>
+                </div>
+              </div>
+            </div>
+
 
             <div className="space-y-3">
               <label className="block text-xs font-black text-slate-700 uppercase tracking-[0.3em] ml-1">Preferred State</label>

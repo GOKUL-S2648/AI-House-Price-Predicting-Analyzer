@@ -91,11 +91,15 @@ const generateMockData = () => {
       const priceModifier = d === 'The Nilgiris' || d === 'Dindigul' ? 1.4 : 1.0;
 
       const types = ['Pg', 'Apartment', 'Villa', 'Individual House', 'Studio'];
+      const bhkTypes = ['1BHK', '2BHK', '3BHK'];
 
       neighborhoods.forEach((neighborhood: string, nIdx: number) => {
-        for (let i = 0; i < 2; i++) {
+        // Increase variety to satisfy "up to 6 suggestions" requirement
+        // Using 15 to cover all combinations of 5 types and 3 BHKs (LCM = 15)
+        for (let i = 0; i < 15; i++) {
           const typeIndex = (nIdx + i) % types.length;
           const type = types[typeIndex];
+          const bhkType = bhkTypes[(nIdx + i) % bhkTypes.length];
 
           // Added significant jitter to ensure unique prices at first glance
           const priceJitter = Math.floor(Math.random() * 3000) - 1500;
@@ -109,30 +113,34 @@ const generateMockData = () => {
           switch (type) {
             case 'Pg':
               basePrice = Math.round(4500 + (nIdx * 250) + (i * 1200)) + priceJitter;
-              title = `${owner}'s Managed PG`;
+              title = `${owner}'s Heritage Guest House (${bhkType})`;
               amenities = ['WiFi', 'Food', 'Cleaning', 'Laundry'];
               break;
             case 'Apartment':
               basePrice = Math.round((9500 + (nIdx * 550) + (i * 2800)) * priceModifier) + priceJitter;
-              title = `${owner}'s Luxury Flat`;
+              title = `${owner}'s Traditional Flat (${bhkType})`;
               amenities = ['Lift', 'Security', 'Parking', 'Gym'];
               break;
             case 'Villa':
               basePrice = Math.round((38000 + (nIdx * 1200) + (i * 12000)) * priceModifier) + priceJitter;
-              title = `${owner}'s Private Villa`;
+              title = `${owner}'s Royal Estate (${bhkType})`;
               amenities = ['Private Garden', 'Swimming Pool', 'Luxury Interiors', 'Solar Power'];
               break;
             case 'Individual House':
               basePrice = Math.round((14500 + (nIdx * 850) + (i * 3500)) * priceModifier) + priceJitter;
-              title = `${owner}'s Independent Home`;
+              title = `${owner}'s Heritage Home (${bhkType})`;
               amenities = ['Backyard', 'Own Water Source', 'Quiet Area', 'Pet Friendly'];
               break;
             case 'Studio':
               basePrice = Math.round(7500 + (nIdx * 350) + (i * 1800)) + priceJitter;
-              title = `${owner}'s Compact Studio`;
+              title = `${owner}'s Traditional Studio (${bhkType})`;
               amenities = ['AC', 'Compact Kitchen', 'Near Transit', 'Balcony'];
               break;
           }
+
+          // Adjust base price by BHK Type
+          if (bhkType === '2BHK') basePrice *= 1.5;
+          if (bhkType === '3BHK') basePrice *= 2.2;
 
           // Ensure price doesn't go negative or too low
           basePrice = Math.max(3000, basePrice);
@@ -148,6 +156,7 @@ const generateMockData = () => {
             id: `listing_${sIdx}_${dIdx}_${nIdx}_${i}_${Math.floor(Math.random() * 1000)}`,
             title,
             type,
+            bhkType,
             price: finalPrice,
             location: `${neighborhood}, ${d}`,
             district: d,
@@ -163,7 +172,7 @@ const generateMockData = () => {
               { year: 2025, price: roundTo500((finalPrice * 5) / 6) },
               { year: 2026, price: finalPrice }
             ],
-            description: `Beautifully maintained ${type} located in the heart of ${neighborhood}. Perfect for those seeking both comfort and accessibility in ${d}.`,
+            description: `Beautifully maintained ${type} (${bhkType}) located in the heart of ${neighborhood}. Perfect for those seeking both comfort and accessibility in ${d}.`,
             isApproved: true,
             lat: baseCoords[0] + latJitter,
             lng: baseCoords[1] + lngJitter,

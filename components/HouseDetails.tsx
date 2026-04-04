@@ -72,14 +72,16 @@ const HouseDetails = ({ house, user, onBack, onBook }: {
         <div className="lg:w-1/2 p-12 lg:p-16 space-y-12 flex flex-col justify-center">
           <div>
             <span className="text-sm font-black text-[#00AEEF] uppercase tracking-[0.4em] mb-6 block border-l-2 border-[#00AEEF] pl-4">Verified Intelligence Holding</span>
-            <h1 className="text-4xl lg:text-5xl font-black text-[#0F172A] tracking-tight leading-tight uppercase mb-6">{house.title}</h1>
+            <h1 className="text-4xl lg:text-5xl font-black text-[#0F172A] tracking-tight leading-tight uppercase mb-6">
+              {house.title}
+            </h1>
             <div className="flex items-center gap-4 text-[#0F172A] font-black text-xs uppercase tracking-[0.2em] mt-2">
               <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-[#00AEEF] shadow-sm border border-black/5">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 </svg>
               </div>
-              {house.location}
+              {house.location} • {house.type} • {house.bhkType}
             </div>
           </div>
 
