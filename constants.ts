@@ -1,3 +1,30 @@
+export const PROPERTY_IMAGES = {
+  exteriors: [
+    '/assets/house_exterior.png',
+    'https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80'
+  ],
+  halls: [
+    '/assets/house_living.png',
+    'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80'
+  ],
+  bedrooms: [
+    '/assets/house_bedroom.png',
+    'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80'
+  ],
+  kitchens: [
+    '/assets/house_kitchen.png',
+    'https://images.unsplash.com/photo-1556911223-e4524a13936d?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1556912176-12bb89dbef71?auto=format&fit=crop&w=800&q=80'
+  ],
+  parking: [
+    '/assets/house_parking.png',
+    'https://images.unsplash.com/photo-1595206133361-b1fe343e5e23?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1549411380-90977464047a?auto=format&fit=crop&w=800&q=80'
+  ]
+};
 
 const DISTRICT_COORDS = {
   'Chennai': [13.0827, 80.2707],
@@ -58,20 +85,6 @@ export const STATES_AND_DISTRICTS = [
   }
 ];
 
-const PROPERTY_IMAGES = [
-  'https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=800&q=80',
-  'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80',
-  'https://images.unsplash.com/photo-1480074568708-e7b720bb3f09?auto=format&fit=crop&w=800&q=80',
-  'https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=800&q=80',
-  'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=800&q=80',
-  'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80',
-  'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=800&q=80',
-  'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=800&q=80',
-  'https://images.unsplash.com/photo-1513584684374-8bdb74838a0f?auto=format&fit=crop&w=800&q=80',
-  'https://images.unsplash.com/photo-1448630360428-6e238802ee97?auto=format&fit=crop&w=800&q=80',
-  'https://images.unsplash.com/photo-1501183638710-841dd1904471?auto=format&fit=crop&w=800&q=80',
-  'https://images.unsplash.com/photo-1554995207-c18c203602cb?auto=format&fit=crop&w=800&q=80'
-];
 
 const generateMockData = () => {
   const houses: any[] = [];
@@ -114,27 +127,27 @@ const generateMockData = () => {
             case 'Pg':
               basePrice = Math.round(4500 + (nIdx * 250) + (i * 1200)) + priceJitter;
               title = `${owner}'s Heritage Guest House (${bhkType})`;
-              amenities = ['WiFi', 'Food', 'Cleaning', 'Laundry'];
+              amenities = ['WiFi', 'Food', 'Cleaning', 'Car Parking'];
               break;
             case 'Apartment':
               basePrice = Math.round((9500 + (nIdx * 550) + (i * 2800)) * priceModifier) + priceJitter;
               title = `${owner}'s Traditional Flat (${bhkType})`;
-              amenities = ['Lift', 'Security', 'Parking', 'Gym'];
+              amenities = ['Lift', 'Security', 'Car Parking', 'Gym'];
               break;
             case 'Villa':
               basePrice = Math.round((38000 + (nIdx * 1200) + (i * 12000)) * priceModifier) + priceJitter;
               title = `${owner}'s Royal Estate (${bhkType})`;
-              amenities = ['Private Garden', 'Swimming Pool', 'Luxury Interiors', 'Solar Power'];
+              amenities = ['Private Garden', 'Swimming Pool', 'Luxury Interiors', 'Car Parking'];
               break;
             case 'Individual House':
               basePrice = Math.round((14500 + (nIdx * 850) + (i * 3500)) * priceModifier) + priceJitter;
               title = `${owner}'s Heritage Home (${bhkType})`;
-              amenities = ['Backyard', 'Own Water Source', 'Quiet Area', 'Pet Friendly'];
+              amenities = ['Backyard', 'Own Water Source', 'Quiet Area', 'Car Parking'];
               break;
             case 'Studio':
               basePrice = Math.round(7500 + (nIdx * 350) + (i * 1800)) + priceJitter;
               title = `${owner}'s Traditional Studio (${bhkType})`;
-              amenities = ['AC', 'Compact Kitchen', 'Near Transit', 'Balcony'];
+              amenities = ['AC', 'Compact Kitchen', 'Near Transit', 'Car Parking'];
               break;
           }
 
@@ -147,7 +160,21 @@ const generateMockData = () => {
 
           const latJitter = (Math.random() - 0.5) * 0.08;
           const lngJitter = (Math.random() - 0.5) * 0.08;
-          const imageIndex = (sIdx + dIdx + nIdx + i) % PROPERTY_IMAGES.length;
+          
+          const extIdx = (sIdx + dIdx + nIdx + i) % PROPERTY_IMAGES.exteriors.length;
+          const hallIdx = (sIdx + dIdx + nIdx + i) % PROPERTY_IMAGES.halls.length;
+          const bedIdx = (sIdx + dIdx + nIdx + i) % PROPERTY_IMAGES.bedrooms.length;
+          const kitIdx = (sIdx + dIdx + nIdx + i) % PROPERTY_IMAGES.kitchens.length;
+          const parkIdx = (sIdx + dIdx + nIdx + i) % PROPERTY_IMAGES.parking.length;
+
+          // Generate a standardized array of 5 images: [Exterior, Hall, Bedroom, Kitchen, Parking]
+          const images = [
+            PROPERTY_IMAGES.exteriors[extIdx],
+            PROPERTY_IMAGES.halls[hallIdx],
+            PROPERTY_IMAGES.bedrooms[bedIdx],
+            PROPERTY_IMAGES.kitchens[kitIdx],
+            PROPERTY_IMAGES.parking[parkIdx]
+          ];
 
           const roundTo500 = (num: number) => Math.round(num / 500) * 500;
           const finalPrice = roundTo500(basePrice);
@@ -161,7 +188,8 @@ const generateMockData = () => {
             location: `${neighborhood}, ${d}`,
             district: d,
             state: sObj.state,
-            image: PROPERTY_IMAGES[imageIndex],
+            image: PROPERTY_IMAGES.exteriors[extIdx],
+            images: images,
             email: `${owner.toLowerCase().replace(/\s/g, '')}s@gmail.com`,
             phone: `+91 9${Math.floor(1000 + Math.random() * 9000)}-${Math.floor(100000 + Math.random() * 900000)}`,
             ownerName: owner,

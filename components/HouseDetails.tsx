@@ -11,6 +11,7 @@ const HouseDetails = ({ house, user, onBack, onBook }: {
   onBook: () => void;
 }) => {
   const [insight, setInsight] = useState('');
+  const [activeImage, setActiveImage] = useState<string | null>(house.image);
   const [mlData, setMlData] = useState<{
     predictedPrice: number;
     trend: string;
@@ -61,15 +62,49 @@ const HouseDetails = ({ house, user, onBack, onBook }: {
       </button>
 
       {/* 1. Main Overview Header (Hero) */}
-      <div className="bg-[#F8FAFC] rounded-[56px] overflow-hidden shadow-2xl border border-black/5 flex flex-col lg:flex-row mb-16 backdrop-blur-xl">
-        <div className="lg:w-1/2 aspect-square lg:aspect-auto p-4">
-          <img 
-            src={house.image} 
-            alt={house.title}
-            className="w-full h-full object-cover grayscale-[10%] hover:grayscale-0 transition-all duration-1000 rounded-[40px] shadow-lg" 
-          />
+      <div className="bg-[#F8FAFC] rounded-[56px] overflow-hidden shadow-2xl border border-black/5 flex flex-col lg:flex-row mb-16 backdrop-blur-xl min-h-[700px]">
+        <div className="lg:w-1/2 bg-slate-50/50 p-8 flex flex-col border-r border-black/5">
+          <div className="flex-1 space-y-10 flex flex-col justify-center">
+            <div className="aspect-[4/5] w-full relative group">
+              <img 
+                src={activeImage || house.image} 
+                alt={house.title}
+                className="w-full h-full object-cover grayscale-[10%] hover:grayscale-0 transition-all duration-700 rounded-[48px] shadow-2xl border border-black/5" 
+              />
+              {house.images && house.images.length > 1 && (
+                <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 px-5 py-3 bg-black/30 backdrop-blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500">
+                  {house.images.map((_, i) => (
+                    <div 
+                      key={i} 
+                      className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                        (activeImage || house.image) === house.images![i] ? 'bg-[#00AEEF] scale-150 shadow-[0_0_10px_#00AEEF]' : 'bg-white/40 hover:bg-white/60'
+                      }`}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+            
+            {house.images && house.images.length > 1 && (
+              <div className="grid grid-cols-5 gap-4 px-2">
+                {house.images.map((img, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setActiveImage(img)}
+                    className={`aspect-square rounded-[24px] overflow-hidden border-2 transition-all duration-500 hover:scale-110 ${
+                      (activeImage || house.image) === img 
+                        ? 'border-[#00AEEF] scale-105 shadow-xl shadow-[#00AEEF]/20' 
+                        : 'border-transparent bg-white shadow-sm hover:border-black/10'
+                    }`}
+                  >
+                    <img src={img} className="w-full h-full object-cover" alt={`View ${idx + 1}`} />
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
-        <div className="lg:w-1/2 p-12 lg:p-16 space-y-12 flex flex-col justify-center">
+        <div className="lg:w-1/2 p-12 lg:p-20 space-y-12 flex flex-col justify-center bg-white">
           <div>
             <span className="text-sm font-black text-[#00AEEF] uppercase tracking-[0.4em] mb-6 block border-l-2 border-[#00AEEF] pl-4">Verified Intelligence Holding</span>
             <h1 className="text-4xl lg:text-5xl font-black text-[#0F172A] tracking-tight leading-tight uppercase mb-6">
@@ -136,51 +171,26 @@ const HouseDetails = ({ house, user, onBack, onBook }: {
         </div>
       </div>
       {/* 2. Ratings Based on Features Section */}
-      <div className="bg-white rounded-[56px] p-12 lg:p-20 mb-16 shadow-2xl border border-black/5 animate-in fade-in slide-in-from-bottom duration-1000 transition-all hover:shadow-[0_32px_80px_rgba(0,0,0,0.08)]">
-        <div className="flex items-center gap-3 mb-16">
-          <h3 className="text-2xl font-black text-[#0F172A] tracking-tighter uppercase italic">Ratings based on features</h3>
-          <div className="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 cursor-help group/info relative">
-            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-            </svg>
-            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-48 p-4 bg-[#0F172A] text-white text-xs rounded-xl opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all font-bold uppercase tracking-widest text-center shadow-2xl z-20">
-              Aggregated from user reviews and localized infra data targets.
-            </div>
-          </div>
-        </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-12 lg:gap-16">
-          {[
-            { label: 'Connectivity', icon: 'M12 2c-4 0-8 .5-8 4v9.5c0 1.38 1.12 2.5 2.5 2.5l-.5 1v.5c0 .28.22.5.5.5h11c.28 0 .5-.22.5-.5v-.5l-.5-1c1.38 0 2.5-1.12 2.5-2.5V6c0-3.5-4-4-8-4z', value: house.ratings?.connectivity || 4.2 },
-            { label: 'Neighbourhood', icon: 'M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z', value: house.ratings?.neighbourhood || 3.6 },
-            { label: 'Safety', icon: 'M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71L12 2z', value: house.ratings?.safety || 3.5 },
-            { label: 'Livability', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6', value: house.ratings?.livability || 4.2 }
-          ].map((rating, idx) => (
-            <div key={idx} className="flex flex-col items-center group/rating cursor-pointer">
-              <div className="relative w-28 h-28 mb-8">
-                <svg className="w-full h-full transform -rotate-90">
-                  <circle cx="56" cy="56" r="50" stroke="currentColor" strokeWidth="3" fill="transparent" className="text-gray-100" />
-                  <circle cx="56" cy="56" r="50" stroke="currentColor" strokeWidth="3" fill="transparent" strokeDasharray={314} strokeDashoffset={314 - (314 * (rating.value / 5))} strokeLinecap="round" className="text-[#10B981] transition-all duration-1000 ease-out" style={{ filter: 'drop-shadow(0 0 12px rgba(16,185,129,0.2))' }} />
-                </svg>
-                <div className="absolute inset-0 flex items-center justify-center text-gray-400 group-hover/rating:text-[#10B981] transition-all duration-500 bg-white rounded-full m-3 shadow-inner">
-                  <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={rating.icon} />
-                  </svg>
-                </div>
-              </div>
-              <div className="text-center">
-                <div className="flex items-baseline justify-center gap-1 font-black mb-2">
-                  <span className="text-2xl text-[#0F172A] tracking-tighter">{rating.value.toFixed(1)}</span>
-                  <span className="text-gray-300 text-xs uppercase tracking-widest">/5</span>
-                </div>
-                <span className="text-xs font-black text-gray-400 uppercase tracking-[0.3em] group-hover/rating:text-[#00AEEF] transition-colors">
-                  {rating.label}
-                </span>
-              </div>
+      {/* 2.5 Amenities Section */}
+      <div className="bg-white rounded-[56px] p-12 lg:p-20 mb-16 shadow-2xl border border-black/5 animate-in fade-in slide-in-from-bottom duration-1000 transition-all hover:shadow-[0_32px_80px_rgba(0,0,0,0.08)]">
+        <h3 className="text-2xl font-black text-[#0F172A] tracking-tighter uppercase italic mb-10">Premium Amenities</h3>
+        <div className="flex flex-wrap gap-4">
+          {house.amenities.map((amenity, idx) => (
+            <div key={idx} className="bg-[#F8FAFC] border border-black/5 px-6 py-4 rounded-2xl flex items-center gap-3 group hover:border-[#00AEEF]/20 transition-all shadow-sm">
+              <div className="w-2 h-2 rounded-full bg-[#00AEEF] group-hover:scale-125 transition-transform"></div>
+              <span className="text-sm font-black text-[#0F172A] uppercase tracking-widest">{amenity}</span>
             </div>
           ))}
+          {house.carParking && (
+            <div className="bg-[#F8FAFC] border border-[#00AEEF]/20 px-6 py-4 rounded-2xl flex items-center gap-3">
+              <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
+              <span className="text-sm font-black text-[#0F172A] uppercase tracking-widest">Car Parking: {house.carParking}</span>
+            </div>
+          )}
         </div>
       </div>
+
 
       {/* 3. Neural Analysis Section (2 Column Grid) */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 animate-in fade-in slide-in-from-bottom duration-1000">

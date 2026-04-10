@@ -61,8 +61,19 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ pendingHouses, onAction
                 ) : (
                     pendingHouses.map(house => (
                         <div key={house.id} className="bg-[#F8FAFC] p-10 rounded-[56px] border border-black/5 shadow-xl flex flex-col lg:flex-row gap-12 items-center group hover:border-[#00AEEF]/30 transition-all duration-700">
-                            <div className="w-full lg:w-80 h-64 rounded-[40px] overflow-hidden border border-black/5 shrink-0">
-                                <img src={house.image} alt={house.title} className="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 group-hover:scale-110 transition-all duration-1000" />
+                            <div className="w-full lg:w-80 space-y-4 shrink-0">
+                                <div className="h-64 rounded-[40px] overflow-hidden border border-black/5">
+                                    <img src={house.image} alt={house.title} className="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 group-hover:scale-110 transition-all duration-1000" />
+                                </div>
+                                {house.images && house.images.length > 1 && (
+                                    <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+                                        {house.images.slice(1).map((img, idx) => (
+                                            <div key={idx} className="w-16 h-16 rounded-xl overflow-hidden border border-black/5 shrink-0">
+                                                <img src={img} className="w-full h-full object-cover" alt="" />
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
 
                             <div className="flex-1 space-y-6">

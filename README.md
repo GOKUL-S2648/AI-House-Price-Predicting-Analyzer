@@ -105,5 +105,16 @@ GROQ_API_KEY=your_api_key_here
 
 
 ### 4️⃣ Run locally
+To start both the React frontend and Python ML backend:
+```bash
+npm run dev:all
+```
+Or start them separately:
+```bash
+# Terminal 1: Frontend
 npm run dev
+
+# Terminal 2: AI Backend
+npm run server
+```
 

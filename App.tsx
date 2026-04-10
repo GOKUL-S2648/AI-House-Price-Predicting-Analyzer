@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { MOCK_HOUSES } from './constants';
+import { MOCK_HOUSES, PROPERTY_IMAGES } from './constants';
 import Auth from './components/Auth';
 import Navbar from './components/Navbar';
 import SearchFilters from './components/SearchFilters';
@@ -56,6 +56,8 @@ const App: React.FC = () => {
   });
   const [aiTips, setAiTips] = useState<Record<string, string[]>>({});
   const [isNavbarOpen, setIsNavbarOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const HOUSES_PER_PAGE = 12;
   const [searchCriteria, setSearchCriteria] = useState<SearchCriteria>(() => {
     try {
       const saved = sessionStorage.getItem('homesight_search_criteria');
@@ -137,7 +139,16 @@ const App: React.FC = () => {
             { year: 2026, price: h.price }
           ],
           isApproved: h.is_approved,
-          ownerId: h.owner_id
+          ownerId: h.owner_id,
+          images: (h.images && h.images.length >= 5) ? h.images : [
+            h.image,
+            PROPERTY_IMAGES.halls[0],
+            PROPERTY_IMAGES.bedrooms[0],
+            PROPERTY_IMAGES.kitchens[0],
+            PROPERTY_IMAGES.parking[0]
+          ],
+          bhkType: h.bhkType || h.bhk_type,
+          carParking: h.carParking || h.car_parking
         }));
       }
       
@@ -230,6 +241,7 @@ const App: React.FC = () => {
   const handleSearch = useCallback((criteria: SearchCriteria) => {
     setSearchCriteria(criteria);
     setIsSearching(true);
+    setCurrentPage(1);
 
     const query = (criteria.district || '').toLowerCase().trim();
     const results = houses.filter(h => {
@@ -276,14 +288,20 @@ const App: React.FC = () => {
     setView('dashboard');
   };
 
-  const currentDisplayHouses = useMemo(() => {
+  const allDisplayHouses = useMemo(() => {
     if (!currentUser) return [];
     if (view === 'details' && selectedHouse) return [selectedHouse];
     if (isSearching) return filteredHouses;
     const approvedHouses = houses.filter(h => h.isApproved);
-    // Removed strict price filter to show ALL approved houses
-    return rankProperties(approvedHouses, currentUser).slice(0, 20);
+    // Show ALL approved houses, ranked by relevance
+    return rankProperties(approvedHouses, currentUser);
   }, [currentUser, isSearching, filteredHouses, view, selectedHouse, houses]);
+
+  const totalPages = Math.max(1, Math.ceil(allDisplayHouses.length / HOUSES_PER_PAGE));
+  const currentDisplayHouses = useMemo(() => {
+    const start = (currentPage - 1) * HOUSES_PER_PAGE;
+    return allDisplayHouses.slice(start, start + HOUSES_PER_PAGE);
+  }, [allDisplayHouses, currentPage, HOUSES_PER_PAGE]);
 
   const updateBookingStatus = (id: string, status: string) => {
     setBookings(prev => prev.map(b => b.id === id ? { ...b, status: status as any } : b));
@@ -329,15 +347,90 @@ const App: React.FC = () => {
                   <h2 className="text-4xl font-black tracking-tight text-[#0F172A] uppercase">
                     {isSearching ? 'Strategic Matches' : 'Market Recommendations'}
                   </h2>
-                  <p className="text-[#00AEEF] font-black text-xs mt-3 uppercase tracking-[0.3em]">Analyzed by our intelligence model for your portfolio.</p>
+                  <p className="text-[#00AEEF] font-black text-xs mt-3 uppercase tracking-[0.3em]">
+                    {allDisplayHouses.length} properties analyzed by our intelligence model.
+                  </p>
+                </div>
+                <div className="text-right hidden md:block">
+                  <p className="text-xs font-black text-gray-400 uppercase tracking-[0.3em]">Page</p>
+                  <p className="text-2xl font-black text-[#0F172A]">{currentPage} <span className="text-gray-300">/ {totalPages}</span></p>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
-                {currentDisplayHouses.map(house => (
-                  <HouseCard key={house.id} house={house} onClick={() => handleViewDetails(house)} user={currentUser} />
-                ))}
-              </div>
+              {loading ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+                  {Array.from({ length: 8 }).map((_, i) => (
+                    <div key={i} className="bg-[#F8FAFC] rounded-[40px] overflow-hidden border border-black/5 shadow-xl h-[420px] animate-pulse" />
+                  ))}
+                </div>
+              ) : currentDisplayHouses.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-32 space-y-6">
+                  <div className="w-24 h-24 rounded-full bg-[#E2E8F0] flex items-center justify-center">
+                    <svg className="w-10 h-10 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                    </svg>
+                  </div>
+                  <p className="text-2xl font-black text-[#0F172A] uppercase tracking-tight">No Properties Found</p>
+                  <p className="text-sm text-gray-400 font-bold uppercase tracking-widest">Adjust your filters to expand the search</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+                  {currentDisplayHouses.map(house => (
+                    <HouseCard key={house.id} house={house} onClick={() => handleViewDetails(house)} user={currentUser} />
+                  ))}
+                </div>
+              )}
+
+              {/* Pagination Controls */}
+              {totalPages > 1 && (
+                <div className="flex items-center justify-center gap-3 pt-8">
+                  <button
+                    onClick={() => { setCurrentPage(p => Math.max(1, p - 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                    disabled={currentPage === 1}
+                    className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-white border border-black/5 shadow-lg text-xs font-black uppercase tracking-[0.2em] text-[#0F172A] hover:border-[#00AEEF]/40 hover:text-[#00AEEF] transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                  >
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" /></svg>
+                    Prev
+                  </button>
+
+                  <div className="flex items-center gap-2">
+                    {Array.from({ length: totalPages }, (_, i) => i + 1)
+                      .filter(p => p === 1 || p === totalPages || Math.abs(p - currentPage) <= 2)
+                      .reduce<(number | string)[]>((acc, p, idx, arr) => {
+                        if (idx > 0 && (p as number) - (arr[idx - 1] as number) > 1) acc.push('...');
+                        acc.push(p);
+                        return acc;
+                      }, [])
+                      .map((p, idx) =>
+                        p === '...' ? (
+                          <span key={`ellipsis-${idx}`} className="px-2 text-gray-300 font-black">…</span>
+                        ) : (
+                          <button
+                            key={p}
+                            onClick={() => { setCurrentPage(p as number); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                            className={`w-10 h-10 rounded-xl text-xs font-black uppercase transition-all ${
+                              currentPage === p
+                                ? 'bg-[#00AEEF] text-white shadow-lg shadow-[#00AEEF]/30'
+                                : 'bg-white border border-black/5 text-[#0F172A] hover:border-[#00AEEF]/30 hover:text-[#00AEEF]'
+                            }`}
+                          >
+                            {p}
+                          </button>
+                        )
+                      )
+                    }
+                  </div>
+
+                  <button
+                    onClick={() => { setCurrentPage(p => Math.min(totalPages, p + 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                    disabled={currentPage === totalPages}
+                    className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-white border border-black/5 shadow-lg text-xs font-black uppercase tracking-[0.2em] text-[#0F172A] hover:border-[#00AEEF]/40 hover:text-[#00AEEF] transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                  >
+                    Next
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" /></svg>
+                  </button>
+                </div>
+              )}
             </section>
           </div>
         )}

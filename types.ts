@@ -30,6 +30,7 @@ export interface House {
   district: string;
   state: string;
   image: string;
+  images?: string[];
   amenities: string[];
   historicalPrices: { year: number; price: number }[];
   description: string;
@@ -47,6 +48,7 @@ export interface House {
   phone: string;
   ownerName: string;
   bhkType?: string;
+  carParking?: string;
 }
 
 // Booking interface representing a scheduled property visit

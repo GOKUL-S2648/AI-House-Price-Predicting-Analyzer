@@ -90,7 +90,7 @@ const HouseCard: React.FC<HouseCardProps> = ({ house, onClick, user }) => {
         </div>
 
         <div className="mt-auto flex flex-wrap gap-2 pt-4">
-          {house.amenities.slice(0, 3).map(a => (
+          {house.amenities.slice(0, 4).map(a => (
             <span key={a} className="bg-white text-gray-400 text-xs font-black px-3 py-1.5 rounded-lg uppercase tracking-widest border border-black/5 group-hover:border-[#00AEEF]/10 group-hover:text-gray-500 transition-all">
               {a}
             </span>
