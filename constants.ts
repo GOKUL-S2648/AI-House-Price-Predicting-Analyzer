@@ -1,26 +1,26 @@
 export const PROPERTY_IMAGES = {
   exteriors: [
-    '/assets/house_exterior.png',
+    '/assets/house_exterior.jpg',
     'https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=800&q=80',
     'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80'
   ],
   halls: [
-    '/assets/house_living.png',
+    '/assets/house_living.jpeg',
     'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=800&q=80',
     'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80'
   ],
   bedrooms: [
-    '/assets/house_bedroom.png',
+    '/assets/house_bedroom.jpg',
     'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=800&q=80',
     'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80'
   ],
   kitchens: [
-    '/assets/house_kitchen.png',
+    '/assets/house_kitchen.jpg',
     'https://images.unsplash.com/photo-1556911223-e4524a13936d?auto=format&fit=crop&w=800&q=80',
     'https://images.unsplash.com/photo-1556912176-12bb89dbef71?auto=format&fit=crop&w=800&q=80'
   ],
   parking: [
-    '/assets/house_parking.png',
+    '/assets/house_parking.jpg',
     'https://images.unsplash.com/photo-1595206133361-b1fe343e5e23?auto=format&fit=crop&w=800&q=80',
     'https://images.unsplash.com/photo-1549411380-90977464047a?auto=format&fit=crop&w=800&q=80'
   ]
@@ -200,7 +200,10 @@ const generateMockData = () => {
               { year: 2025, price: roundTo500((finalPrice * 5) / 6) },
               { year: 2026, price: finalPrice }
             ],
-            description: `Beautifully maintained ${type} (${bhkType}) located in the heart of ${neighborhood}. Perfect for those seeking both comfort and accessibility in ${d}.`,
+            description: `This meticulously maintained ${type} (${bhkType}) represents a prime asset in ${neighborhood}. 
+            The architectural layout maximizes neural efficiency while ensuring premium lifestyle comforts in ${d}. 
+            Proprietary neighborhood analysis confirms high connectivity indices and long-term demographic stability. 
+            An ideal strategic holding for those seeking verified quality and localized accessibility.`,
             isApproved: true,
             lat: baseCoords[0] + latJitter,
             lng: baseCoords[1] + lngJitter,

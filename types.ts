@@ -49,6 +49,7 @@ export interface House {
   ownerName: string;
   bhkType?: string;
   carParking?: string;
+  neuralAnalysis?: string;
 }
 
 // Booking interface representing a scheduled property visit

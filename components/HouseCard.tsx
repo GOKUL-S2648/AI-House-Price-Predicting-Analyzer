@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { getMatchScore, predictFuturePrice, analyzeListingValue } from '../mlService';
 import { House, User } from '../types';
@@ -27,7 +26,7 @@ const HouseCard: React.FC<HouseCardProps> = ({ house, onClick, user }) => {
 
   return (
     <div
-      className="group relative bg-[#F8FAFC] rounded-[40px] overflow-hidden border border-black/5 shadow-xl hover:border-[#00AEEF]/30 transition-all duration-700 cursor-pointer flex flex-col h-full hover:shadow-[0_20px_60px_rgba(0,174,239,0.08)]"
+      className="group relative bg-[var(--bg-secondary)] rounded-[40px] overflow-hidden border border-black/5 shadow-xl hover:border-[#00AEEF]/30 transition-all duration-700 cursor-pointer flex flex-col h-full hover:shadow-[0_20px_60px_rgba(0,174,239,0.08)]"
       onClick={onClick}
     >
       <div className="relative aspect-[16/11] overflow-hidden">
@@ -44,7 +43,7 @@ const HouseCard: React.FC<HouseCardProps> = ({ house, onClick, user }) => {
             <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" /></svg>
             Verified Intelligence
           </div>
-          <div className="bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] text-[#00AEEF] shadow-lg flex items-center gap-2 border border-black/5">
+          <div className="bg-[var(--bg-main)]/90 backdrop-blur-md px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] text-[#00AEEF] shadow-lg flex items-center gap-2 border border-black/5">
             <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
             </svg>
@@ -57,12 +56,12 @@ const HouseCard: React.FC<HouseCardProps> = ({ house, onClick, user }) => {
         {house.is_suspicious && (
           <div className="mb-6 p-4 bg-rose-50 rounded-2xl border border-rose-100">
             <p className="text-xs font-black text-rose-500 uppercase tracking-widest mb-1">Anomaly Log</p>
-            <p className="text-xs font-bold text-rose-600/70 leading-relaxed line-clamp-2">{house.suspicious_reason}</p>
+            <p className="text-xs font-bold text-rose-500/80 leading-relaxed line-clamp-2">{house.suspicious_reason}</p>
           </div>
         )}
         
         <div className="mb-6 h-[52px] flex items-start">
-          <h3 className="text-lg font-black text-[#0F172A] group-hover:text-[#00AEEF] transition-colors leading-tight uppercase tracking-tight line-clamp-2">
+          <h3 className="text-lg font-black text-[var(--text-main)] group-hover:text-[#00AEEF] transition-colors leading-tight uppercase tracking-tight line-clamp-2">
             {house.title}
           </h3>
         </div>
@@ -81,7 +80,7 @@ const HouseCard: React.FC<HouseCardProps> = ({ house, onClick, user }) => {
         </div>
 
         <div className="flex items-center gap-4 text-gray-400 mb-8 min-h-[32px]">
-          <div className="w-8 h-8 rounded-full bg-white border border-black/5 flex items-center justify-center text-[#00AEEF]/60 shrink-0">
+          <div className="w-8 h-8 rounded-full bg-[var(--bg-main)] border border-black/5 flex items-center justify-center text-[#00AEEF]/60 shrink-0">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
             </svg>
@@ -91,7 +90,7 @@ const HouseCard: React.FC<HouseCardProps> = ({ house, onClick, user }) => {
 
         <div className="mt-auto flex flex-wrap gap-2 pt-4">
           {house.amenities.slice(0, 4).map(a => (
-            <span key={a} className="bg-white text-gray-400 text-xs font-black px-3 py-1.5 rounded-lg uppercase tracking-widest border border-black/5 group-hover:border-[#00AEEF]/10 group-hover:text-gray-500 transition-all">
+            <span key={a} className="bg-[var(--bg-main)] text-gray-400 text-xs font-black px-3 py-1.5 rounded-lg uppercase tracking-widest border border-black/5 group-hover:border-[#00AEEF]/10 group-hover:text-gray-500 transition-all">
               {a}
             </span>
           ))}
@@ -101,4 +100,4 @@ const HouseCard: React.FC<HouseCardProps> = ({ house, onClick, user }) => {
   );
 };
 
-export default HouseCard;  
+export default HouseCard;

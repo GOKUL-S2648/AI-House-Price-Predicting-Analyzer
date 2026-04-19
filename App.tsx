@@ -82,6 +82,19 @@ const App: React.FC = () => {
   });
   const [houses, setHouses] = useState<House[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    return localStorage.getItem('homesight_theme') === 'dark';
+  });
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('homesight_theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('homesight_theme', 'light');
+    }
+  }, [isDarkMode]);
 
   // Persistence Effects
   useEffect(() => {
@@ -118,69 +131,83 @@ const App: React.FC = () => {
 
   const fetchHouses = useCallback(async () => {
     try {
+      console.log("Starting data fetch sequence...");
       setLoading(true);
-      const { data, error } = await supabase
-        .from('houses')
-        .select('*');
-
-      if (error) throw error;
-
-      const roundTo500 = (num: number) => Math.round(num / 500) * 500;
-
+      
       let fetched: House[] = [];
-      if (data && data.length > 0) {
-        fetched = data.map((h: any) => ({
-          ...h,
-          id: h.listing_id || h.id,
-          historicalPrices: h.historical_prices && h.historical_prices.length > 0 ? h.historical_prices : [
-            { year: 2023, price: roundTo500(h.price * 0.5) },
-            { year: 2024, price: roundTo500((h.price * 2) / 3) },
-            { year: 2025, price: roundTo500((h.price * 5) / 6) },
-            { year: 2026, price: h.price }
-          ],
-          isApproved: h.is_approved,
-          ownerId: h.owner_id,
-          images: (h.images && h.images.length >= 5) ? h.images : [
-            h.image,
-            PROPERTY_IMAGES.halls[0],
-            PROPERTY_IMAGES.bedrooms[0],
-            PROPERTY_IMAGES.kitchens[0],
-            PROPERTY_IMAGES.parking[0]
-          ],
-          bhkType: h.bhkType || h.bhk_type,
-          carParking: h.carParking || h.car_parking
-        }));
+      try {
+        const { data, error } = await supabase
+          .from('houses')
+          .select('*');
+
+        if (error) {
+          console.warn("Supabase fetch error, will fallback to mocks:", error);
+        } else if (data && data.length > 0) {
+          console.log(`Successfully fetched ${data.length} records from Supabase.`);
+          const roundTo500 = (num: number) => Math.round(num / 500) * 500;
+          fetched = data.map((h: any) => ({
+            ...h,
+            id: h.listing_id || h.id,
+            amenities: Array.isArray(h.amenities) ? h.amenities : [],
+            historicalPrices: h.historical_prices && h.historical_prices.length > 0 ? h.historical_prices : [
+              { year: 2023, price: roundTo500(h.price * 0.5) },
+              { year: 2024, price: roundTo500((h.price * 2) / 3) },
+              { year: 2025, price: roundTo500((h.price * 5) / 6) },
+              { year: 2026, price: h.price }
+            ],
+            isApproved: h.is_approved === false ? false : true,
+            ownerId: h.owner_id,
+            images: (h.images && Array.isArray(h.images) && h.images.length >= 5) ? h.images : [
+              h.image || PROPERTY_IMAGES.exteriors[0],
+              PROPERTY_IMAGES.halls[0],
+              PROPERTY_IMAGES.bedrooms[0],
+              PROPERTY_IMAGES.kitchens[0],
+              PROPERTY_IMAGES.parking[0]
+            ],
+            bhkType: h.bhk_type || h.bhkType || '2BHK',
+            carParking: h.car_parking || h.carParking || 'Available'
+          }));
+        }
+      } catch (supabaseErr) {
+        console.error("Supabase critical failure:", supabaseErr);
       }
       
-      // Combine DB houses with Mock houses so the platform feels full
       const combined = [...fetched, ...MOCK_HOUSES.filter(mh => !fetched.some(fh => fh.id === mh.id))];
-      const analyzed = await detectSuspiciousListings(combined);
-      setHouses(analyzed);
+      console.log(`Total houses to analyze: ${combined.length}`);
 
-      // Restore search state if refreshing while searching
-      if (isSearching) {
-        const query = (searchCriteria.district || '').toLowerCase().trim();
-        const results = analyzed.filter((h: House) => {
-          if (currentUser?.role !== 'admin' && !h.isApproved) return false;
-          const priceLimit = searchCriteria.maxPrice || 10000000;
-          const priceMatch = h.price <= (priceLimit + 10000);
-          const typeMatch = !searchCriteria.houseType || searchCriteria.houseType === 'Any' || h.type === searchCriteria.houseType;
-          const bhkMatch = !searchCriteria.bhkType || searchCriteria.bhkType === 'Any' || h.bhkType === searchCriteria.bhkType;
-          const locationMatch = !query || h.location.toLowerCase().includes(query) || h.title.toLowerCase().includes(query);
-          return priceMatch && typeMatch && bhkMatch && locationMatch;
-        });
+      try {
+        const analyzed = await detectSuspiciousListings(combined);
+        setHouses(analyzed);
+        
+        // Handle search filtering
+        if (isSearching) {
+          const query = (searchCriteria.district || '').toLowerCase().trim();
+          const results = analyzed.filter((h: House) => {
+            if (currentUser?.role !== 'admin' && !h.isApproved) return false;
+            const priceLimit = searchCriteria.maxPrice || 10000000;
+            const priceMatch = h.price <= (priceLimit + 10000);
+            const typeMatch = !searchCriteria.houseType || searchCriteria.houseType === 'Any' || h.type === searchCriteria.houseType;
+            const bhkMatch = !searchCriteria.bhkType || searchCriteria.bhkType === 'Any' || h.bhkType === searchCriteria.bhkType;
+            const locationMatch = !query || h.location.toLowerCase().includes(query) || h.title.toLowerCase().includes(query);
+            return priceMatch && typeMatch && bhkMatch && locationMatch;
+          });
 
-        if (currentUser) {
-          setFilteredHouses(rankProperties(results, currentUser));
-        } else {
-          setFilteredHouses(results);
+          if (currentUser) {
+            setFilteredHouses(rankProperties(results, currentUser));
+          } else {
+            setFilteredHouses(results);
+          }
         }
+      } catch (mlErr) {
+        console.error("ML Analysis failed, showing raw data:", mlErr);
+        setHouses(combined);
       }
+
     } catch (err) {
-      console.error("Error fetching houses:", err);
-      const analyzed = await detectSuspiciousListings(MOCK_HOUSES);
-      setHouses(analyzed);
+      console.error("Final catch in fetchHouses:", err);
+      setHouses(MOCK_HOUSES);
     } finally {
+      console.log("Data fetch sequence completed.");
       setLoading(false);
     }
   }, [isSearching, searchCriteria, currentUser]);
@@ -310,7 +337,7 @@ const App: React.FC = () => {
   if (!currentUser) return <Auth onLogin={handleLogin} />;
 
   return (
-    <div className="min-h-screen flex bg-[#F1F5F9] text-[#0F172A] selection:bg-[#00AEEF]/10">
+    <div className="min-h-screen flex bg-[var(--bg-main)] text-[var(--text-main)] selection:bg-[#00AEEF]/10">
       <Navbar
         user={currentUser}
         onNavigate={(v: any) => setView(v)}
@@ -327,13 +354,25 @@ const App: React.FC = () => {
       />
 
       <main className="flex-1 min-w-0 overflow-y-auto px-6 py-12 md:px-16 md:py-16 scroll-smooth">
-        {/* Mobile Sidebar Toggle Overlay */}
-        <div className="flex items-center justify-between md:justify-end mb-8">
+        {/* Mobile Sidebar Toggle & Theme Toggle */}
+        <div className="flex items-center justify-between md:justify-end gap-4 mb-8">
           <button
             onClick={() => setIsNavbarOpen(true)}
-            className="md:hidden p-3 rounded-2xl bg-[#E2E8F0] border border-black/5 text-gray-400 hover:text-[#00AEEF] transition-all"
+            className="md:hidden p-3 rounded-2xl bg-[var(--bg-secondary)] border border-black/5 text-[var(--text-muted)] hover:text-[#00AEEF] transition-all"
           >
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 6h16M4 12h16m-7 6h7" /></svg>
+          </button>
+
+          <button
+            onClick={() => setIsDarkMode(!isDarkMode)}
+            className="p-3 rounded-2xl bg-[var(--bg-secondary)] border border-black/5 text-[var(--text-muted)] hover:text-[#00AEEF] transition-all shadow-lg hover:shadow-[#00AEEF]/10 active:scale-95"
+            title="Toggle Theme"
+          >
+            {isDarkMode ? (
+              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clipRule="evenodd" /></svg>
+            ) : (
+              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" /></svg>
+            )}
           </button>
         </div>
 

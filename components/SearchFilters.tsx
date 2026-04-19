@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { SearchCriteria } from '../types';
 
@@ -48,12 +47,12 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({ onSearch, initialCriteria
           alt="Cinematic Interior" 
           className="w-full h-full object-cover scale-105"
         />
-        <div className="absolute inset-0 bg-white/30"></div>
+        <div className="absolute inset-0 bg-[var(--bg-main)]/40 backdrop-blur-sm"></div>
       </div>
 
       <div className="relative z-10 p-8 md:p-14 lg:p-20">
         <div className="max-w-3xl mb-12 md:mb-16">
-          <h2 className="text-4xl md:text-6xl font-black text-[#0F172A] leading-[1.1] tracking-tighter uppercase">
+          <h2 className="text-4xl md:text-6xl font-black text-[var(--text-main)] leading-[1.1] tracking-tighter uppercase transition-colors">
             Your Next Chapter <br /><span className="text-[#00AEEF]">Begins Here.</span>
           </h2>
           <p className="text-[#00AEEF] font-black text-xs md:text-sm mt-6 uppercase tracking-[0.4em]">Refine your search to find spaces that speak to you.</p>
@@ -67,7 +66,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({ onSearch, initialCriteria
                 <select
                   value={houseType}
                   onChange={e => setHouseType(e.target.value)}
-                  className="w-full bg-white/40 backdrop-blur-md border border-black/5 rounded-2xl px-5 py-4 text-sm font-black text-[#0F172A] appearance-none outline-none ring-2 ring-transparent focus:ring-[#00AEEF]/10 focus:border-[#00AEEF]/30 focus:bg-white/60 transition-all cursor-pointer uppercase tracking-widest"
+                  className="w-full bg-[var(--bg-secondary)]/50 backdrop-blur-md border border-black/5 rounded-2xl px-5 py-4 text-sm font-black text-[var(--text-main)] appearance-none outline-none ring-2 ring-transparent focus:ring-[#00AEEF]/10 focus:border-[#00AEEF]/30 focus:bg-[var(--bg-main)]/60 transition-all cursor-pointer uppercase tracking-widest"
                 >
                   <option value="" disabled hidden className="bg-white">Choose Type</option>
                   <option value="Any" className="bg-white">All Options</option>
@@ -89,7 +88,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({ onSearch, initialCriteria
                 <select
                   value={bhkType}
                   onChange={e => setBhkType(e.target.value)}
-                  className="w-full bg-white/40 backdrop-blur-md border border-black/5 rounded-2xl px-5 py-4 text-sm font-black text-[#0F172A] appearance-none outline-none ring-2 ring-transparent focus:ring-[#00AEEF]/10 focus:border-[#00AEEF]/30 focus:bg-white/60 transition-all cursor-pointer uppercase tracking-widest"
+                  className="w-full bg-[var(--bg-secondary)]/50 backdrop-blur-md border border-black/5 rounded-2xl px-5 py-4 text-sm font-black text-[var(--text-main)] appearance-none outline-none ring-2 ring-transparent focus:ring-[#00AEEF]/10 focus:border-[#00AEEF]/30 focus:bg-[var(--bg-main)]/60 transition-all cursor-pointer uppercase tracking-widest"
                 >
                   <option value="" disabled hidden className="bg-white">Choose BHK</option>
                   <option value="Any" className="bg-white">All BHK</option>
@@ -110,7 +109,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({ onSearch, initialCriteria
                 type="text"
                 value={stateName}
                 onChange={e => setStateName(e.target.value)}
-                className="w-full bg-white/40 backdrop-blur-md border border-black/5 rounded-2xl px-5 py-4 text-sm font-black text-[#0F172A] outline-none ring-2 ring-transparent focus:ring-[#00AEEF]/10 focus:border-[#00AEEF]/30 focus:bg-white/60 transition-all placeholder:text-gray-300 uppercase tracking-widest"
+                className="w-full bg-[var(--bg-secondary)]/50 backdrop-blur-md border border-black/5 rounded-2xl px-5 py-4 text-sm font-black text-[var(--text-main)] outline-none ring-2 ring-transparent focus:ring-[#00AEEF]/10 focus:border-[#00AEEF]/30 focus:bg-[var(--bg-main)]/60 transition-all placeholder:text-gray-300 uppercase tracking-widest"
                 placeholder="e.g. Kerala"
               />
             </div>
@@ -121,7 +120,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({ onSearch, initialCriteria
                 type="text"
                 value={district}
                 onChange={e => setDistrict(e.target.value)}
-                className="w-full bg-white/40 backdrop-blur-md border border-black/5 rounded-2xl px-5 py-4 text-sm font-black text-[#0F172A] outline-none ring-2 ring-transparent focus:ring-[#00AEEF]/10 focus:border-[#00AEEF]/30 focus:bg-white/60 transition-all placeholder:text-gray-300 uppercase tracking-widest"
+                className="w-full bg-[var(--bg-secondary)]/50 backdrop-blur-md border border-black/5 rounded-2xl px-5 py-4 text-sm font-black text-[var(--text-main)] outline-none ring-2 ring-transparent focus:ring-[#00AEEF]/10 focus:border-[#00AEEF]/30 focus:bg-[var(--bg-main)]/60 transition-all placeholder:text-gray-300 uppercase tracking-widest"
                 placeholder="e.g. Kochi"
               />
             </div>
@@ -132,7 +131,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({ onSearch, initialCriteria
                 type="text"
                 value={income}
                 onChange={e => setIncome(e.target.value.replace(/\D/g, ''))}
-                className="w-full bg-white/40 backdrop-blur-md border border-black/5 rounded-2xl px-5 py-4 text-sm font-black text-[#0F172A] outline-none ring-2 ring-transparent focus:ring-[#00AEEF]/10 focus:border-[#00AEEF]/30 focus:bg-white/60 transition-all placeholder:text-gray-300 uppercase tracking-widest"
+                className="w-full bg-[var(--bg-secondary)]/50 backdrop-blur-md border border-black/5 rounded-2xl px-5 py-4 text-sm font-black text-[var(--text-main)] outline-none ring-2 ring-transparent focus:ring-[#00AEEF]/10 focus:border-[#00AEEF]/30 focus:bg-[var(--bg-main)]/60 transition-all placeholder:text-gray-300 uppercase tracking-widest"
                 placeholder="Income ₹/mo"
               />
             </div>
@@ -153,4 +152,4 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({ onSearch, initialCriteria
   );
 };
 
-export default SearchFilters;   
+export default SearchFilters;
